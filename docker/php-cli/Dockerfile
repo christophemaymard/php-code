@@ -16,8 +16,10 @@ RUN apt-get update \
     && docker-php-ext-install -j$(nproc) \
         zip \
         opcache \
+    && pecl install xdebug \
     && docker-php-ext-enable \
-        opcache
+        opcache \
+        xdebug
 
 RUN php -r " \
         \$COMPOSER_SIGNATURE = trim(file_get_contents('https://composer.github.io/installer.sig')); \
