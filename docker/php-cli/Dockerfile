@@ -14,10 +14,12 @@ RUN apt-get update \
         libzip-dev \
     && docker-php-ext-configure zip --with-libzip \
     && docker-php-ext-install -j$(nproc) \
+        mbstring \
         zip \
         opcache \
     && pecl install xdebug \
     && docker-php-ext-enable \
+        mbstring \
         opcache \
         xdebug
 
