@@ -17,6 +17,9 @@ interface LexerInterface
     /**
      * Returns the next token in the stream.
      * 
+     * If the end of the stream is reached, it always returns a token with 
+     * the {@see PhpCode\Language\Cpp\Lexical\Tag::EOF} tag.
+     * 
      * @return  TokenInterface
      */
     public function getToken(): TokenInterface;

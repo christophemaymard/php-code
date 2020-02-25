@@ -8,13 +8,19 @@
 namespace PhpCode\Language\Cpp\Lexical;
 
 /**
- * Represents all the tags that identify tokens.
+ * Represents the lexical analyzer used to produce tokens from a stream.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class Tag
+class Lexer implements LexerInterface
 {
-    /** End of File. */
-    public const EOF = 0;
+    /**
+     * {@inheritDoc}
+     */
+    public function getToken(): TokenInterface
+    {
+        // End of File token.
+        return new Token('', Tag::EOF);
+    }
 }
 
