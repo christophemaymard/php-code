@@ -18,5 +18,7 @@ class Tag
     public const EOF = 0;
     /** Unknown. */
     public const UNKNOWN = 1;
+    /** Identifier. */
+    public const ID = 2;
 }
 

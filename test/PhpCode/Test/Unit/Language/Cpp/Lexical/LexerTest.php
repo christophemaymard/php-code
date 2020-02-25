@@ -104,6 +104,30 @@ class LexerTest extends TestCase
                 " \t \r \n é  \t \r \n è  \t \r \n ", 
                 [['é', 1], ['è', 1]], 
             ], 
+            'Identifier starts with underscore' => [
+                '_', 
+                [['_', 2],], 
+            ], 
+            'Identifier starts with lower case letter' => [
+                'a', 
+                [['a', 2],], 
+            ], 
+            'Identifier starts with upper case letter' => [
+                'Z', 
+                [['Z', 2],], 
+            ], 
+            'Identifier contains digit' => [
+                'c0123456789', 
+                [['c0123456789', 2],], 
+            ], 
+            'Identifier starts with digit' => [
+                '0t', 
+                [['0', 1], ['t', 2],], 
+            ], 
+            'Identifiers with white spaces' => [
+                " _foo1\tbar2\rbaz3\n ", 
+                [['_foo1', 2], ['bar2', 2], ['baz3', 2],], 
+            ], 
         ];
     }
 }

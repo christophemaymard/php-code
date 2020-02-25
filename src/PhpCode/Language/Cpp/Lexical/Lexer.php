@@ -49,9 +49,20 @@ class Lexer implements LexerInterface
      */
     public function getToken(): TokenInterface
     {
+        $remain = \mb_substr($this->stream, $this->pos);
+        
         // Skip white spaces (space, CR, LF and HT).
-        if (\preg_match("`^([ \r\n\t]+)`", \mb_substr($this->stream, $this->pos), $matches)) {
+        if (\preg_match("`^([ \r\n\t]+)`", $remain, $matches)) {
             $this->pos += \mb_strlen($matches[1]);
+            
+            $remain = \mb_substr($this->stream, $this->pos);
+        }
+        
+        // Identifier token.
+        if (\preg_match('`^('.Identifier::PATTERN.')`', $remain, $matches)) {
+            $this->pos += \mb_strlen($matches[1]);
+            
+            return new Token($matches[1], Tag::ID);
         }
         
         // Unknown token.
