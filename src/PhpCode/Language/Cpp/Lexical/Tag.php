@@ -16,5 +16,7 @@ class Tag
 {
     /** End of File. */
     public const EOF = 0;
+    /** Unknown. */
+    public const UNKNOWN = 1;
 }
 

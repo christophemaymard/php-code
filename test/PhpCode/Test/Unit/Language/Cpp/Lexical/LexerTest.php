@@ -62,5 +62,41 @@ class LexerTest extends TestCase
         
         self::assertNotSame($tkn1, $tkn2);
     }
+    
+    /**
+     * Tests that getToken() returns an instance of token.
+     * 
+     * @param   string  $stream The stream to set.
+     * @param   array[] $tokens The array of the expected tokens.
+     * 
+     * @dataProvider    getStreamsProvider
+     */
+    public function testGetTokenReturnsToken(string $stream, array $tokens): void
+    {
+        $sut = new Lexer();
+        $sut->setStream($stream);
+        
+        foreach ($tokens as list($lexeme, $tag)) {
+            self::assertToken($sut->getToken(), $lexeme, $tag);
+        }
+        
+        self::assertEOFToken($sut->getToken(), 'The last token must be the EOF token.');
+    }
+    
+    /**
+     * Returns a set of streams with the expected tokens that must be 
+     * produced (except the last one that is always an EOF token).
+     * 
+     * @return  array[]
+     */
+    public function getStreamsProvider(): array
+    {
+        return [
+            'Unknown tokens' => [
+                'éè', 
+                [['é', 1], ['è', 1]], 
+            ], 
+        ];
+    }
 }
 
