@@ -96,6 +96,14 @@ class LexerTest extends TestCase
                 'éè', 
                 [['é', 1], ['è', 1]], 
             ], 
+            'White spaces are skipped' => [
+                " \t \r \n  \t \r \n    \t \r \n ", 
+                [], 
+            ], 
+            'White spaces are skipped before' => [
+                " \t \r \n é  \t \r \n è  \t \r \n ", 
+                [['é', 1], ['è', 1]], 
+            ], 
         ];
     }
 }
