@@ -123,6 +123,23 @@ class TokenTableTest extends TestCase
     }
     
     /**
+     * Tests that count() returns the number of tokens.
+     */
+    public function testCountReturnsInt(): void
+    {
+        self::assertSame(0, $this->sut->count());
+        
+        $this->sut->addToken('foo', 1);
+        self::assertSame(1, $this->sut->count());
+        
+        $this->sut->addToken('bar', 2);
+        self::assertSame(2, $this->sut->count());
+        
+        $this->sut->addToken('baz', 3);
+        self::assertSame(3, $this->sut->count());
+    }
+    
+    /**
      * Returns a set of lexemes.
      * 
      * @return  array[]

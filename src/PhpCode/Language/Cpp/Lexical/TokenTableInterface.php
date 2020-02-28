@@ -14,7 +14,7 @@ use PhpCode\Exception\InvalidOperationException;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-interface TokenTableInterface
+interface TokenTableInterface extends \Countable
 {
     /**
      * Returns the tag of the token with the specified lexeme.

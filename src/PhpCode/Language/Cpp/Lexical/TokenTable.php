@@ -98,5 +98,13 @@ class TokenTable implements TokenTableInterface
     {
         return $this->lengths;
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function count(): int
+    {
+        return \count($this->tokens);
+    }
 }
 
