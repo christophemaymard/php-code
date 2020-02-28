@@ -33,5 +33,12 @@ interface TokenTableInterface
      * @return  bool    TRUE if a token with the specified lexeme is present, otherwise FALSE.
      */
     public function hasToken(string $lexeme): bool;
+    
+    /**
+     * Returns all the different lengths of the token lexemes.
+     * 
+     * @return  int[]   An indexed array of the lengths (in reverse order).
+     */
+    public function getLengths(): array;
 }
 

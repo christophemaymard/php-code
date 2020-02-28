@@ -26,6 +26,13 @@ class TokenTable implements TokenTableInterface
     private $tokens = [];
     
     /**
+     * An indexed array of the lengths of the token lexemes (in reverse 
+     * order).
+     * @var int[]
+     */
+    private $lengths = [];
+    
+    /**
      * Adds a token with the specified lexeme and tag.
      * 
      * @param   string  $lexeme The lexeme of the token.
@@ -43,6 +50,7 @@ class TokenTable implements TokenTableInterface
         }
         
         $this->tokens[$lexeme] = $tag;
+        $this->addLength(\mb_strlen($lexeme));
     }
     
     /**
@@ -66,6 +74,29 @@ class TokenTable implements TokenTableInterface
     public function hasToken(string $lexeme): bool
     {
         return \array_key_exists($lexeme, $this->tokens);
+    }
+    
+    /**
+     * Adds the specified length.
+     * 
+     * If the length is already stored, then it is not added.
+     * 
+     * @param   int $lengh  The length to add.
+     */
+    private function addLength(int $lengh): void
+    {
+        if (!\in_array($lengh, $this->lengths, TRUE)) {
+            $this->lengths[] = $lengh;
+            \rsort($this->lengths);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function getLengths(): array
+    {
+        return $this->lengths;
     }
 }
 

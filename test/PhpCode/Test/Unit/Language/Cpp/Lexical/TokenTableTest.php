@@ -105,6 +105,24 @@ class TokenTableTest extends TestCase
     }
     
     /**
+     * Tests that getLengths() returns an indexed array of integers in 
+     * reverse order.
+     */
+    public function testgetLengthsReturnsArrayOfInt(): void
+    {
+        self::assertSame([], $this->sut->getLengths());
+        
+        $this->sut->addToken('éè', 10);
+        self::assertSame([2], $this->sut->getLengths());
+        
+        $this->sut->addToken('fo', 20);
+        self::assertSame([2], $this->sut->getLengths());
+        
+        $this->sut->addToken('bar', 30);
+        self::assertSame([3, 2], $this->sut->getLengths());
+    }
+    
+    /**
      * Returns a set of lexemes.
      * 
      * @return  array[]
