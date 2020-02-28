@@ -91,6 +91,38 @@ class TokenTableInterfaceDoubleBuilder
     }
     
     /**
+     * Builds and adds a prophecy for the getLengths() method that will 
+     * return the specified return value and is expected to be called.
+     * 
+     * @param   int[]   $return The value (an indexed array of lengths in reverse order) that will be returned.
+     * @return  TokenTableInterfaceDoubleBuilder    This instance.
+     */
+    public function buildGetLengthsCall(array $return): self
+    {
+        $this->prophecy
+            ->getLengths()
+            ->willReturn($return)
+            ->shouldBeCalled();
+        
+        return $this;
+    }
+    
+    /**
+     * Builds and adds a prophecy for the getLengths() method that is not 
+     * expected to be called.
+     * 
+     * @return  TokenTableInterfaceDoubleBuilder    This instance.
+     */
+    public function buildGetLengthsNotCall(): self
+    {
+        $this->prophecy
+            ->getLengths()
+            ->shouldNotBeCalled();
+        
+        return $this;
+    }
+    
+    /**
      * Returns the double that has been built.
      * 
      * @return  ProphecySubjectInterface

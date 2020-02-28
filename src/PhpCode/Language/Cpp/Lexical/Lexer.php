@@ -88,6 +88,17 @@ class Lexer implements LexerInterface
             return new Token($lexeme, $tag);
         }
         
+        // Punctuator token.
+        foreach ($this->ctx->getPunctuators()->getLengths() as $length) {
+            $lexeme = \mb_substr($remain, 0, $length);
+            
+            if ($this->ctx->getPunctuators()->hasToken($lexeme)) {
+                $this->pos += $length;
+                
+                return new Token($lexeme, $this->ctx->getPunctuators()->getTag($lexeme));
+            }
+        }
+        
         // Unknown token.
         if ($this->pos < $this->length) {
             return new Token(\mb_substr($this->stream, $this->pos++, 1), Tag::UNKNOWN);

@@ -54,6 +54,23 @@ class LanguageContextInterfaceDoubleBuilder
     }
     
     /**
+     * Builds and adds a prophecy for the getPunctuators() method that will 
+     * return the specified return value and is expected to be called.
+     * 
+     * @param   TokenTableInterface $return The value (a token table) that will be returned.
+     * @return  LanguageContextInterfaceDoubleBuilder   This instance.
+     */
+    public function buildGetPunctuatorsCall(TokenTableInterface $return): self
+    {
+        $this->prophecy
+            ->getPunctuators()
+            ->willReturn($return)
+            ->shouldBeCalled();
+        
+        return $this;
+    }
+    
+    /**
      * Returns the double that has been built.
      * 
      * @return  ProphecySubjectInterface
