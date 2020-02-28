@@ -7,6 +7,8 @@
  */
 namespace PhpCode\Language\Cpp\Lexical;
 
+use PhpCode\Language\Cpp\LanguageContextInterface;
+
 /**
  * Represents the lexical analyzer used to produce tokens from a stream.
  * 
@@ -14,6 +16,12 @@ namespace PhpCode\Language\Cpp\Lexical;
  */
 class Lexer implements LexerInterface
 {
+    /**
+     * The language context.
+     * @var LanguageContextInterface
+     */
+    private $ctx;
+    
     /**
      * The stream used to produce tokens (default to an empty string).
      * @var string
@@ -32,6 +40,16 @@ class Lexer implements LexerInterface
      */
     private $pos = 0;
     
+    /**
+     * Constructor.
+     * 
+     * @param   LanguageContextInterface    $ctx
+     */
+    public function __construct(LanguageContextInterface $ctx)
+    {
+        $this->ctx = $ctx;
+    }
+
     /**
      * Sets the stream used to produce tokens.
      * 
@@ -58,11 +76,16 @@ class Lexer implements LexerInterface
             $remain = \mb_substr($this->stream, $this->pos);
         }
         
-        // Identifier token.
+        // Identifier or keyword token.
         if (\preg_match('`^('.Identifier::PATTERN.')`', $remain, $matches)) {
-            $this->pos += \mb_strlen($matches[1]);
+            $lexeme = $matches[1];
+            $this->pos += \mb_strlen($lexeme);
             
-            return new Token($matches[1], Tag::ID);
+            $tag = $this->ctx->getKeywords()->hasToken($lexeme) ? 
+                $this->ctx->getKeywords()->getTag($lexeme) : 
+                Tag::ID;
+            
+            return new Token($lexeme, $tag);
         }
         
         // Unknown token.
