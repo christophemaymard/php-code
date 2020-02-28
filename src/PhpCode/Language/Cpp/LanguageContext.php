@@ -23,13 +23,21 @@ class LanguageContext implements LanguageContextInterface
     private $keywords;
     
     /**
+     * The table of punctuator tokens.
+     * @var TokenTableInterface
+     */
+    private $punctuators;
+    
+    /**
      * Constructor.
      * 
-     * @param   TokenTableInterface $keywords   The table of keyword tokens.
+     * @param   TokenTableInterface $keywords       The table of keyword tokens.
+     * @param   TokenTableInterface $punctuators    The table of punctuator tokens.
      */
-    public function __construct(TokenTableInterface $keywords)
+    public function __construct(TokenTableInterface $keywords, TokenTableInterface $punctuators)
     {
         $this->keywords = $keywords;
+        $this->punctuators = $punctuators;
     }
     
     /**
@@ -38,6 +46,14 @@ class LanguageContext implements LanguageContextInterface
     public function getKeywords(): TokenTableInterface
     {
         return $this->keywords;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function getPunctuators(): TokenTableInterface
+    {
+        return $this->punctuators;
     }
 }
 

@@ -23,14 +23,17 @@ use PHPUnit\Framework\TestCase;
 class LanguageContextTest extends TestCase
 {
     /**
-     * Tests that __construct() stores the table of keyword tokens.
+     * Tests that __construct() stores the table of keyword tokens and the 
+     * table of punctuator tokens.
      */
-    public function test__constructStoresKeywords(): void
+    public function test__constructStoresKeywordsPunctuators(): void
     {
         $keywordsDummy = $this->prophesize(TokenTableInterface::class)->reveal();
+        $punctuatorsDummy = $this->prophesize(TokenTableInterface::class)->reveal();
         
-        $sut = new LanguageContext($keywordsDummy);
+        $sut = new LanguageContext($keywordsDummy, $punctuatorsDummy);
         self::assertSame($keywordsDummy, $sut->getKeywords());
+        self::assertSame($punctuatorsDummy, $sut->getPunctuators());
     }
 }
 

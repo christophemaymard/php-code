@@ -22,5 +22,12 @@ interface LanguageContextInterface
      * @return  TokenTableInterface
      */
     public function getKeywords(): TokenTableInterface;
+    
+    /**
+     * Returns the table of punctuator tokens.
+     * 
+     * @return  TokenTableInterface
+     */
+    public function getPunctuators(): TokenTableInterface;
 }
 
