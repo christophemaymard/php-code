@@ -627,7 +627,8 @@ constraint-logical-and-expression:
 
 postfix-expression:
     primary-expression
-    postfix-expression [ expr-or-braced-init-list ]
+    postfix-expression [ expression ]
+    postfix-expression [ braced-init-list ]
     postfix-expression ( expression-list[opt] )
     simple-type-specifier ( expression-list[opt] )
     typename-specifier ( expression-list[opt] )
@@ -852,12 +853,14 @@ for-range-declaration:
     attribute-specifier-seq[opt] decl-specifier-seq ref-qualifier[opt] [ identifier-list ]
 
 for-range-initializer:
-    expr-or-braced-init-list
+    expression
+    braced-init-list
 
 jump-statement:
     break ;
     continue ;
-    return expr-or-braced-init-list[opt] ;
+    return expression[opt] ;
+    return braced-init-list ;
     goto identifier ;
 
 declaration-statement:
@@ -1268,10 +1271,6 @@ designated-initializer-clause:
 
 designator:
     . identifier
-
-expr-or-braced-init-list:
-    expression
-    braced-init-list
 
 
 
