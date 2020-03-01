@@ -87,13 +87,7 @@ class LexerTest extends TestCase
      */
     public function testGetTokenReturnsNewInstanceEOFTokenWhenInstantiated(): void
     {
-        $languageContext = $this->createLanguageContextDouble(
-            [], 
-            [], 
-            [], 
-            [], 
-            []
-        );
+        $languageContext = $this->createLanguageContextDouble([], [], []);
         
         $sut = new Lexer($languageContext);
         
@@ -109,32 +103,26 @@ class LexerTest extends TestCase
     /**
      * Tests that getToken() returns an instance of token.
      * 
-     * @param   string      $stream         The stream to set.
-     * @param   array[]     $tokens         The array of the expected tokens.
-     * @param   string[]    $kwNotTokens    The identifiers that are not keywords.
-     * @param   array[]     $kwTokens       The identifiers that are keywords.
-     * @param   int[]       $pnLengths      The punctuator lengths.
-     * @param   array[]     $pnLexNotPuncs  The lexemes that are not punctuators.
-     * @param   array[]     $pns            The punctuators.
+     * @param   string      $stream             The stream to set.
+     * @param   array[]     $tokens             The expected tokens.
+     * @param   array[]     $keywords           The keywords.
+     * @param   array[]     $punctuators        The punctuators.
+     * @param   int[]       $punctuatorLengths  The punctuator lengths.
      * 
      * @dataProvider    getStreamsProvider
      */
     public function testGetTokenReturnsToken(
         string $stream, 
         array $tokens, 
-        array $kwNotTokens, 
-        array $kwTokens, 
-        array $pnLengths, 
-        array $pnLexNotPuncs, 
-        array $pns
+        array $keywords, 
+        array $punctuators, 
+        array $punctuatorLengths
     ): void
     {
         $languageContext = $this->createLanguageContextDouble(
-            $kwNotTokens, 
-            $kwTokens, 
-            $pnLengths, 
-            $pnLexNotPuncs, 
-            $pns
+            $keywords, 
+            $punctuators, 
+            $punctuatorLengths
         );
         
         $sut = new Lexer($languageContext);
@@ -151,56 +139,42 @@ class LexerTest extends TestCase
      * Creates a double of the {@see PhpCode\Language\Cpp\LanguageContextInterface} 
      * interface.
      * 
-     * @param   string[]    $kwNotTokens    The identifiers that are not keywords.
-     * @param   array[]     $kwTokens       The identifiers that are keywords.
-     * @param   int[]       $pnLengths      The punctuator lengths.
-     * @param   array[]     $pnLexNotPuncs  The lexemes that are not punctuators.
-     * @param   array[]     $pns            The punctuators.
+     * @param   array[]     $keywords           The keywords.
+     * @param   array[]     $punctuators        The punctuators.
+     * @param   int[]       $punctuatorLengths  The punctuator lengths.
      * @return  ProphecySubjectInterface
      */
     private function createLanguageContextDouble(
-        array $kwNotTokens, 
-        array $kwTokens, 
-        array $pnLengths, 
-        array $pnLexNotPuncs, 
-        array $pns
+        array $keywords, 
+        array $punctuators, 
+        array $punctuatorLengths
     ): ProphecySubjectInterface
     {
-        if (!empty($kwNotTokens) || !empty($kwTokens)) {
-            foreach ($kwNotTokens as $lexeme) {
-                $this->keywordTableBuilder
-                    ->buildHasTokenCall($lexeme, FALSE)
-                    ->buildGetTagNotCall($lexeme);
-            }
-            
-            foreach ($kwTokens as list($lexeme, $tag)) {
-                $this->keywordTableBuilder
-                    ->buildHasTokenCall($lexeme, TRUE)
-                    ->buildGetTagCall($lexeme, $tag);
-            }
-            
-            $this->keywordTableBuilder->buildGetLengthsNotCall();
-            
-            $keywordTable = $this->keywordTableBuilder->getDouble();
-            $this->languageContextBuilder->buildGetKeywordsCall($keywordTable);
+        foreach ($keywords as list($lexeme, $tag)) {
+            $this->keywordTableBuilder
+                ->buildHasToken($lexeme, TRUE)
+                ->buildGetTag($lexeme, $tag);
         }
         
-        $this->punctuatorTableBuilder->buildGetLengthsCall($pnLengths);
+        $keywordTable = $this->keywordTableBuilder
+            ->buildHasTokenAnyReturnsFalse()
+            ->buildGetLengthsNotCall()
+            ->getDouble();
         
-        foreach ($pnLexNotPuncs as $lexeme) {
+        $this->languageContextBuilder->buildGetKeywords($keywordTable);
+        
+        foreach ($punctuators as list($lexeme, $tag)) {
             $this->punctuatorTableBuilder
-                ->buildHasTokenCall($lexeme, FALSE)
-                ->buildGetTagNotCall($lexeme);
+                ->buildHasToken($lexeme, TRUE)
+                ->buildGetTag($lexeme, $tag);
         }
         
-        foreach ($pns as list($lexeme, $tag)) {
-            $this->punctuatorTableBuilder
-                ->buildHasTokenCall($lexeme, TRUE)
-                ->buildGetTagCall($lexeme, $tag);
-        }
+        $punctuatorTable = $this->punctuatorTableBuilder
+            ->buildHasTokenAnyReturnsFalse()
+            ->buildGetLengths($punctuatorLengths)
+            ->getDouble();
         
-        $punctuatorTable = $this->punctuatorTableBuilder->getDouble();
-        $this->languageContextBuilder->buildGetPunctuatorsCall($punctuatorTable);
+        $this->languageContextBuilder->buildGetPunctuators($punctuatorTable);
         
         return $this->languageContextBuilder->getDouble();
     }
@@ -212,11 +186,9 @@ class LexerTest extends TestCase
      * @return  array[] An indexed array of arrays where
      *                  [0] is the stream, 
      *                  [1] is the expected tokens,
-     *                  [2] is the identifiers that are not keywords, 
-     *                  [3] is the identifiers that are keywords, 
-     *                  [4] is the lengths of punctuators, 
-     *                  [5] is the lexemes that are not punctuators, 
-     *                  [6] is the punctuators.
+     *                  [2] is the keywords, 
+     *                  [3] is the punctuators.
+     *                  [4] is the punctuator lengths, 
      */
     public function getStreamsProvider(): array
     {
@@ -227,13 +199,9 @@ class LexerTest extends TestCase
                 [], 
                 [], 
                 [], 
-                [], 
-                [], 
             ], 
             'White spaces are skipped' => [
                 " \t \r \n  \t \r \n    \t \r \n ", 
-                [], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -245,14 +213,10 @@ class LexerTest extends TestCase
                 [], 
                 [], 
                 [], 
-                [], 
-                [], 
             ], 
             'Identifier starts with underscore' => [
                 '_', 
                 [['_', 2],], 
-                ['_'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -260,8 +224,6 @@ class LexerTest extends TestCase
             'Identifier starts with lower case letter' => [
                 'a', 
                 [['a', 2],], 
-                ['a'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -269,8 +231,6 @@ class LexerTest extends TestCase
             'Identifier starts with upper case letter' => [
                 'Z', 
                 [['Z', 2],], 
-                ['Z'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -278,8 +238,6 @@ class LexerTest extends TestCase
             'Identifier contains digit' => [
                 'c0123456789', 
                 [['c0123456789', 2],], 
-                ['c0123456789'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -287,8 +245,6 @@ class LexerTest extends TestCase
             'Identifier starts with digit' => [
                 '0t', 
                 [['0', 1], ['t', 2],], 
-                ['t'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -296,8 +252,6 @@ class LexerTest extends TestCase
             'Identifiers with white spaces' => [
                 " _foo1\tbar2\rbaz3\n ", 
                 [['_foo1', 2], ['bar2', 2], ['baz3', 2],], 
-                ['_foo1', 'bar2', 'baz3'], 
-                [], 
                 [], 
                 [], 
                 [], 
@@ -305,18 +259,14 @@ class LexerTest extends TestCase
             'Keyword foo' => [
                 'foo', 
                 [['foo', 100000]], 
-                [], 
                 [['foo', 100000]], 
-                [], 
                 [], 
                 [], 
             ], 
             'Keyword foo with white spaces' => [
                 "  \tfoo\n  \r  ", 
                 [['foo', 100000]], 
-                [], 
                 [['foo', 100000]], 
-                [], 
                 [], 
                 [], 
             ], 
@@ -324,28 +274,29 @@ class LexerTest extends TestCase
                 '<<<', 
                 [['<<<', 200000]], 
                 [], 
-                [], 
-                [3], 
-                [''], 
                 [['<<<', 200000]], 
+                [3], 
+            ], 
+            'Punctuator priority (the longest first)' => [
+                '<<<', 
+                [['<<<', 200000]], 
+                [], 
+                [['<', 300000], ['<<<', 200000]], 
+                [3, 1], 
             ], 
             'Punctuator <<< with white spaces' => [
                 "  \t<<<\n  \r  ", 
                 [['<<<', 200000]], 
                 [], 
-                [], 
-                [3], 
-                [''], 
                 [['<<<', 200000]], 
+                [3], 
             ], 
             'Identifier foo, keyword bar, punctuator <<< and unknown é with white spaces' => [
                 " foo \tbar é\n <<< \r  ", 
                 [['foo', 2], ['bar', 100000], ['é', 1], ['<<<', 200000]], 
-                ['foo'], 
                 [['bar', 100000]], 
-                [3], 
-                ["é\n ", ''], 
                 [['<<<', 200000]], 
+                [3], 
             ], 
         ];
     }

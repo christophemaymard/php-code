@@ -39,70 +39,65 @@ class TokenTableInterfaceDoubleBuilder
     /**
      * Builds and adds a prophecy for the hasToken() method, with the 
      * specified lexeme as first argument, that will return the specified 
-     * return value and is expected to be called.
+     * return value.
      * 
      * @param   string  $lexeme The lexeme (the first argument).
      * @param   bool    $return The value that will be returned.
      * @return  TokenTableInterfaceDoubleBuilder    This instance.
      */
-    public function buildHasTokenCall(string $lexeme, bool $return): self
+    public function buildHasToken(string $lexeme, bool $return): self
     {
         $this->prophecy
             ->hasToken(Argument::is($lexeme))
-            ->willReturn($return)
-            ->shouldBeCalled();
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds and adds a prophecy for the hasToken() method, with any lexeme 
+     * as first argument, that will return FALSE.
+     * 
+     * @return  TokenTableInterfaceDoubleBuilder    This instance.
+     */
+    public function buildHasTokenAnyReturnsFalse(): self
+    {
+        $this->prophecy
+            ->hasToken(Argument::any())
+            ->willReturn(FALSE);
         
         return $this;
     }
     
     /**
      * Builds and adds a prophecy for the getTag() method, with the specified 
-     * lexeme as first argument, that will return the specified return value 
-     * and is expected to be called.
+     * lexeme as first argument, that will return the specified return value.
      * 
      * @param   string  $lexeme The lexeme (the first argument).
      * @param   int     $return The value (a tag) that will be returned.
      * @return  TokenTableInterfaceDoubleBuilder    This instance.
      */
-    public function buildGetTagCall(string $lexeme, int $return): self
+    public function buildGetTag(string $lexeme, int $return): self
     {
         $this->prophecy
             ->getTag(Argument::is($lexeme))
-            ->willReturn($return)
-            ->shouldBeCalled();
-        
-        return $this;
-    }
-    
-    /**
-     * Builds and adds a prophecy for the getTag() method, with the specified 
-     * lexeme as first argument, that is not expected to be called.
-     * 
-     * @param   string  $lexeme The lexeme (the first argument).
-     * @return  TokenTableInterfaceDoubleBuilder    This instance.
-     */
-    public function buildGetTagNotCall(string $lexeme): self
-    {
-        $this->prophecy
-            ->getTag(Argument::is($lexeme))
-            ->shouldNotBeCalled();
+            ->willReturn($return);
         
         return $this;
     }
     
     /**
      * Builds and adds a prophecy for the getLengths() method that will 
-     * return the specified return value and is expected to be called.
+     * return the specified return value.
      * 
      * @param   int[]   $return The value (an indexed array of lengths in reverse order) that will be returned.
      * @return  TokenTableInterfaceDoubleBuilder    This instance.
      */
-    public function buildGetLengthsCall(array $return): self
+    public function buildGetLengths(array $return): self
     {
         $this->prophecy
             ->getLengths()
-            ->willReturn($return)
-            ->shouldBeCalled();
+            ->willReturn($return);
         
         return $this;
     }

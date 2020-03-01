@@ -38,34 +38,32 @@ class LanguageContextInterfaceDoubleBuilder
     
     /**
      * Builds and adds a prophecy for the getKeywords() method that will 
-     * return the specified return value and is expected to be called.
+     * return the specified return value.
      * 
      * @param   TokenTableInterface $return The value (a token table) that will be returned.
      * @return  LanguageContextInterfaceDoubleBuilder   This instance.
      */
-    public function buildGetKeywordsCall(TokenTableInterface $return): self
+    public function buildGetKeywords(TokenTableInterface $return): self
     {
         $this->prophecy
             ->getKeywords()
-            ->willReturn($return)
-            ->shouldBeCalled();
+            ->willReturn($return);
         
         return $this;
     }
     
     /**
      * Builds and adds a prophecy for the getPunctuators() method that will 
-     * return the specified return value and is expected to be called.
+     * return the specified return value.
      * 
      * @param   TokenTableInterface $return The value (a token table) that will be returned.
      * @return  LanguageContextInterfaceDoubleBuilder   This instance.
      */
-    public function buildGetPunctuatorsCall(TokenTableInterface $return): self
+    public function buildGetPunctuators(TokenTableInterface $return): self
     {
         $this->prophecy
             ->getPunctuators()
-            ->willReturn($return)
-            ->shouldBeCalled();
+            ->willReturn($return);
         
         return $this;
     }
