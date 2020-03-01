@@ -405,8 +405,7 @@ postfix-expression:
     postfix-expression [ expression ]
     postfix-expression ( expression-list[opt] )
     simple-type-specifier ( expression-list[opt] )
-    typename ::[opt] nested-name-specifier identifier ( expression-list[opt] )
-    typename ::[opt] nested-name-specifier template[opt] template-id ( expression-list[opt] )
+    typename-specifier ( expression-list[opt] )
     postfix-expression . template[opt] id-expression
     postfix-expression -> template[opt] id-expression
     postfix-expression . pseudo-destructor-name
@@ -426,7 +425,7 @@ expression-list:
 
 pseudo-destructor-name:
     ::[opt] nested-name-specifier[opt] type-name :: ~ type-name
-    ::[opt] nested-name-specifier template template-id :: ~ type-name
+    ::[opt] nested-name-specifier template simple-template-id :: ~ type-name
     ::[opt] nested-name-specifier[opt] ~ type-name
 
 unary-expression:
@@ -455,15 +454,15 @@ new-placement:
     ( expression-list )
 
 new-type-id:
-    type-specifier-seq new-declarator[opt]
+    defining-type-specifier-seq new-declarator[opt]
 
 new-declarator:
     ptr-operator new-declarator[opt]
-    direct-new-declarator
+    noptr-new-declarator
 
-direct-new-declarator:
+noptr-new-declarator:
     [ expression ]
-    direct-new-declarator [ constant-expression ]
+    noptr-new-declarator [ constant-expression ]
 
 new-initializer:
     ( expression-list[opt] )
@@ -596,18 +595,18 @@ selection-statement:
     if ( condition ) statement else statement
     switch ( condition ) statement
 
-for-init-statement:
+init-statement:
     expression-statement
     simple-declaration
 
 condition:
     expression
-    type-specifier-seq declarator = assignment-expression
+    defining-type-specifier-seq declarator = assignment-expression
 
 iteration-statement:
     while ( condition ) statement
     do statement while ( expression ) ;
-    for ( for-init-statement condition[opt] ; expression[opt] ) statement
+    for ( init-statement condition[opt] ; expression[opt] ) statement
 
 jump-statement:
     break ;
@@ -648,7 +647,7 @@ simple-declaration:
 
 decl-specifier:
     storage-class-specifier
-    type-specifier
+    defining-type-specifier
     function-specifier
     friend
     typedef
@@ -673,17 +672,21 @@ typedef-name:
 
 type-specifier:
     simple-type-specifier
-    class-specifier
-    enum-specifier
     elaborated-type-specifier
     cv-qualifier
 
-type-specifier-seq:
-    type-specifier type-specifier-seq[opt]
+defining-type-specifier:
+    type-specifier
+    class-specifier
+    enum-specifier
+
+defining-type-specifier-seq:
+    defining-type-specifier
+    defining-type-specifier defining-type-specifier-seq
 
 simple-type-specifier:
     ::[opt] nested-name-specifier[opt] type-name
-    ::[opt] nested-name-specifier template template-id
+    ::[opt] nested-name-specifier template simple-template-id
     char
     wchar_t
     bool
@@ -700,19 +703,29 @@ type-name:
     class-name
     enum-name
     typedef-name
+    simple-template-id
 
 elaborated-type-specifier:
     class-key ::[opt] nested-name-specifier[opt] identifier
-    class-key ::[opt] nested-name-specifier[opt] template[opt] template-id
+    class-key ::[opt] nested-name-specifier[opt] template[opt] simple-template-id
     enum ::[opt] nested-name-specifier[opt] identifier
     typename ::[opt] nested-name-specifier identifier
-    typename ::[opt] nested-name-specifier template[opt] template-id
+    typename ::[opt] nested-name-specifier template[opt] simple-template-id
 
 enum-name:
     identifier
 
 enum-specifier:
-    enum identifier[opt] { enumerator-list[opt] }
+    enum-head { enumerator-list[opt] }
+
+enum-head:
+    enum-key enum-head-name[opt]
+
+enum-head-name:
+    identifier
+
+enum-key:
+    enum
 
 enumerator-list:
     enumerator-definition
@@ -726,25 +739,15 @@ enumerator:
     identifier
 
 namespace-name:
-    original-namespace-name
-    namespace-alias
-
-original-namespace-name:
     identifier
+    namespace-alias
 
 namespace-definition:
     named-namespace-definition
     unnamed-namespace-definition
 
 named-namespace-definition:
-    original-namespace-definition
-    extension-namespace-definition
-
-original-namespace-definition:
     namespace identifier { namespace-body }
-
-extension-namespace-definition:
-    namespace original-namespace-name { namespace-body }
 
 unnamed-namespace-definition:
     namespace { namespace-body }
@@ -788,14 +791,20 @@ init-declarator:
     declarator initializer[opt]
 
 declarator:
-    direct-declarator
-    ptr-operator declarator
+    ptr-declarator
 
-direct-declarator:
+ptr-declarator:
+    noptr-declarator
+    ptr-operator ptr-declarator
+
+noptr-declarator:
     declarator-id
-    direct-declarator ( parameter-declaration-clause ) cv-qualifier-seq[opt] exception-specification[opt]
-    direct-declarator [ constant-expression[opt] ]
-    ( declarator )
+    noptr-declarator parameters-and-qualifiers
+    noptr-declarator [ constant-expression[opt] ]
+    ( ptr-declarator )
+
+parameters-and-qualifiers:
+    ( parameter-declaration-clause ) cv-qualifier-seq[opt] exception-specification[opt]
 
 ptr-operator:
     * cv-qualifier-seq[opt]
@@ -814,16 +823,19 @@ declarator-id:
     ::[opt] nested-name-specifier[opt] type-name
 
 type-id:
-    type-specifier-seq abstract-declarator[opt]
+    defining-type-specifier-seq abstract-declarator[opt]
 
 abstract-declarator:
-    ptr-operator abstract-declarator[opt]
-    direct-abstract-declarator
+    ptr-abstract-declarator
 
-direct-abstract-declarator:
-    direct-abstract-declarator[opt] ( parameter-declaration-clause ) cv-qualifier-seq[opt] exception-specification[opt]
-    direct-abstract-declarator[opt] [ constant-expression[opt] ]
-    ( abstract-declarator )
+ptr-abstract-declarator:
+    noptr-abstract-declarator
+    ptr-operator ptr-abstract-declarator[opt]
+
+noptr-abstract-declarator:
+    noptr-abstract-declarator parameters-and-qualifiers
+    noptr-abstract-declarator [ constant-expression[opt] ]
+    ( ptr-abstract-declarator )
 
 parameter-declaration-clause:
     parameter-declaration-list[opt] ...[opt]
@@ -840,18 +852,24 @@ parameter-declaration:
     decl-specifier-seq abstract-declarator[opt] = assignment-expression
 
 function-definition:
-    decl-specifier-seq[opt] declarator ctor-initializer[opt] function-body
-    decl-specifier-seq[opt] declarator function-try-block
+    decl-specifier-seq[opt] declarator function-body
 
 function-body:
-    compound-statement
+    ctor-initializer[opt] compound-statement
+    function-try-block
 
 initializer:
-    = initializer-clause
+    brace-or-equal-initializer
     ( expression-list )
+
+brace-or-equal-initializer:
+    = initializer-clause
 
 initializer-clause:
     assignment-expression
+    braced-init-list
+
+braced-init-list:
     { initializer-list ,[opt] }
     { }
 
@@ -866,15 +884,17 @@ initializer-list:
 
 class-name:
     identifier
-    template-id
+    simple-template-id
 
 class-specifier:
     class-head { member-specification[opt] }
 
 class-head:
-    class-key identifier[opt] base-clause[opt]
-    class-key nested-name-specifier identifier base-clause[opt]
-    class-key nested-name-specifier[opt] template-id base-clause[opt]
+    class-key class-head-name base-clause[opt]
+    class-key base-clause[opt]
+
+class-head-name:
+    nested-name-specifier[opt] class-name
 
 class-key:
     class
@@ -920,9 +940,12 @@ base-specifier-list:
     base-specifier-list , base-specifier
 
 base-specifier:
+    class-or-decltype
+    virtual access-specifier[opt] class-or-decltype
+    access-specifier virtual[opt] class-or-decltype
+
+class-or-decltype:
     ::[opt] nested-name-specifier[opt] class-name
-    virtual access-specifier[opt] ::[opt] nested-name-specifier[opt] class-name
-    access-specifier virtual[opt] ::[opt] nested-name-specifier[opt] class-name
 
 access-specifier:
     private
@@ -938,7 +961,7 @@ conversion-function-id:
     operator conversion-type-id
 
 conversion-type-id:
-    type-specifier-seq conversion-declarator[opt]
+    defining-type-specifier-seq conversion-declarator[opt]
 
 conversion-declarator:
     ptr-operator conversion-declarator[opt]
@@ -954,7 +977,7 @@ mem-initializer:
     mem-initializer-id ( expression-list[opt] )
 
 mem-initializer-id:
-    ::[opt] nested-name-specifier[opt] class-name
+    class-or-decltype
     identifier
 
 
@@ -1016,7 +1039,10 @@ overloaded-operator:
 // Templates
 
 template-declaration:
-    export[opt] template < template-parameter-list > declaration
+    export[opt] template-head declaration
+
+template-head:
+    template < template-parameter-list >
 
 template-parameter-list:
     template-parameter
@@ -1027,15 +1053,20 @@ template-parameter:
     parameter-declaration
 
 type-parameter:
-    class identifier[opt]
-    class identifier[opt] = type-id
-    typename identifier[opt]
-    typename identifier[opt] = type-id
-    template < template-parameter-list > class identifier[opt]
-    template < template-parameter-list > class identifier[opt] = id-expression
+    type-parameter-key identifier[opt]
+    type-parameter-key identifier[opt] = type-id
+    template-head class identifier[opt]
+    template-head class identifier[opt] = id-expression
+
+type-parameter-key:
+    class
+    typename
+
+simple-template-id:
+    template-name < template-argument-list[opt] >
 
 template-id:
-    template-name < template-argument-list[opt] >
+    simple-template-id
 
 template-name:
     identifier
@@ -1048,6 +1079,10 @@ template-argument:
     assignment-expression
     type-id
     id-expression
+
+typename-specifier:
+    typename ::[opt] nested-name-specifier identifier
+    typename ::[opt] nested-name-specifier template[opt] simple-template-id
 
 explicit-instantiation:
     template declaration
@@ -1064,7 +1099,7 @@ try-block:
     try compound-statement handler-seq
 
 function-try-block:
-    try ctor-initializer[opt] function-body handler-seq
+    try ctor-initializer[opt] compound-statement handler-seq
 
 handler-seq:
     handler handler-seq[opt]
@@ -1073,9 +1108,9 @@ handler:
     catch ( exception-declaration ) compound-statement
 
 exception-declaration:
-    type-specifier-seq declarator
-    type-specifier-seq abstract-declarator
-    type-specifier-seq
+    defining-type-specifier-seq declarator
+    defining-type-specifier-seq abstract-declarator
+    defining-type-specifier-seq
     ...
 
 exception-specification:
