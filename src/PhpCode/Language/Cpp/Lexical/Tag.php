@@ -193,5 +193,110 @@ class Tag
     public const KW_XOR = 185000;
     /** Keyword: "xor_eq". */
     public const KW_XOR_EQ = 186000;
+    
+    /** Punctuator: "{". */
+    public const PN_BRACE_L = 201000;
+    /** Punctuator: "}". */
+    public const PN_BRACE_R = 202000;
+    /** Punctuator: "[". */
+    public const PN_SQUARE_L = 203000;
+    /** Punctuator: "]". */
+    public const PN_SQUARE_R = 204000;
+    /** Punctuator: "#". */
+    public const PN_HASH = 205000;
+    /** Punctuator: "##". */
+    public const PN_HASH_HASH = 206000;
+    /** Punctuator: "(". */
+    public const PN_PAREN_L = 207000;
+    /** Punctuator: ")". */
+    public const PN_PAREN_R = 208000;
+    /** Punctuator: ";". */
+    public const PN_SEMI = 209000;
+    /** Punctuator: ":". */
+    public const PN_COLON = 210000;
+    /** Punctuator: "...". */
+    public const PN_ELLIPSIS = 211000;
+    /** Punctuator: "?". */
+    public const PN_QUESTION = 212000;
+    /** Punctuator: "::". */
+    public const PN_COLON_COLON = 213000;
+    /** Punctuator: ".". */
+    public const PN_PERIOD = 214000;
+    /** Punctuator: ".*". */
+    public const PN_PERIOD_STAR = 215000;
+    /** Punctuator: "+". */
+    public const PN_PLUS = 216000;
+    /** Punctuator: "-". */
+    public const PN_MINUS = 217000;
+    /** Punctuator: "*". */
+    public const PN_STAR = 218000;
+    /** Punctuator: "/". */
+    public const PN_SLASH = 219000;
+    /** Punctuator: "%". */
+    public const PN_PERCENT = 220000;
+    /** Punctuator: "^". */
+    public const PN_CARET = 221000;
+    /** Punctuator: "&". */
+    public const PN_AMP = 222000;
+    /** Punctuator: "|". */
+    public const PN_PIPE = 223000;
+    /** Punctuator: "~". */
+    public const PN_TILDE = 224000;
+    /** Punctuator: "!". */
+    public const PN_EXCLAIM = 225000;
+    /** Punctuator: "=". */
+    public const PN_EQ = 226000;
+    /** Punctuator: "<". */
+    public const PN_LT = 227000;
+    /** Punctuator: ">". */
+    public const PN_GT = 228000;
+    /** Punctuator: "+=". */
+    public const PN_PLUS_EQ = 229000;
+    /** Punctuator: "-=". */
+    public const PN_MINUS_EQ = 230000;
+    /** Punctuator: "*=". */
+    public const PN_STAR_EQ = 231000;
+    /** Punctuator: "/=". */
+    public const PN_SLASH_EQ = 232000;
+    /** Punctuator: "%=". */
+    public const PN_PERCENT_EQ = 233000;
+    /** Punctuator: "^=". */
+    public const PN_CARET_EQ = 234000;
+    /** Punctuator: "&=". */
+    public const PN_AMP_EQ = 235000;
+    /** Punctuator: "|=". */
+    public const PN_PIPE_EQ = 236000;
+    /** Punctuator: "<<". */
+    public const PN_LT_LT = 237000;
+    /** Punctuator: ">>". */
+    public const PN_GT_GT = 238000;
+    /** Punctuator: "<<=". */
+    public const PN_LT_LT_EQ = 239000;
+    /** Punctuator: ">>=". */
+    public const PN_GT_GT_EQ = 240000;
+    /** Punctuator: "==". */
+    public const PN_EQ_EQ = 241000;
+    /** Punctuator: "!=". */
+    public const PN_EXCLAIM_EQ = 242000;
+    /** Punctuator: "<=". */
+    public const PN_LT_EQ = 243000;
+    /** Punctuator: ">=". */
+    public const PN_GT_EQ = 244000;
+    /** Punctuator: "&&". */
+    public const PN_AMP_AMP = 245000;
+    /** Punctuator: "||". */
+    public const PN_PIPE_PIPE = 246000;
+    /** Punctuator: "++". */
+    public const PN_PLUS_PLUS = 247000;
+    /** Punctuator: "--". */
+    public const PN_MINUS_MINUS = 248000;
+    /** Punctuator: ",". */
+    public const PN_COMMA = 249000;
+    /** Punctuator: "->*". */
+    public const PN_ARROW_STAR = 250000;
+    /** Punctuator: "->". */
+    public const PN_ARROW = 251000;
+    /** Punctuator: "<=>". */
+    public const PN_LT_EQ_GT = 252000;
 }
 
