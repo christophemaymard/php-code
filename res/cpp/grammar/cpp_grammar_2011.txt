@@ -489,6 +489,9 @@ capture-list:
     capture-list , capture ...[opt]
 
 capture:
+    simple-capture
+
+simple-capture:
     identifier
     & identifier
     this
@@ -553,7 +556,7 @@ new-placement:
     ( expression-list )
 
 new-type-id:
-    type-specifier-seq new-declarator[opt]
+    defining-type-specifier-seq new-declarator[opt]
 
 new-declarator:
     ptr-operator new-declarator[opt]
@@ -698,7 +701,7 @@ selection-statement:
     if ( condition ) statement else statement
     switch ( condition ) statement
 
-for-init-statement:
+init-statement:
     expression-statement
     simple-declaration
 
@@ -710,7 +713,7 @@ condition:
 iteration-statement:
     while ( condition ) statement
     do statement while ( expression ) ;
-    for ( for-init-statement condition[opt] ; expression[opt] ) statement
+    for ( init-statement condition[opt] ; expression[opt] ) statement
     for ( for-range-declaration : for-range-initializer ) statement
 
 for-range-declaration:
@@ -761,7 +764,7 @@ block-declaration:
     opaque-enum-declaration
 
 alias-declaration:
-    using identifier attribute-specifier-seq[opt] = type-id ;
+    using identifier attribute-specifier-seq[opt] = defining-type-id ;
 
 simple-declaration:
     decl-specifier-seq[opt] init-declarator-list[opt] ;
@@ -778,7 +781,7 @@ attribute-declaration:
 
 decl-specifier:
     storage-class-specifier
-    type-specifier
+    defining-type-specifier
     function-specifier
     friend
     typedef
@@ -804,11 +807,6 @@ typedef-name:
     identifier
 
 type-specifier:
-    trailing-type-specifier
-    class-specifier
-    enum-specifier
-
-trailing-type-specifier:
     simple-type-specifier
     elaborated-type-specifier
     typename-specifier
@@ -818,9 +816,14 @@ type-specifier-seq:
     type-specifier attribute-specifier-seq[opt]
     type-specifier type-specifier-seq
 
-trailing-type-specifier-seq:
-    trailing-type-specifier attribute-specifier-seq[opt]
-    trailing-type-specifier trailing-type-specifier-seq
+defining-type-specifier:
+    type-specifier
+    class-specifier
+    enum-specifier
+
+defining-type-specifier-seq:
+    defining-type-specifier attribute-specifier-seq[opt]
+    defining-type-specifier defining-type-specifier-seq
 
 simple-type-specifier:
     nested-name-specifier[opt] type-name
@@ -863,8 +866,10 @@ enum-specifier:
     enum-head { enumerator-list , }
 
 enum-head:
-    enum-key attribute-specifier-seq[opt] identifier[opt] enum-base[opt]
-    enum-key attribute-specifier-seq[opt] nested-name-specifier identifier enum-base[opt]
+    enum-key attribute-specifier-seq[opt] enum-head-name[opt] enum-base[opt]
+
+enum-head-name:
+    nested-name-specifier[opt] identifier
 
 opaque-enum-declaration:
     enum-key attribute-specifier-seq[opt] identifier enum-base[opt] ;
@@ -875,7 +880,7 @@ enum-key:
     enum struct
 
 enum-base:
-    : type-specifier-seq
+    : defining-type-specifier-seq
 
 enumerator-list:
     enumerator-definition
@@ -889,25 +894,15 @@ enumerator:
     identifier
 
 namespace-name:
-    original-namespace-name
-    namespace-alias
-
-original-namespace-name:
     identifier
+    namespace-alias
 
 namespace-definition:
     named-namespace-definition
     unnamed-namespace-definition
 
 named-namespace-definition:
-    original-namespace-definition
-    extension-namespace-definition
-
-original-namespace-definition:
     inline[opt] namespace identifier { namespace-body }
-
-extension-namespace-definition:
-    inline[opt] namespace original-namespace-name { namespace-body }
 
 unnamed-namespace-definition:
     inline[opt] namespace { namespace-body }
@@ -1011,7 +1006,7 @@ parameters-and-qualifiers:
     ( parameter-declaration-clause ) attribute-specifier-seq[opt] cv-qualifier-seq[opt] ref-qualifier[opt] exception-specification[opt]
 
 trailing-return-type:
-    -> trailing-type-specifier-seq abstract-declarator[opt]
+    -> type-specifier-seq abstract-declarator[opt]
 
 ptr-operator:
     * attribute-specifier-seq[opt] cv-qualifier-seq[opt]
@@ -1035,7 +1030,10 @@ declarator-id:
     nested-name-specifier[opt] class-name
 
 type-id:
-    type-specifier-seq abstract-declarator[opt]
+    defining-type-specifier-seq abstract-declarator[opt]
+
+defining-type-id:
+    defining-type-specifier-seq abstract-declarator[opt]
 
 abstract-declarator:
     ptr-abstract-declarator
@@ -1175,16 +1173,13 @@ base-specifier-list:
     base-specifier-list , base-specifier ...[opt]
 
 base-specifier:
-    attribute-specifier-seq[opt] base-type-specifier
-    attribute-specifier-seq[opt] virtual access-specifier[opt] base-type-specifier
-    attribute-specifier-seq[opt] access-specifier virtual[opt] base-type-specifier
+    attribute-specifier-seq[opt] class-or-decltype
+    attribute-specifier-seq[opt] virtual access-specifier[opt] class-or-decltype
+    attribute-specifier-seq[opt] access-specifier virtual[opt] class-or-decltype
 
 class-or-decltype:
     nested-name-specifier[opt] class-name
     decltype-specifier
-
-base-type-specifier:
-    class-or-decltype
 
 access-specifier:
     private
@@ -1200,7 +1195,7 @@ conversion-function-id:
     operator conversion-type-id
 
 conversion-type-id:
-    type-specifier-seq conversion-declarator[opt]
+    defining-type-specifier-seq conversion-declarator[opt]
 
 conversion-declarator:
     ptr-operator conversion-declarator[opt]
@@ -1281,7 +1276,10 @@ literal-operator-id:
 // Templates
 
 template-declaration:
-    template < template-parameter-list > declaration
+    template-head declaration
+
+template-head:
+    template < template-parameter-list >
 
 template-parameter-list:
     template-parameter
@@ -1292,12 +1290,14 @@ template-parameter:
     parameter-declaration
 
 type-parameter:
-    class ...[opt] identifier[opt]
-    class identifier[opt] = type-id
-    typename ...[opt] identifier[opt]
-    typename identifier[opt] = type-id
-    template < template-parameter-list > class ...[opt] identifier[opt]
-    template < template-parameter-list > class identifier[opt] = id-expression
+    type-parameter-key ...[opt] identifier[opt]
+    type-parameter-key identifier[opt] = type-id
+    template-head class ...[opt] identifier[opt]
+    template-head class identifier[opt] = id-expression
+
+type-parameter-key:
+    class
+    typename
 
 simple-template-id:
     template-name < template-argument-list[opt] >
@@ -1347,8 +1347,8 @@ handler:
     catch ( exception-declaration ) compound-statement
 
 exception-declaration:
-    attribute-specifier-seq[opt] type-specifier-seq declarator
-    attribute-specifier-seq[opt] type-specifier-seq abstract-declarator[opt]
+    attribute-specifier-seq[opt] defining-type-specifier-seq declarator
+    attribute-specifier-seq[opt] defining-type-specifier-seq abstract-declarator[opt]
     ...
 
 exception-specification:
