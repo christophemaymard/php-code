@@ -454,14 +454,11 @@ unqualified-id:
 
 qualified-id:
     nested-name-specifier template[opt] unqualified-id
-    :: identifier
-    :: operator-function-id
-    :: literal-operator-id
-    :: template-id
 
 nested-name-specifier:
-    ::[opt] type-name ::
-    ::[opt] namespace-name ::
+    ::
+    type-name ::
+    namespace-name ::
     decltype-specifier ::
     nested-name-specifier identifier ::
     nested-name-specifier template[opt] simple-template-id ::
@@ -1027,7 +1024,6 @@ ref-qualifier:
 
 declarator-id:
     ...[opt] id-expression
-    nested-name-specifier[opt] class-name
 
 type-id:
     defining-type-specifier-seq abstract-declarator[opt]
@@ -1352,19 +1348,13 @@ exception-declaration:
     ...
 
 exception-specification:
-    dynamic-exception-specification
-    noexcept-specification
-
-dynamic-exception-specification:
     throw ( type-id-list[opt] )
+    noexcept
+    noexcept ( constant-expression )
 
 type-id-list:
     type-id ...[opt]
     type-id-list , type-id ...[opt]
-
-noexcept-specification:
-    noexcept ( constant-expression )
-    noexcept
 
 
 
