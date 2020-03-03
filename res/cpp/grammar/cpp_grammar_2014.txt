@@ -1415,19 +1415,13 @@ exception-declaration:
     ...
 
 exception-specification:
-    dynamic-exception-specification
-    noexcept-specification
-
-dynamic-exception-specification:
     throw ( type-id-list[opt] )
+    noexcept
+    noexcept ( constant-expression )
 
 type-id-list:
     type-id ...[opt]
     type-id-list , type-id ...[opt]
-
-noexcept-specification:
-    noexcept ( constant-expression )
-    noexcept
 
 
 
