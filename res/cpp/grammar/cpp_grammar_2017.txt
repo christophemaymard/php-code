@@ -511,7 +511,7 @@ lambda-introducer:
     [ lambda-capture[opt] ]
 
 lambda-declarator:
-    ( parameter-declaration-clause ) decl-specifier-seq[opt] noexcept-specifier[opt] attribute-specifier-seq[opt] trailing-return-type[opt]
+    ( parameter-declaration-clause ) decl-specifier-seq[opt] exception-specification attribute-specifier-seq[opt] trailing-return-type[opt]
 
 lambda-capture:
     capture-default
@@ -1163,7 +1163,7 @@ noptr-declarator:
     ( ptr-declarator )
 
 parameters-and-qualifiers:
-    ( parameter-declaration-clause ) cv-qualifier-seq[opt] ref-qualifier[opt] noexcept-specifier[opt] attribute-specifier-seq[opt]
+    ( parameter-declaration-clause ) cv-qualifier-seq[opt] ref-qualifier[opt] exception-specification attribute-specifier-seq[opt]
 
 trailing-return-type:
     -> type-id
@@ -1558,10 +1558,10 @@ exception-declaration:
     attribute-specifier-seq[opt] type-specifier-seq abstract-declarator[opt]
     ...
 
-noexcept-specifier:
-    noexcept ( constant-expression )
-    noexcept
+exception-specification:
     throw ( )
+    noexcept
+    noexcept ( constant-expression )
 
 
 
