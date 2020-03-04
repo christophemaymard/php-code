@@ -310,6 +310,14 @@ Table of contents
 
 
 
+### ptr-declarator
+
+| Definitions                           | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:--------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [noptr-declarator](#noptr-declarator) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### noptr-declarator
 
 | Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -365,6 +373,7 @@ Table of contents
   - [nondigit](#nondigit)
   - [noptr-declarator](#noptr-declarator)
 - **P**
+  - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)
 - **T**
   - [token](#token)
