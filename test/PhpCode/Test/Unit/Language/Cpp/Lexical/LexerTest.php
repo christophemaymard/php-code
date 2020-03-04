@@ -9,11 +9,9 @@ namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
 
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Lexical\TokenInterface;
-use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
-use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
-use PhpCode\Test\Unit\Language\Cpp\Specification\LanguageContextInterfaceDoubleBuilder;
+use PhpCode\Test\ProphecyFactory;
+use PhpCode\Test\Unit\Language\Cpp\Specification\LanguageContextInterfaceDoubleFactory;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Language\Cpp\Lexical\Lexer} 
@@ -27,33 +25,17 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
 class LexerTest extends TestCase
 {
     /**
-     * @var LanguageContextInterfaceDoubleBuilder
+     * @var LanguageContextInterfaceDoubleFactory
      */
-    private $languageContextBuilder;
-    
-    /**
-     * @var TokenTableInterfaceDoubleBuilder
-     */
-    private $keywordTableBuilder;
-    
-    /**
-     * @var TokenTableInterfaceDoubleBuilder
-     */
-    private $punctuatorTableBuilder;
+    private $lciDoubleFactory;
     
     /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
-        $this->languageContextBuilder = new LanguageContextInterfaceDoubleBuilder(
-            $this->prophesize(LanguageContextInterface::class)
-        );
-        $this->keywordTableBuilder = new TokenTableInterfaceDoubleBuilder(
-            $this->prophesize(TokenTableInterface::class)
-        );
-        $this->punctuatorTableBuilder = new TokenTableInterfaceDoubleBuilder(
-            $this->prophesize(TokenTableInterface::class)
+        $this->lciDoubleFactory = new LanguageContextInterfaceDoubleFactory(
+            new ProphecyFactory($this)
         );
     }
     
@@ -87,7 +69,7 @@ class LexerTest extends TestCase
      */
     public function testGetTokenReturnsNewInstanceEOFTokenWhenInstantiated(): void
     {
-        $languageContext = $this->createLanguageContextDouble([], [], []);
+        $languageContext = $this->lciDoubleFactory->createDouble([], [], []);
         
         $sut = new Lexer($languageContext);
         
@@ -119,7 +101,7 @@ class LexerTest extends TestCase
         array $punctuatorLengths
     ): void
     {
-        $languageContext = $this->createLanguageContextDouble(
+        $languageContext = $this->lciDoubleFactory->createDouble(
             $keywords, 
             $punctuators, 
             $punctuatorLengths
@@ -133,50 +115,6 @@ class LexerTest extends TestCase
         }
         
         self::assertEOFToken($sut->getToken(), 'The last token must be the EOF token.');
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\LanguageContextInterface} 
-     * interface.
-     * 
-     * @param   array[]     $keywords           The keywords.
-     * @param   array[]     $punctuators        The punctuators.
-     * @param   int[]       $punctuatorLengths  The punctuator lengths.
-     * @return  ProphecySubjectInterface
-     */
-    private function createLanguageContextDouble(
-        array $keywords, 
-        array $punctuators, 
-        array $punctuatorLengths
-    ): ProphecySubjectInterface
-    {
-        foreach ($keywords as list($lexeme, $tag)) {
-            $this->keywordTableBuilder
-                ->buildHasToken($lexeme, TRUE)
-                ->buildGetTag($lexeme, $tag);
-        }
-        
-        $keywordTable = $this->keywordTableBuilder
-            ->buildHasTokenAnyReturnsFalse()
-            ->buildGetLengthsNotCall()
-            ->getDouble();
-        
-        $this->languageContextBuilder->buildGetKeywords($keywordTable);
-        
-        foreach ($punctuators as list($lexeme, $tag)) {
-            $this->punctuatorTableBuilder
-                ->buildHasToken($lexeme, TRUE)
-                ->buildGetTag($lexeme, $tag);
-        }
-        
-        $punctuatorTable = $this->punctuatorTableBuilder
-            ->buildHasTokenAnyReturnsFalse()
-            ->buildGetLengths($punctuatorLengths)
-            ->getDouble();
-        
-        $this->languageContextBuilder->buildGetPunctuators($punctuatorTable);
-        
-        return $this->languageContextBuilder->getDouble();
     }
     
     /**
