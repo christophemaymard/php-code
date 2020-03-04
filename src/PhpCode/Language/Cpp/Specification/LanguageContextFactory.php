@@ -5,13 +5,10 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Language\Cpp;
+namespace PhpCode\Language\Cpp\Specification;
 
 use PhpCode\Language\Cpp\Lexical\Tag;
 use PhpCode\Language\Cpp\Lexical\TokenTable;
-use PhpCode\Language\Cpp\Specification\LanguageContext;
-use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
-use PhpCode\Language\Cpp\Specification\Standard;
 
 /**
  * Represents a factory of language contexts.

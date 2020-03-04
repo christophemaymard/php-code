@@ -5,15 +5,16 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp;
+namespace PhpCode\Test\Unit\Language\Cpp\Specification;
 
-use PhpCode\Language\Cpp\LanguageContextFactory;
+use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Represents the unit tests for the {@see PhpCode\Language\Cpp\LanguageContextFactory} 
+ * Represents the unit tests for the {@see PhpCode\Language\Cpp\Specification\LanguageContextFactory} 
  * class.
  * 
+ * @group   specification
  * @group   c++
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
