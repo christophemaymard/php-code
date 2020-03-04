@@ -387,18 +387,14 @@ unqualified-id:
     template-id
 
 qualified-id:
-    ::[opt] nested-name-specifier template[opt] unqualified-id
-    :: identifier
-    :: operator-function-id
-    :: template-id
+    nested-name-specifier template[opt] unqualified-id
 
 nested-name-specifier:
-    class-or-namespace-name :: nested-name-specifier[opt]
-    class-or-namespace-name :: template nested-name-specifier
-
-class-or-namespace-name:
-    class-name
-    namespace-name
+    ::
+    class-name ::
+    namespace-name ::
+    nested-name-specifier identifier ::
+    nested-name-specifier template simple-template-id ::
 
 postfix-expression:
     primary-expression
@@ -424,9 +420,9 @@ expression-list:
     expression-list , assignment-expression
 
 pseudo-destructor-name:
-    ::[opt] nested-name-specifier[opt] type-name :: ~ type-name
-    ::[opt] nested-name-specifier template simple-template-id :: ~ type-name
-    ::[opt] nested-name-specifier[opt] ~ type-name
+    nested-name-specifier[opt] type-name :: ~ type-name
+    nested-name-specifier template simple-template-id :: ~ type-name
+    nested-name-specifier[opt] ~ type-name
 
 unary-expression:
     postfix-expression
@@ -685,8 +681,8 @@ defining-type-specifier-seq:
     defining-type-specifier defining-type-specifier-seq
 
 simple-type-specifier:
-    ::[opt] nested-name-specifier[opt] type-name
-    ::[opt] nested-name-specifier template simple-template-id
+    nested-name-specifier[opt] type-name
+    nested-name-specifier template simple-template-id
     char
     wchar_t
     bool
@@ -706,11 +702,11 @@ type-name:
     simple-template-id
 
 elaborated-type-specifier:
-    class-key ::[opt] nested-name-specifier[opt] identifier
-    class-key ::[opt] nested-name-specifier[opt] template[opt] simple-template-id
-    enum ::[opt] nested-name-specifier[opt] identifier
-    typename ::[opt] nested-name-specifier identifier
-    typename ::[opt] nested-name-specifier template[opt] simple-template-id
+    class-key nested-name-specifier[opt] identifier
+    class-key nested-name-specifier[opt] template[opt] simple-template-id
+    enum nested-name-specifier[opt] identifier
+    typename nested-name-specifier identifier
+    typename nested-name-specifier template[opt] simple-template-id
 
 enum-name:
     identifier
@@ -762,14 +758,14 @@ namespace-alias-definition:
     namespace identifier = qualified-namespace-specifier ;
 
 qualified-namespace-specifier:
-    ::[opt] nested-name-specifier[opt] namespace-name
+    nested-name-specifier[opt] namespace-name
 
 using-declaration:
-    using typename[opt] ::[opt] nested-name-specifier unqualified-id ;
+    using typename[opt] nested-name-specifier unqualified-id ;
     using :: unqualified-id ;
 
 using-directive:
-    using namespace ::[opt] nested-name-specifier[opt] namespace-name ;
+    using namespace nested-name-specifier[opt] namespace-name ;
 
 asm-definition:
     asm ( string-literal ) ;
@@ -809,7 +805,7 @@ parameters-and-qualifiers:
 ptr-operator:
     * cv-qualifier-seq[opt]
     &
-    ::[opt] nested-name-specifier * cv-qualifier-seq[opt]
+    nested-name-specifier * cv-qualifier-seq[opt]
 
 cv-qualifier-seq:
     cv-qualifier cv-qualifier-seq[opt]
@@ -820,7 +816,6 @@ cv-qualifier:
 
 declarator-id:
     id-expression
-    ::[opt] nested-name-specifier[opt] type-name
 
 type-id:
     defining-type-specifier-seq abstract-declarator[opt]
@@ -908,7 +903,7 @@ member-specification:
 member-declaration:
     decl-specifier-seq[opt] member-declarator-list[opt] ;
     function-definition ;[opt]
-    ::[opt] nested-name-specifier template[opt] unqualified-id ;
+    nested-name-specifier template[opt] unqualified-id ;
     using-declaration
     template-declaration
 
@@ -945,7 +940,7 @@ base-specifier:
     access-specifier virtual[opt] class-or-decltype
 
 class-or-decltype:
-    ::[opt] nested-name-specifier[opt] class-name
+    nested-name-specifier[opt] class-name
 
 access-specifier:
     private
@@ -987,7 +982,6 @@ mem-initializer-id:
 
 operator-function-id:
     operator overloaded-operator
-    operator overloaded-operator < template-argument-list[opt] >
 
 overloaded-operator:
     new
@@ -1067,6 +1061,7 @@ simple-template-id:
 
 template-id:
     simple-template-id
+    operator-function-id < template-argument-list[opt] >
 
 template-name:
     identifier
@@ -1081,8 +1076,8 @@ template-argument:
     id-expression
 
 typename-specifier:
-    typename ::[opt] nested-name-specifier identifier
-    typename ::[opt] nested-name-specifier template[opt] simple-template-id
+    typename nested-name-specifier identifier
+    typename nested-name-specifier template[opt] simple-template-id
 
 explicit-instantiation:
     template declaration
