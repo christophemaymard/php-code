@@ -5,7 +5,7 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Language\Cpp;
+namespace PhpCode\Language\Cpp\Specification;
 
 /**
  * Represents all the standards.
