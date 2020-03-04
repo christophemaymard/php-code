@@ -282,6 +282,14 @@ Table of contents
 
 
 
+### unqualified-id
+
+| Definitions               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:--------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [identifier](#identifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ## **Statements**
 
 
@@ -333,6 +341,8 @@ Table of contents
   - [punctuator](#punctuator)
 - **T**
   - [token](#token)
+- **U**
+  - [unqualified-id](#unqualified-id)
 
 
 
