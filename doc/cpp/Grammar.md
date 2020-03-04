@@ -310,6 +310,14 @@ Table of contents
 
 
 
+### noptr-declarator
+
+| Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:--------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [declarator-id](#declarator-id) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### declarator-id
 
 | Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -355,6 +363,7 @@ Table of contents
   - [keyword](#keyword)
 - **N**
   - [nondigit](#nondigit)
+  - [noptr-declarator](#noptr-declarator)
 - **P**
   - [punctuator](#punctuator)
 - **T**
