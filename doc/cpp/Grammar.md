@@ -310,6 +310,14 @@ Table of contents
 
 
 
+### declarator-id
+
+| Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:--------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [id-expression](#id-expression) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ## **Classes**
 
 
@@ -337,6 +345,7 @@ Table of contents
 ## **Index of rules**
 
 - **D**
+  - [declarator-id](#declarator-id)
   - [digit](#digit)
 - **I**
   - [id-expression](#id-expression)
