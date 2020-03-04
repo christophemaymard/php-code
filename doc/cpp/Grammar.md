@@ -310,6 +310,14 @@ Table of contents
 
 
 
+### declarator
+
+| Definitions                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [ptr-declarator](#ptr-declarator) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### ptr-declarator
 
 | Definitions                           | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -361,6 +369,7 @@ Table of contents
 ## **Index of rules**
 
 - **D**
+  - [declarator](#declarator)
   - [declarator-id](#declarator-id)
   - [digit](#digit)
 - **I**
