@@ -5,14 +5,14 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp;
+namespace PhpCode\Test\Unit\Language\Cpp\Specification;
 
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
- * Represents a builder of double for the {@see PhpCode\Language\Cpp\LanguageContextInterface} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Specification\LanguageContextInterface} 
  * interface.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
@@ -20,7 +20,7 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
 class LanguageContextInterfaceDoubleBuilder
 {
     /**
-     * The prophecy of a {@see PhpCode\Language\Cpp\LanguageContextInterface} 
+     * The prophecy of a {@see PhpCode\Language\Cpp\Specification\LanguageContextInterface} 
      * interface.
      * @var ObjectProphecy
      */
@@ -29,7 +29,7 @@ class LanguageContextInterfaceDoubleBuilder
     /**
      * Constructor.
      * 
-     * @param   ObjectProphecy  $prophecy   The prophecy of a PhpCode\Language\Cpp\LanguageContextInterface interface.
+     * @param   ObjectProphecy  $prophecy   The prophecy of a PhpCode\Language\Cpp\Specification\LanguageContextInterface interface.
      */
     public function __construct(ObjectProphecy $prophecy)
     {

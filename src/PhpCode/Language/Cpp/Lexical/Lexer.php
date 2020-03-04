@@ -7,7 +7,7 @@
  */
 namespace PhpCode\Language\Cpp\Lexical;
 
-use PhpCode\Language\Cpp\LanguageContextInterface;
+use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
 
 /**
  * Represents the lexical analyzer used to produce tokens from a stream.

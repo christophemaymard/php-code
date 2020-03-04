@@ -7,11 +7,11 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
 
-use PhpCode\Language\Cpp\LanguageContextInterface;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
-use PhpCode\Test\Unit\Language\Cpp\LanguageContextInterfaceDoubleBuilder;
+use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
+use PhpCode\Test\Unit\Language\Cpp\Specification\LanguageContextInterfaceDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 

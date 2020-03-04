@@ -9,6 +9,8 @@ namespace PhpCode\Language\Cpp;
 
 use PhpCode\Language\Cpp\Lexical\Tag;
 use PhpCode\Language\Cpp\Lexical\TokenTable;
+use PhpCode\Language\Cpp\Specification\LanguageContext;
+use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
 use PhpCode\Language\Cpp\Specification\Standard;
 
 /**

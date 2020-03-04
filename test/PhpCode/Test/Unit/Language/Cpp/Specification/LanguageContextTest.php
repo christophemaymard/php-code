@@ -5,17 +5,17 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp;
+namespace PhpCode\Test\Unit\Language\Cpp\Specification;
 
-use PhpCode\Language\Cpp\LanguageContext;
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
+use PhpCode\Language\Cpp\Specification\LanguageContext;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Represents the unit tests for the {@see PhpCode\Language\Cpp\LanguageContext} 
+ * Represents the unit tests for the {@see PhpCode\Language\Cpp\Specification\LanguageContext} 
  * class.
  * 
- * @group   lexical
+ * @group   specification
  * @group   c++
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
