@@ -282,6 +282,14 @@ Table of contents
 
 
 
+### id-expression
+
+| Definitions                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [unqualified-id](#unqualified-id) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### unqualified-id
 
 | Definitions               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -331,6 +339,7 @@ Table of contents
 - **D**
   - [digit](#digit)
 - **I**
+  - [id-expression](#id-expression)
   - [identifier](#identifier)
   - [identifier-nondigit](#identifier-nondigit)
 - **K**
