@@ -7,7 +7,7 @@
  */
 namespace PhpCode\Language\Cpp\Lexical;
 
-use PhpCode\Exception\InvalidValueException;
+use PhpCode\Exception\FormatException;
 
 /**
  * Represents an identifier.
@@ -42,12 +42,12 @@ class Identifier
      * 
      * @param   string  $id The identifier to set.
      * 
-     * @throws  InvalidValueException   When the identifier is invalid.
+     * @throws  FormatException When the identifier is invalid.
      */
     private function setIdentifier(string $id): void
     {
         if (!\preg_match('`^'.self::PATTERN.'$`', $id)) {
-            throw new InvalidValueException(\sprintf('"%s" is an invalid identifier.', $id));
+            throw new FormatException(\sprintf('"%s" is an invalid identifier.', $id));
         }
         
         $this->id = $id;

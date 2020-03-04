@@ -8,12 +8,11 @@
 namespace PhpCode\Exception;
 
 /**
- * Represents the exception thrown when a value does not adhere to a defined 
- * valid data domain.
+ * Represents the exception thrown when the format is invalid.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class InvalidValueException extends \Exception implements PhpCodeExceptionInterface
+class FormatException extends \Exception implements PhpCodeExceptionInterface
 {
 }
 

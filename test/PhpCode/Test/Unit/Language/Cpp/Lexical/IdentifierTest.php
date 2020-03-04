@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
 
 use PhpCode\Language\Cpp\Lexical\Identifier;
-use PhpCode\Exception\InvalidValueException;
+use PhpCode\Exception\FormatException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +32,7 @@ class IdentifierTest extends TestCase
      */
     public function test__constructThrowsExceptionWhenIdentifierIsInvalid(string $id): void
     {
-        $this->expectException(InvalidValueException::class);
+        $this->expectException(FormatException::class);
         $this->expectExceptionMessage(
             \sprintf('"%s" is an invalid identifier.', $id)
         );
