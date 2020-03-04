@@ -3,13 +3,6 @@
 Table of contents
 
 1. [Lexical](#lexical)
-   - [token](#token)
-   - [keyword](#keyword)
-   - [punctuator](#punctuator)
-   - [identifier](#identifier)
-   - [identifier-nondigit](#identifier-nondigit)
-   - [nondigit](#nondigit)
-   - [digit](#digit)
 2. [Expressions](#expressions)
 3. [Statements](#statements)
 4. [Declarations](#declarations)
@@ -20,6 +13,7 @@ Table of contents
 9. [Overloading](#overloading)
 10. [Templates](#templates)
 11. [Exception handling](#exception-handling)
+12. [Index of rules](#index-of-rules)
 
 
 
@@ -321,6 +315,24 @@ Table of contents
 
 
 ## **Exception handling**
+
+
+
+## **Index of rules**
+
+- **D**
+  - [digit](#digit)
+- **I**
+  - [identifier](#identifier)
+  - [identifier-nondigit](#identifier-nondigit)
+- **K**
+  - [keyword](#keyword)
+- **N**
+  - [nondigit](#nondigit)
+- **P**
+  - [punctuator](#punctuator)
+- **T**
+  - [token](#token)
 
 
 
