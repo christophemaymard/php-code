@@ -10,6 +10,9 @@
         <testsuite name="unit-test">
             <directory>test/PhpCode/Test/Unit/</directory>
         </testsuite>
+        <testsuite name="integration-test">
+            <directory>test/PhpCode/Test/Integration/</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist>
