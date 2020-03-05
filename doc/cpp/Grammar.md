@@ -334,6 +334,14 @@ Table of contents
 
 
 
+### parameters-and-qualifiers
+
+| Definitions | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **(** **)** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### declarator-id
 
 | Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -382,6 +390,7 @@ Table of contents
   - [nondigit](#nondigit)
   - [noptr-declarator](#noptr-declarator)
 - **P**
+  - [parameters-and-qualifiers](#parameters-and-qualifiers)
   - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)
 - **T**

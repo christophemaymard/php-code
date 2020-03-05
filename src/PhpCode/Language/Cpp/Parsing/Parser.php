@@ -11,6 +11,7 @@ use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
 use PhpCode\Language\Cpp\Expression\IdExpression;
 use PhpCode\Language\Cpp\Expression\UnqualifiedId;
@@ -103,6 +104,50 @@ class Parser
         $dcltor = Declarator::createPtrDeclarator($ptrDcltor);
         
         return $dcltor;
+    }
+    
+    /**
+     * Parse parameters and qualifiers.
+     * 
+     * parameters-and-qualifiers:
+     *     ( )
+     * 
+     * @return  ParametersAndQualifiers
+     * 
+     * @throws  FormatException When "(" is missing before token.
+     * @throws  FormatException When ")" is missing before token.
+     */
+    public function parseParametersAndQualifiers(): ParametersAndQualifiers
+    {
+        if (!$this->moveIf(Tag::PN_PAREN_L)) {
+            throw new FormatException(\sprintf('Missing "(" before "%s".', $this->tkn->getLexeme()));
+        }
+        
+        if (!$this->moveIf(Tag::PN_PAREN_R)) {
+            throw new FormatException(\sprintf('Missing ")" before "%s".', $this->tkn->getLexeme()));
+        }
+        
+        $prmQual = new ParametersAndQualifiers();
+        
+        return $prmQual;
+    }
+    
+    /**
+     * Updates the current token with the next available token of the lexer 
+     * if the current token matches the specified tag.
+     * 
+     * @param   int $tag    The tag to match.
+     * @return  bool    TRUE if if the current token matches the specified tag, otherwise FALSE.
+     */
+    private function moveIf(int $tag): bool
+    {
+        if (!$this->tokenIs($tag)) {
+            return FALSE;
+        }
+        
+        $this->move();
+        
+        return TRUE;
     }
     
     /**
