@@ -5,7 +5,7 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
+namespace PhpCode\Test\Language\Cpp\Lexical;
 
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;

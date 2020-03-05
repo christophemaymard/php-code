@@ -10,7 +10,7 @@ namespace PhpCode\Test\Unit\Language\Cpp\Specification;
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
 use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
 use PhpCode\Test\ProphecyFactory;
-use PhpCode\Test\Unit\Language\Cpp\Lexical\TokenTableInterfaceDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Lexical\TokenTableInterfaceDoubleBuilder;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
