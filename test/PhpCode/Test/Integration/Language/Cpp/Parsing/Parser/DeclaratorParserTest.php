@@ -50,6 +50,7 @@ class DeclaratorParserTest extends TestCase
         
         $ptrDcltor = $dcltor->getPtrDeclarator();
         $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        self::assertFalse($noptrDcltor->hasParametersAndQualifiers());
         $did = $noptrDcltor->getDeclaratorId();
         $idExpr = $did->getIdExpression();
         $uid = $idExpr->getUnqualifiedId();

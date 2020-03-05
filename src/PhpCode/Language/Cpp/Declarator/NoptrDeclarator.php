@@ -12,6 +12,7 @@ namespace PhpCode\Language\Cpp\Declarator;
  * 
  * noptr-declarator:
  *     declarator-id
+ *     noptr-declarator parameters-and-qualifiers
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
@@ -22,6 +23,12 @@ class NoptrDeclarator
      * @var DeclaratorId|NULL
      */
     private $did;
+    
+    /**
+     * The parameters and the qualifiers.
+     * @var ParametersAndQualifiers|NULL
+     */
+    private $prmQual;
     
     /**
      * Creates an instance of a no-pointer declarator defined with a declarator identifier.
@@ -45,6 +52,36 @@ class NoptrDeclarator
     public function getDeclaratorId(): ?DeclaratorId
     {
         return $this->did;
+    }
+    
+    /**
+     * Returns the parameters and the qualifiers.
+     * 
+     * @return  ParametersAndQualifiers|NULL    The instance of parameters and qualifiers if it has been set, otherwise NULL.
+     */
+    public function getParametersAndQualifiers(): ?ParametersAndQualifiers
+    {
+        return $this->prmQual;
+    }
+    
+    /**
+     * Sets the parameters and the qualifiers.
+     * 
+     * @param   ParametersAndQualifiers The parameters and the qualifiers to set.
+     */
+    public function setParametersAndQualifiers(ParametersAndQualifiers $prmQual): void
+    {
+        $this->prmQual = $prmQual;
+    }
+    
+    /**
+     * Indicates whether the parameters and the qualifiers have been set.
+     * 
+     * @return  TRUE if the parameters and the qualifiers have been set, otherwise FALSE. 
+     */
+    public function hasParametersAndQualifiers(): bool
+    {
+        return $this->prmQual !== NULL;
     }
 }
 

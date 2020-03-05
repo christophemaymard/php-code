@@ -9,6 +9,7 @@ namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,6 +55,38 @@ class NoptrDeclaratorTest extends TestCase
         
         $sut = NoptrDeclarator::createDeclaratorId($didDummy);
         self::assertSame($didDummy, $sut->getDeclaratorId());
+    }
+    
+    /**
+     * Tests that getParametersAndQualifiers() returns the instance of 
+     * ParametersAndQualifiers if the parameters and the qualifiers have been 
+     * set, otherwise NULL.
+     */
+    public function testGetParametersAndQualifiers(): void
+    {
+        $sut = new NoptrDeclarator();
+        
+        self::assertNull($sut->getParametersAndQualifiers());
+        
+        $prmQualDummy = $this->prophesize(ParametersAndQualifiers::class)->reveal();
+        $sut->setParametersAndQualifiers($prmQualDummy);
+        self::assertSame($prmQualDummy, $sut->getParametersAndQualifiers());
+    }
+    
+    /**
+     * Tests that hasParametersAndQualifiers() returns TRUE if the parameters 
+     * and the qualifiers have been set, otherwise FALSE.
+     */
+    public function testHasParametersAndQualifiersReturnsBool(): void
+    {
+        $sut = new NoptrDeclarator();
+        
+        self::assertFalse($sut->hasParametersAndQualifiers());
+        
+        $prmQualDummy = $this->prophesize(ParametersAndQualifiers::class)->reveal();
+        $sut->setParametersAndQualifiers($prmQualDummy);
+        
+        self::assertTrue($sut->hasParametersAndQualifiers());
     }
 }
 
