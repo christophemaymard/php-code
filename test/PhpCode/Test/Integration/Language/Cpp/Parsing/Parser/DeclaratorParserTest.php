@@ -58,6 +58,41 @@ class DeclaratorParserTest extends AbstractParserTest
     }
     
     /**
+     * Tests that parseDeclarator() parse an unqualified identifier, that is 
+     * an identifier, and empty parameters and qualifiers.
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseUnqualifiedIdIdentifierEmptyParametersAndQualifiers(
+        int $standard
+    ): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('main()');
+        
+        $sut = new Parser($lexer);
+        $dcltor = $sut->parseDeclarator();
+        
+        $ptrDcltor = $dcltor->getPtrDeclarator();
+        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        self::assertTrue($noptrDcltor->hasParametersAndQualifiers());
+        $did = $noptrDcltor->getDeclaratorId();
+        $idExpr = $did->getIdExpression();
+        $uid = $idExpr->getUnqualifiedId();
+        $id = $uid->getIdentifier();
+        
+        self::assertSame('main', $id->getIdentifier());
+    }
+    
+    /**
      * Tests that parseDeclarator() throws an exception when the stream is 
      * invalid.
      * 
@@ -96,6 +131,11 @@ class DeclaratorParserTest extends AbstractParserTest
                 [ 1, 2, 4, 8, ],
                 '', 
                 'Unexpected "", expected identifier.', 
+            ], 
+            'Multiple declarator-id (id-expression -> unqualified-id -> identifier) before parameters-and-qualifiers' => [
+                [ 1, 2, 4, 8, ],
+                'foo bar()', 
+                'Unexpected identifier "bar".', 
             ], 
         ];
     }

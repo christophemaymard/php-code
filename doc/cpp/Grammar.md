@@ -328,9 +328,10 @@ Table of contents
 
 ### noptr-declarator
 
-| Definitions                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
-|:--------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
-| [declarator-id](#declarator-id) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Definitions                                                                                   | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [declarator-id](#declarator-id)                                                               | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| [noptr-declarator](#noptr-declarator) [parameters-and-qualifiers](#parameters-and-qualifiers) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 

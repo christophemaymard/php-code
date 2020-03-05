@@ -75,6 +75,7 @@ class Parser
      * 
      * noptr-declarator:
      *     declarator-id
+     *     noptr-declarator parameters-and-qualifiers
      * 
      * declarator-id:
      *     id-expression
@@ -88,6 +89,7 @@ class Parser
      * @return  Declarator
      * 
      * @throws  FormatException When an identifier is expected.
+     * @throws  FormatException When an identifier is unexpected.
      */
     public function parseDeclarator(): Declarator
     {
@@ -96,10 +98,22 @@ class Parser
         }
         
         $id = new Identifier($this->tkn->getLexeme());
+        $this->move();
         $uid = UnqualifiedId::createIdentifier($id);
         $idExpr = IdExpression::createUnqualifiedId($uid);
         $did = DeclaratorId::createIdExpression($idExpr);
+        
+        if ($this->tokenIs(Tag::ID)) {
+            throw new FormatException(\sprintf('Unexpected identifier "%s".', $this->tkn->getLexeme()));
+        }
+        
         $noptrDcltor = NoptrDeclarator::createDeclaratorId($did);
+        
+        if ($this->tokenIs(Tag::PN_PAREN_L)) {
+            $prmQual = $this->parseParametersAndQualifiers();
+            $noptrDcltor->setParametersAndQualifiers($prmQual);
+        }
+        
         $ptrDcltor = new PtrDeclarator($noptrDcltor);
         $dcltor = Declarator::createPtrDeclarator($ptrDcltor);
         
