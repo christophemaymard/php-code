@@ -10,7 +10,7 @@ namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Test\ProphecyFactory;
-use PhpCode\Test\Unit\Language\Cpp\Specification\LanguageContextInterfaceDoubleFactory;
+use PhpCode\Test\Language\Cpp\Specification\LanguageContextInterfaceDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**

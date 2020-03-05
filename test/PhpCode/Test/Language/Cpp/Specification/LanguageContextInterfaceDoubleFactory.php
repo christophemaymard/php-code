@@ -5,13 +5,12 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp\Specification;
+namespace PhpCode\Test\Language\Cpp\Specification;
 
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
 use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
 use PhpCode\Test\ProphecyFactory;
 use PhpCode\Test\Language\Cpp\Lexical\TokenTableInterfaceDoubleBuilder;
-use PhpCode\Test\Language\Cpp\Specification\LanguageContextInterfaceDoubleBuilder;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
