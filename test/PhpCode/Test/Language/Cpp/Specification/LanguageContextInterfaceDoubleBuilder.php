@@ -5,7 +5,7 @@
  * @copyright   2020, Christophe Maymard <christophe.maymard@hotmail.com>
  * @license     http://opensource.org/licenses/MIT  MIT
  */
-namespace PhpCode\Test\Unit\Language\Cpp\Specification;
+namespace PhpCode\Test\Language\Cpp\Specification;
 
 use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
 use Prophecy\Prophecy\ObjectProphecy;

@@ -11,6 +11,7 @@ use PhpCode\Language\Cpp\Lexical\TokenTableInterface;
 use PhpCode\Language\Cpp\Specification\LanguageContextInterface;
 use PhpCode\Test\ProphecyFactory;
 use PhpCode\Test\Language\Cpp\Lexical\TokenTableInterfaceDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Specification\LanguageContextInterfaceDoubleBuilder;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
