@@ -118,6 +118,44 @@ class LexerTest extends TestCase
     }
     
     /**
+     * Tests that lookAhead() returns the instance of the next available 
+     * token, without changing the current position.
+     * 
+     * @param   int $n
+     * 
+     * @dataProvider    getNextTokenLookAheadNsProvider
+     */
+    public function testLookAheadReturnsNextToken(int $n): void
+    {
+        $languageContext = $this->lciDoubleFactory->createDouble([], [], []);
+        
+        $sut = new Lexer($languageContext);
+        $sut->setStream('foo bar baz');
+        
+        self::assertToken($sut->lookAhead($n), 'foo', 2);
+        self::assertEOFToken($sut->lookAhead(4));
+        self::assertEOFToken($sut->lookAhead(10));
+        self::assertToken($sut->getToken(), 'foo', 2);
+    }
+    
+    /**
+     * Tests that lookAhead() returns the instance of the N-th available 
+     * token without changing the current position.
+     */
+    public function testLookAheadReturnsNthTokenWhenNth(): void
+    {
+        $languageContext = $this->lciDoubleFactory->createDouble([], [], []);
+        
+        $sut = new Lexer($languageContext);
+        $sut->setStream('foo bar baz');
+        
+        self::assertToken($sut->lookAhead(3), 'baz', 2);
+        self::assertEOFToken($sut->lookAhead(4));
+        self::assertEOFToken($sut->lookAhead(10));
+        self::assertToken($sut->getToken(), 'foo', 2);
+    }
+    
+    /**
      * Returns a set of streams with the expected tokens that must be 
      * produced (except the last one that is always an EOF token).
      * 
@@ -235,6 +273,28 @@ class LexerTest extends TestCase
                 [['bar', 100000]], 
                 [['<<<', 200000]], 
                 [3], 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a data set of parameter values that will return the next 
+     * token when calling lookAhead().
+     * 
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where 
+     *                  [0] is the n parameter.
+     */
+    public function getNextTokenLookAheadNsProvider(): array
+    {
+        return [
+            'Negative' => [
+                -1, 
+            ], 
+            'Zero' => [
+                0, 
+            ], 
+            'One' => [
+                1, 
             ], 
         ];
     }

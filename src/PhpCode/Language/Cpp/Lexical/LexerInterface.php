@@ -15,6 +15,18 @@ namespace PhpCode\Language\Cpp\Lexical;
 interface LexerInterface
 {
     /**
+     * Returns the N-th next token in the stream without changing of the 
+     * position in the stream.
+     * 
+     * If the end of the stream is reached, it always returns a token with 
+     * the {@see PhpCode\Language\Cpp\Lexical\Tag::EOF} tag.
+     * 
+     * @param   int $n  The number (if it is 1 or less then the next token will be returned; if it is 2 then the token next of the next token will be returned, and so on).
+     * @return  TokenInterface
+     */
+    public function lookAhead(int $n): TokenInterface;
+    
+    /**
      * Returns the next token in the stream.
      * 
      * If the end of the stream is reached, it always returns a token with 

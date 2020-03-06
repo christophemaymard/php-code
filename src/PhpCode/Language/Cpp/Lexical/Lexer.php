@@ -65,6 +65,24 @@ class Lexer implements LexerInterface
     /**
      * {@inheritDoc}
      */
+    public function lookAhead(int $n): TokenInterface
+    {
+        $tkn = NULL;
+        $max = $n < 1 ? 1 : $n;
+        $pos = $this->pos;
+        
+        for ($i = 0; $i < $max; $i++) {
+            $tkn = $this->getToken();
+        }
+        
+        $this->pos = $pos;
+        
+        return $tkn;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public function getToken(): TokenInterface
     {
         $remain = \mb_substr($this->stream, $this->pos);
