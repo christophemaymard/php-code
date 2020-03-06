@@ -34,7 +34,8 @@ class Parser
     private $lexer;
     
     /**
-     * The current token.
+     * The token to process.
+     * It is the next available token, without being consumed, of the lexer.
      * @var TokenInterface
      */
     private $tkn;
@@ -42,8 +43,8 @@ class Parser
     /**
      * Constructor.
      * 
-     * Once the lexer is set, the current token is initialized with the next 
-     * available token of the lexer.
+     * Once the lexer is set, the token to process is initialized with the 
+     * next available token of the lexer, without being consumed.
      * 
      * @param   LexerInterface  $lexer  The lexer used to parse.
      */
@@ -53,15 +54,15 @@ class Parser
     }
     
     /**
-     * Sets lexer used to parse and initialize the current token with the 
-     * next available token of the lexer.
+     * Sets lexer used to parse and initialize the token to process with the 
+     * next available token of the lexer, without being consumed.
      * 
      * @param   LexerInterface  $lexer  The lexer used to parse.
      */
     private function setLexer(LexerInterface $lexer): void
     {
         $this->lexer = $lexer;
-        $this->move();
+        $this->initTokenToProcess();
     }
     
     /**
@@ -165,22 +166,35 @@ class Parser
     }
     
     /**
-     * Updates the current token with the next available token of the lexer.
+     * Consumes the token to process and update it with the next available 
+     * token of the lexer, without being consumed.
      */
     private function move(): void
     {
-        $this->tkn = $this->lexer->getToken();
+        // Consume the next token, that is the current to process.
+        $this->lexer->getToken();
+        
+        $this->initTokenToProcess();
     }
     
     /**
-     * Indicates whether the current token matches the specified tag.
+     * Indicates whether the token to process matches the specified tag.
      * 
      * @param   int $tag    The tag to match.
-     * @return  bool    TRUE if the current token matches the specified tag, otherwise FALSE.
+     * @return  bool    TRUE if the token to process matches the specified tag, otherwise FALSE.
      */
     private function tokenIs(int $tag): bool
     {
         return $this->tkn->getTag() === $tag;
+    }
+    
+    /**
+     * Initialize the token to process with the next available token of the 
+     * lexer, without being consumed.
+     */
+    private function initTokenToProcess(): void
+    {
+        $this->tkn = $this->lexer->lookAhead(1);
     }
 }
 

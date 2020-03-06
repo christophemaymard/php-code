@@ -11,6 +11,7 @@ use PhpCode\Language\Cpp\Lexical\LexerInterface;
 use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Language\Cpp\Parsing\Parser;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -24,15 +25,15 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * Tests that __construct() calls LexerInterface::getToken().
+     * Tests that __construct() calls LexerInterface::lookAhead().
      */
-    public function test__constructCallsGetToken(): void
+    public function test__constructCallsLookAhead(): void
     {
         $tokenDummy = $this->prophesize(TokenInterface::class)->reveal();
         
         $lexerProphecy = $this->prophesize(LexerInterface::class);
         $lexerProphecy
-            ->getToken()
+            ->lookAhead(Argument::is(1))
             ->willReturn($tokenDummy)
             ->shouldBeCalled();
         $lexer = $lexerProphecy->reveal();
