@@ -337,9 +337,9 @@ Table of contents
 
 ### parameters-and-qualifiers
 
-| Definitions | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
-|:------------|:------------------:|:------------------:|:------------------:|:------------------:|
-| **(** **)** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Definitions                                                               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:--------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **(** [parameter-declaration-clause](#parameter-declaration-clause) **)** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 

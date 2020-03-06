@@ -126,7 +126,7 @@ class Parser
      * Parse parameters and qualifiers.
      * 
      * parameters-and-qualifiers:
-     *     ( )
+     *     ( parameter-declaration-clause )
      * 
      * @return  ParametersAndQualifiers
      * 
@@ -139,11 +139,13 @@ class Parser
             throw new FormatException(\sprintf('Missing "(" before "%s".', $this->tkn->getLexeme()));
         }
         
+        $prmDeclClause = $this->parseParameterDeclarationClause();
+        
         if (!$this->moveIf(Tag::PN_PAREN_R)) {
             throw new FormatException(\sprintf('Missing ")" before "%s".', $this->tkn->getLexeme()));
         }
         
-        $prmQual = new ParametersAndQualifiers();
+        $prmQual = new ParametersAndQualifiers($prmDeclClause);
         
         return $prmQual;
     }

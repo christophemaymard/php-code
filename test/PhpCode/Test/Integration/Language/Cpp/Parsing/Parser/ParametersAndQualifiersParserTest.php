@@ -8,7 +8,6 @@
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
-use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Parsing\Parser;
 use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
@@ -47,7 +46,33 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
         $sut = new Parser($lexer);
         $prmQual = $sut->parseParametersAndQualifiers();
         
-        self::assertInstanceOf(ParametersAndQualifiers::class, $prmQual);
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertFalse($prmDeclClause->hasEllipsis());
+    }
+    
+    /**
+     * Tests that parseParametersAndQualifiers() parse an ellipsis.
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseEllipsis(int $standard): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('(  ... )');
+        
+        $sut = new Parser($lexer);
+        $prmQual = $sut->parseParametersAndQualifiers();
+        
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertTrue($prmDeclClause->hasEllipsis());
     }
     
     /**

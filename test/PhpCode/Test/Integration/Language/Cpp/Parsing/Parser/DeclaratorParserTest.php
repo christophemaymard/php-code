@@ -83,7 +83,51 @@ class DeclaratorParserTest extends AbstractParserTest
         
         $ptrDcltor = $dcltor->getPtrDeclarator();
         $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
-        self::assertTrue($noptrDcltor->hasParametersAndQualifiers());
+        
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertFalse($prmDeclClause->hasEllipsis());
+        
+        $did = $noptrDcltor->getDeclaratorId();
+        $idExpr = $did->getIdExpression();
+        $uid = $idExpr->getUnqualifiedId();
+        $id = $uid->getIdentifier();
+        
+        self::assertSame('main', $id->getIdentifier());
+    }
+    
+    /**
+     * Tests that parseDeclarator() parse an unqualified identifier, that is 
+     * an identifier, and parameters and qualifiers with a parameter 
+     * declaration clause, that has only an ellipsis.
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseIdentifierParameterDeclarationClauseEllipsis(
+        int $standard
+    ): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('main(...)');
+        
+        $sut = new Parser($lexer);
+        $dcltor = $sut->parseDeclarator();
+        
+        $ptrDcltor = $dcltor->getPtrDeclarator();
+        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertTrue($prmDeclClause->hasEllipsis());
+        
         $did = $noptrDcltor->getDeclaratorId();
         $idExpr = $did->getIdExpression();
         $uid = $idExpr->getUnqualifiedId();
