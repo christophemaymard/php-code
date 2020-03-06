@@ -351,6 +351,14 @@ Table of contents
 
 
 
+### parameter-declaration-clause
+
+| Definitions  | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:-------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **...**[opt] | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ## **Classes**
 
 
@@ -391,6 +399,7 @@ Table of contents
   - [nondigit](#nondigit)
   - [noptr-declarator](#noptr-declarator)
 - **P**
+  - [parameter-declaration-clause](#parameter-declaration-clause)
   - [parameters-and-qualifiers](#parameters-and-qualifiers)
   - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)

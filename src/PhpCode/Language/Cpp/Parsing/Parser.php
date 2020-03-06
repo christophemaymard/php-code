@@ -11,6 +11,7 @@ use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
 use PhpCode\Language\Cpp\Expression\IdExpression;
@@ -145,6 +146,25 @@ class Parser
         $prmQual = new ParametersAndQualifiers();
         
         return $prmQual;
+    }
+    
+    /**
+     * Parse a parameter declaration clause.
+     * 
+     * parameter-declaration-clause:
+     *     ...[opt]
+     * 
+     * @return  ParameterDeclarationClause
+     */
+    public function parseParameterDeclarationClause(): ParameterDeclarationClause
+    {
+        $prmDeclClause = new ParameterDeclarationClause();
+        
+        if ($this->moveIf(Tag::PN_ELLIPSIS)) {
+            $prmDeclClause->addEllipsis();
+        }
+        
+        return $prmDeclClause;
     }
     
     /**
