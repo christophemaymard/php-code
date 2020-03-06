@@ -1,1 +1,2 @@
 identifier parameters-and-qualifiers (empty)	1 2 4 8	_Z4mainv	main( )
+identifier parameters-and-qualifiers (ellipsis)	1 2 4 8	_Z4mainz	main(...)

@@ -132,7 +132,15 @@ class ItaniumMangler
             throw new FormatException('The declarator does not have parameters-and-qualifiers.');
         }
         
-        $mangledName = 'v';
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        
+        if ($prmDeclClause->hasEllipsis()) {
+            $mangledName = 'z';
+        } else {
+            $mangledName = 'v';
+        }
+        
         
         return $mangledName;
     }
