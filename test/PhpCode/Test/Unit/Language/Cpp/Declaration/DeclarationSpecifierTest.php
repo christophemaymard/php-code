@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
+use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,6 +30,32 @@ class DeclarationSpecifierTest extends TestCase
         $this->expectException(\Throwable::class);
         $this->expectExceptionMessageMatches('`private `');
         $sut = new DeclarationSpecifier();
+    }
+    
+    /**
+     * Tests that createDefiningTypeSpecifier() returns new instances of 
+     * DeclarationSpecifier.
+     */
+    public function testCreateDefiningTypeSpecifierReturnsNewInstanceDeclarationSpecifier(): void
+    {
+        $defTypeSpec = $this->prophesize(DefiningTypeSpecifier::class)->reveal();
+        
+        $declSpec1 = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
+        $declSpec2 = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
+        self::assertNotSame($declSpec1, $declSpec2);
+    }
+    
+    /**
+     * Tests that getDefiningTypeSpecifier() returns the instance of 
+     * DefiningTypeSpecifier when the instance has been created by 
+     * createDefiningTypeSpecifier().
+     */
+    public function testGetDefiningTypeSpecifierReturnsDefiningTypeSpecifierWhenCreateDefiningTypeSpecifier(): void
+    {
+        $defTypeSpec = $this->prophesize(DefiningTypeSpecifier::class)->reveal();
+        
+        $sut = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
+        self::assertSame($defTypeSpec, $sut->getDefiningTypeSpecifier());
     }
 }
 
