@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
+use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
 use PHPUnit\Framework\TestCase;
 
@@ -29,6 +30,32 @@ class TypeSpecifierTest extends TestCase
         $this->expectException(\Throwable::class);
         $this->expectExceptionMessageMatches('`private `');
         $sut = new TypeSpecifier();
+    }
+    
+    /**
+     * Tests that createSimpleTypeSpecifier() returns new instances of 
+     * TypeSpecifier.
+     */
+    public function testCreateSimpleTypeSpecifierReturnsNewInstanceTypeSpecifier(): void
+    {
+        $stSpec = $this->prophesize(SimpleTypeSpecifier::class)->reveal();
+        
+        $typeSpec1 = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
+        $typeSpec2 = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
+        self::assertNotSame($typeSpec1, $typeSpec2);
+    }
+    
+    /**
+     * Tests that getSimpleTypeSpecifier() returns the instance of 
+     * SimpleTypeSpecifier when the instance has been created by 
+     * createSimpleTypeSpecifier().
+     */
+    public function testGetSimpleTypeSpecifierReturnsSimpleTypeSpecifierWhenCreateSimpleTypeSpecifier(): void
+    {
+        $stSpec = $this->prophesize(SimpleTypeSpecifier::class)->reveal();
+        
+        $sut = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
+        self::assertSame($stSpec, $sut->getSimpleTypeSpecifier());
     }
 }
 
