@@ -30,5 +30,25 @@ class SimpleTypeSpecifierTest extends TestCase
         $this->expectExceptionMessageMatches('`private `');
         $sut = new SimpleTypeSpecifier();
     }
+    
+    /**
+     * Tests that createInt() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateIntReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createInt();
+        $stSpec2 = SimpleTypeSpecifier::createInt();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
+     * Tests that isInt() returns TRUE when the instance has been created by 
+     * createInt().
+     */
+    public function testIsIntReturnsTrueWhenCreateInt(): void
+    {
+        $sut = SimpleTypeSpecifier::createInt();
+        self::assertTrue($sut->isInt());
+    }
 }
 
