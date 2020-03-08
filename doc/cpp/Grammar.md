@@ -399,6 +399,15 @@ Table of contents
 
 
 
+### parameter-declaration-list
+
+| Definitions                                                                                                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [parameter-declaration](#parameter-declaration)                                                                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| [parameter-declaration-list](#parameter-declaration-list) **,** [parameter-declaration](#parameter-declaration) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### parameter-declaration
 
 | Definitions                               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -452,6 +461,7 @@ Table of contents
 - **P**
   - [parameter-declaration](#parameter-declaration)
   - [parameter-declaration-clause](#parameter-declaration-clause)
+  - [parameter-declaration-list](#parameter-declaration-list)
   - [parameters-and-qualifiers](#parameters-and-qualifiers)
   - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)

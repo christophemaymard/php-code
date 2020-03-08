@@ -18,6 +18,7 @@ use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
+use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
 use PhpCode\Language\Cpp\Expression\IdExpression;
@@ -176,6 +177,38 @@ class Parser
     }
     
     /**
+     * Parse a parameter declaration list.
+     * 
+     * parameter-declaration-list:
+     *     parameter-declaration
+     *     parameter-declaration-list , parameter-declaration
+     * 
+     * @return  ParameterDeclarationList
+     */
+    public function parseParameterDeclarationList(): ParameterDeclarationList
+    {
+        $prmDeclList = new ParameterDeclarationList();
+        
+        $prmDecl = $this->parseParameterDeclaration();
+        $prmDeclList->addParameterDeclaration($prmDecl);
+        
+        while ($this->tokenIs(Tag::PN_COMMA)) {
+            if ($this->lookAhead(1)->getTag() == Tag::PN_ELLIPSIS) {
+                // Do not consume the comma and the ellipsis.
+                break;
+            }
+            
+            // Consume the comma.
+            $this->move();
+            
+            $prmDecl = $this->parseParameterDeclaration();
+            $prmDeclList->addParameterDeclaration($prmDecl);
+        }
+        
+        return $prmDeclList;
+    }
+    
+    /**
      * Parse a parameter declaration.
      * 
      * parameter-declaration:
@@ -287,6 +320,21 @@ class Parser
     private function tokenIs(int $tag): bool
     {
         return $this->tkn->getTag() === $tag;
+    }
+    
+    /**
+     * Returns the N-th next token in the stream without changing of the 
+     * position in the stream.
+     * 
+     * If the end of the stream is reached, it always returns a token with 
+     * the {@see PhpCode\Language\Cpp\Lexical\Tag::EOF} tag.
+     * 
+     * @param   int $n  The number (if it is 1 or less then the next token will be returned; if it is 2 then the token next of the next token will be returned, and so on).
+     * @return  TokenInterface
+     */
+    private function lookAhead(int $n): TokenInterface
+    {
+        return $this->lexer->lookAhead($n + 1);
     }
     
     /**
