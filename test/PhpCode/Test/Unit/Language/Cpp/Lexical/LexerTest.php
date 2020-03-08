@@ -8,8 +8,8 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Lexical;
 
 use PhpCode\Language\Cpp\Lexical\Lexer;
-use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Test\ProphecyFactory;
+use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
 use PhpCode\Test\Language\Cpp\Specification\LanguageContextInterfaceDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -24,6 +24,8 @@ use PHPUnit\Framework\TestCase;
  */
 class LexerTest extends TestCase
 {
+    use TokenAssertionTrait;
+    
     /**
      * @var LanguageContextInterfaceDoubleFactory
      */
@@ -37,29 +39,6 @@ class LexerTest extends TestCase
         $this->lciDoubleFactory = new LanguageContextInterfaceDoubleFactory(
             new ProphecyFactory($this)
         );
-    }
-    
-    /**
-     * Asserts that the specified token is EOF.
-     * 
-     * @param   TokenInterface  $tkn    The token to assert.
-     */
-    private static function assertEOFToken(TokenInterface $tkn): void
-    {
-        self::assertToken($tkn, '', 0);
-    }
-    
-    /**
-     * Asserts the specified token.
-     * 
-     * @param   TokenInterface  $tkn    The token to assert.
-     * @param   string          $lexeme The expected lexeme.
-     * @param   int             $tag    The expected tag.
-     */
-    private static function assertToken(TokenInterface $tkn, string $lexeme, int $tag): void
-    {
-        self::assertSame($tag, $tkn->getTag(), 'Tag.');
-        self::assertSame($lexeme, $tkn->getLexeme(), 'Lexeme.');
     }
     
     /**
