@@ -22,24 +22,34 @@ trait TokenAssertionTrait
     /**
      * Asserts that the specified token is EOF.
      * 
-     * @param   TokenInterface  $tkn    The token to assert.
+     * @param   TokenInterface  $tkn        The token to assert.
+     * @param   string          $message    The message (default to an empty string).
      */
-    public static function assertEOFToken(TokenInterface $tkn): void
+    public static function assertEOFToken(TokenInterface $tkn, string $message = ''): void
     {
-        self::assertToken($tkn, '', 0);
+        self::assertToken('', 0, $tkn, $message);
     }
     
     /**
      * Asserts the specified token.
      * 
-     * @param   TokenInterface  $tkn    The token to assert.
-     * @param   string          $lexeme The expected lexeme.
-     * @param   int             $tag    The expected tag.
+     * @param   string          $lexeme     The expected lexeme.
+     * @param   int             $tag        The expected tag.
+     * @param   TokenInterface  $tkn        The token to assert.
+     * @param   string          $message    The message (default to an empty string).
      */
-    public static function assertToken(TokenInterface $tkn, string $lexeme, int $tag): void
+    public static function assertToken(
+        string $lexeme, 
+        int $tag, 
+        TokenInterface $tkn, 
+        string $message = ''
+    ): void
     {
-        self::assertSame($tag, $tkn->getTag(), 'Tag.');
-        self::assertSame($lexeme, $tkn->getLexeme(), 'Lexeme.');
+        static::assertThat(
+            $tkn, 
+            new IsTokenEqualConstraint($lexeme, $tag), 
+            $message
+        );
     }
 }
 

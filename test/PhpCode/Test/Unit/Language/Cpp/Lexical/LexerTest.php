@@ -90,7 +90,7 @@ class LexerTest extends TestCase
         $sut->setStream($stream);
         
         foreach ($tokens as list($lexeme, $tag)) {
-            self::assertToken($sut->getToken(), $lexeme, $tag);
+            self::assertToken($lexeme, $tag, $sut->getToken());
         }
         
         self::assertEOFToken($sut->getToken(), 'The last token must be the EOF token.');
@@ -111,10 +111,10 @@ class LexerTest extends TestCase
         $sut = new Lexer($languageContext);
         $sut->setStream('foo bar baz');
         
-        self::assertToken($sut->lookAhead($n), 'foo', 2);
+        self::assertToken('foo', 2, $sut->lookAhead($n));
         self::assertEOFToken($sut->lookAhead(4));
         self::assertEOFToken($sut->lookAhead(10));
-        self::assertToken($sut->getToken(), 'foo', 2);
+        self::assertToken('foo', 2, $sut->getToken());
     }
     
     /**
@@ -128,10 +128,10 @@ class LexerTest extends TestCase
         $sut = new Lexer($languageContext);
         $sut->setStream('foo bar baz');
         
-        self::assertToken($sut->lookAhead(3), 'baz', 2);
+        self::assertToken('baz', 2, $sut->lookAhead(3));
         self::assertEOFToken($sut->lookAhead(4));
         self::assertEOFToken($sut->lookAhead(10));
-        self::assertToken($sut->getToken(), 'foo', 2);
+        self::assertToken('foo', 2, $sut->getToken());
     }
     
     /**
