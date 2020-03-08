@@ -306,6 +306,14 @@ Table of contents
 
 
 
+### decl-specifier-seq
+
+| Definitions                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [decl-specifier](#decl-specifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ### decl-specifier
 
 | Definitions                                         | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
@@ -419,6 +427,7 @@ Table of contents
 
 - **D**
   - [decl-specifier](#decl-specifier)
+  - [decl-specifier-seq](#decl-specifier-seq)
   - [declarator](#declarator)
   - [declarator-id](#declarator-id)
   - [defining-type-specifier](#defining-type-specifier)

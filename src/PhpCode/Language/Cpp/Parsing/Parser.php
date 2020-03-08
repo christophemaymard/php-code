@@ -9,6 +9,7 @@ namespace PhpCode\Language\Cpp\Parsing;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
+use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
 use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
@@ -171,6 +172,24 @@ class Parser
         }
         
         return $prmDeclClause;
+    }
+    
+    /**
+     * Parse a declaration specifier sequence.
+     * 
+     * decl-specifier-seq:
+     *     decl-specifier
+     * 
+     * @return  DeclarationSpecifierSequence
+     */
+    public function parseDeclarationSpecifierSequence(): DeclarationSpecifierSequence
+    {
+        $declSpecSeq = new DeclarationSpecifierSequence();
+        
+        $declSpec = $this->parseDeclarationSpecifier();
+        $declSpecSeq->addDeclarationSpecifier($declSpec);
+        
+        return $declSpecSeq;
     }
     
     /**
