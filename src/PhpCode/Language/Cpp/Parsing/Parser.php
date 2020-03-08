@@ -8,6 +8,10 @@
 namespace PhpCode\Language\Cpp\Parsing;
 
 use PhpCode\Exception\FormatException;
+use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
+use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
+use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
@@ -167,6 +171,45 @@ class Parser
         }
         
         return $prmDeclClause;
+    }
+    
+    /**
+     * Parse a declaration specifier.
+     * 
+     * decl-specifier:
+     *     defining-type-specifier
+     * 
+     * defining-type-specifier:
+     *     type-specifier
+     * 
+     * type-specifier:
+     *     simple-type-specifier
+     * 
+     * simple-type-specifier:
+     *     int
+     * 
+     * @return  DeclarationSpecifier
+     * 
+     * @throws  FormatException When no declaration specifier has been parsed.
+     */
+    public function parseDeclarationSpecifier(): DeclarationSpecifier
+    {
+        if ($this->tokenIs(Tag::KW_INT)) {
+            $this->move();
+            
+            return DeclarationSpecifier::createDefiningTypeSpecifier(
+                DefiningTypeSpecifier::createTypeSpecifier(
+                    TypeSpecifier::createSimpleTypeSpecifier(
+                        SimpleTypeSpecifier::createInt()
+                    )
+                )
+            );
+        }
+        
+        throw new FormatException(\sprintf(
+            'Unexpected "%s", expected decl-specifier.', 
+            $this->tkn->getLexeme()
+        ));
     }
     
     /**

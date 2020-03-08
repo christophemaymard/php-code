@@ -306,6 +306,38 @@ Table of contents
 
 
 
+### decl-specifier
+
+| Definitions                                         | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [defining-type-specifier](#defining-type-specifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### defining-type-specifier
+
+| Definitions                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [type-specifier](#type-specifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### type-specifier
+
+| Definitions                                     | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [simple-type-specifier](#simple-type-specifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### simple-type-specifier
+
+| Definitions | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **int**     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
 ## **Declarators**
 
 
@@ -386,8 +418,10 @@ Table of contents
 ## **Index of rules**
 
 - **D**
+  - [decl-specifier](#decl-specifier)
   - [declarator](#declarator)
   - [declarator-id](#declarator-id)
+  - [defining-type-specifier](#defining-type-specifier)
   - [digit](#digit)
 - **I**
   - [id-expression](#id-expression)
@@ -403,8 +437,11 @@ Table of contents
   - [parameters-and-qualifiers](#parameters-and-qualifiers)
   - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)
+- **S**
+  - [simple-type-specifier](#simple-type-specifier)
 - **T**
   - [token](#token)
+  - [type-specifier](#type-specifier)
 - **U**
   - [unqualified-id](#unqualified-id)
 
