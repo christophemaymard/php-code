@@ -393,9 +393,10 @@ Table of contents
 
 ### parameter-declaration-clause
 
-| Definitions  | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
-|:-------------|:------------------:|:------------------:|:------------------:|:------------------:|
-| **...**[opt] | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Definitions                                                                  | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:-----------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [parameter-declaration-list](#parameter-declaration-list)[opt] **...**[opt]  | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| [parameter-declaration-list](#parameter-declaration-list) **,** **...**[opt] | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 

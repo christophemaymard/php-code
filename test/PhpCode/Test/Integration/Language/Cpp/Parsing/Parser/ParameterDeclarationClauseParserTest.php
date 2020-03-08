@@ -7,11 +7,11 @@
  */
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
-use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
+use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Parsing\Parser;
 use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
-use PHPUnit\Framework\TestCase;
+use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -23,10 +23,12 @@ use PHPUnit\Framework\TestCase;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class ParameterDeclarationClauseParserTest extends TestCase
+class ParameterDeclarationClauseParserTest extends AbstractParserTest
 {
+    use TokenAssertionTrait;
+    
     /**
-     * Tests that parseParameterDeclarationClause() parses nothing.
+     * Tests that parseParameterDeclarationClause() parses "        ".
      * 
      * @param   int $standard   The standard to create the language context for.
      * 
@@ -35,7 +37,7 @@ class ParameterDeclarationClauseParserTest extends TestCase
      * @dataProvider    getCpp2014StandardProvider
      * @dataProvider    getCpp2017StandardProvider
      */
-    public function testParseNothingWhenEmpty(int $standard): void
+    public function testParseEmpty(int $standard): void
     {
         $factory = new LanguageContextFactory();
         $ctx = $factory->create($standard);
@@ -46,12 +48,14 @@ class ParameterDeclarationClauseParserTest extends TestCase
         $sut = new Parser($lexer);
         $prmDeclClause = $sut->parseParameterDeclarationClause();
         
+        self::assertFalse($prmDeclClause->hasParameterDeclarationList());
         self::assertFalse($prmDeclClause->hasEllipsis());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Tests that parseParameterDeclarationClause() parses an ellipsis when 
-     * there is only an ellipsis.
+     * Tests that parseParameterDeclarationClause() parses "  ...   ".
      * 
      * @param   int $standard   The standard to create the language context for.
      * 
@@ -60,7 +64,7 @@ class ParameterDeclarationClauseParserTest extends TestCase
      * @dataProvider    getCpp2014StandardProvider
      * @dataProvider    getCpp2017StandardProvider
      */
-    public function testParseEllipsisWhenOnlyEllipsis(int $standard): void
+    public function testParseEllipsis(int $standard): void
     {
         $factory = new LanguageContextFactory();
         $ctx = $factory->create($standard);
@@ -71,54 +75,181 @@ class ParameterDeclarationClauseParserTest extends TestCase
         $sut = new Parser($lexer);
         $prmDeclClause = $sut->parseParameterDeclarationClause();
         
+        self::assertFalse($prmDeclClause->hasParameterDeclarationList());
         self::assertTrue($prmDeclClause->hasEllipsis());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Returns a set of standards with only C++ 2003.
+     * Tests that parseParameterDeclarationClause() parses "int".
      * 
-     * @return  array[]
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
      */
-    public function getCpp2003StandardProvider(): array
+    public function testParseInt(int $standard): void
     {
-        return [
-            'C++ 2003' => [ 1, ], 
-        ];
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('int');
+        
+        $sut = new Parser($lexer);
+        $prmDeclClause = $sut->parseParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertFalse($prmDeclClause->hasEllipsis());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Returns a set of standards with only C++ 2011.
+     * Tests that parseParameterDeclarationClause() parses "int ...".
      * 
-     * @return  array[]
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
      */
-    public function getCpp2011StandardProvider(): array
+    public function testParseIntEllipsis(int $standard): void
     {
-        return [
-            'C++ 2011' => [ 2, ], 
-        ];
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('int ...');
+        
+        $sut = new Parser($lexer);
+        $prmDeclClause = $sut->parseParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertTrue($prmDeclClause->hasEllipsis());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Returns a set of standards with only C++ 2014.
+     * Tests that parseParameterDeclarationClause() parses "int, ...".
      * 
-     * @return  array[]
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
      */
-    public function getCpp2014StandardProvider(): array
+    public function testParseIntCommaEllipsis(int $standard): void
     {
-        return [
-            'C++ 2014' => [ 4, ], 
-        ];
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('int, ...');
+        
+        $sut = new Parser($lexer);
+        $prmDeclClause = $sut->parseParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertTrue($prmDeclClause->hasEllipsis());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Returns a set of standards with only C++ 2017.
+     * Tests that parseParameterDeclarationList() throws an exception when 
+     * the stream is invalid.
      * 
-     * @return  array[]
+     * @param   int     $standard   The standard to create the language context for.
+     * @param   string  $stream     The stream to test.
+     * @param   string  $message    The expected message of the exception.
+     * 
+     * @dataProvider    getInvalidStreamsProvider
      */
-    public function getCpp2017StandardProvider(): array
+    public function testParseParameterDeclarationClauseThrowsExceptionWhenInvalidStream(
+        int $standard,
+        string $stream,
+        string $message
+    ): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream($stream);
+        
+        $sut = new Parser($lexer);
+        
+        $this->expectException(FormatException::class);
+        $this->expectExceptionMessage($message);
+        $sut->parseParameterDeclarationClause();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function getInvalidStreams(): array
     {
         return [
-            'C++ 2017' => [ 8, ], 
+            // 
+            '3 parameters "int, , int" second is missing' => [
+                [ 1, 2, 4, 8, ], 
+                'int, , int', 
+                'Unexpected ",", expected decl-specifier.', 
+            ], 
+            '3 parameters "int, int," third is missing' => [
+                [ 1, 2, 4, 8, ], 
+                'int, int,', 
+                'Unexpected "", expected decl-specifier.', 
+            ], 
         ];
     }
 }

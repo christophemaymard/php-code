@@ -11,6 +11,7 @@ use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Parsing\Parser;
 use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
+use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -24,9 +25,10 @@ use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
  */
 class DeclaratorParserTest extends AbstractParserTest
 {
+    use TokenAssertionTrait;
+    
     /**
-     * Tests that parseDeclarator() parse an unqualified identifier that is 
-     * an identifier.
+     * Tests that parseDeclarator() parse "main".
      * 
      * @param   int $standard   The standard to create the language context for.
      * 
@@ -55,11 +57,12 @@ class DeclaratorParserTest extends AbstractParserTest
         $id = $uid->getIdentifier();
         
         self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Tests that parseDeclarator() parse an unqualified identifier, that is 
-     * an identifier, and empty parameters and qualifiers.
+     * Tests that parseDeclarator() parse "main()".
      * 
      * @param   int $standard   The standard to create the language context for.
      * 
@@ -86,20 +89,22 @@ class DeclaratorParserTest extends AbstractParserTest
         
         $prmQual = $noptrDcltor->getParametersAndQualifiers();
         $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertFalse($prmDeclClause->hasParameterDeclarationList());
         self::assertFalse($prmDeclClause->hasEllipsis());
         
+        // 
         $did = $noptrDcltor->getDeclaratorId();
         $idExpr = $did->getIdExpression();
         $uid = $idExpr->getUnqualifiedId();
         $id = $uid->getIdentifier();
         
         self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
-     * Tests that parseDeclarator() parse an unqualified identifier, that is 
-     * an identifier, and parameters and qualifiers with a parameter 
-     * declaration clause, that has only an ellipsis.
+     * Tests that parseDeclarator() parse "main(...)".
      * 
      * @param   int $standard   The standard to create the language context for.
      * 
@@ -126,14 +131,183 @@ class DeclaratorParserTest extends AbstractParserTest
         
         $prmQual = $noptrDcltor->getParametersAndQualifiers();
         $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        self::assertFalse($prmDeclClause->hasParameterDeclarationList());
         self::assertTrue($prmDeclClause->hasEllipsis());
         
+        // 
         $did = $noptrDcltor->getDeclaratorId();
         $idExpr = $did->getIdExpression();
         $uid = $idExpr->getUnqualifiedId();
         $id = $uid->getIdentifier();
         
         self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
+    }
+    
+    /**
+     * Tests that parseDeclarator() parses "main(int)".
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseUnqualifiedIdPAQInt(int $standard): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('main(int)');
+        
+        $sut = new Parser($lexer);
+        $dcltor = $sut->parseDeclarator();
+        
+        $ptrDcltor = $dcltor->getPtrDeclarator();
+        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertFalse($prmDeclClause->hasEllipsis());
+        
+        // 
+        $did = $noptrDcltor->getDeclaratorId();
+        $idExpr = $did->getIdExpression();
+        $uid = $idExpr->getUnqualifiedId();
+        $id = $uid->getIdentifier();
+        
+        self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
+    }
+    
+    /**
+     * Tests that parseDeclarator() parses "main(int ...)".
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseUnqualifiedIdPAQIntEllipsis(int $standard): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('main(int ...)');
+        
+        $sut = new Parser($lexer);
+        $dcltor = $sut->parseDeclarator();
+        
+        $ptrDcltor = $dcltor->getPtrDeclarator();
+        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertTrue($prmDeclClause->hasEllipsis());
+        
+        // 
+        $did = $noptrDcltor->getDeclaratorId();
+        $idExpr = $did->getIdExpression();
+        $uid = $idExpr->getUnqualifiedId();
+        $id = $uid->getIdentifier();
+        
+        self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
+    }
+    
+    /**
+     * Tests that parseDeclarator() parses "main(int, ...)".
+     * 
+     * @param   int $standard   The standard to create the language context for.
+     * 
+     * @dataProvider    getCpp2003StandardProvider
+     * @dataProvider    getCpp2011StandardProvider
+     * @dataProvider    getCpp2014StandardProvider
+     * @dataProvider    getCpp2017StandardProvider
+     */
+    public function testParseUnqualifiedIdPAQIntCommaEllipsis(int $standard): void
+    {
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream('main(int, ...)');
+        
+        $sut = new Parser($lexer);
+        $dcltor = $sut->parseDeclarator();
+        
+        $ptrDcltor = $dcltor->getPtrDeclarator();
+        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
+        
+        $prmQual = $noptrDcltor->getParametersAndQualifiers();
+        $prmDeclClause = $prmQual->getParameterDeclarationClause();
+        
+        // 
+        $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+        self::assertCount(1, $prmDeclList);
+        
+        $prmDecl = $prmDeclList->getParameterDeclarations()[0];
+        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
+        self::assertCount(1, $declSpecSeq);
+        
+        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
+        $stSpec = $declSpec->getDefiningTypeSpecifier()
+            ->getTypeSpecifier()
+            ->getSimpleTypeSpecifier();
+        self::assertTrue($stSpec->isInt());
+        
+        // 
+        self::assertTrue($prmDeclClause->hasEllipsis());
+        
+        // 
+        $did = $noptrDcltor->getDeclaratorId();
+        $idExpr = $did->getIdExpression();
+        $uid = $idExpr->getUnqualifiedId();
+        $id = $uid->getIdentifier();
+        
+        self::assertSame('main', $id->getIdentifier());
+        
+        self::assertEOFToken($lexer->getToken());
     }
     
     /**
@@ -180,6 +354,43 @@ class DeclaratorParserTest extends AbstractParserTest
                 [ 1, 2, 4, 8, ],
                 'foo bar()', 
                 'Unexpected identifier "bar".', 
+            ], 
+            // 
+            'ELLIPSIS param "main(... int)"' => [
+                [ 1, 2, 4, 8, ], 
+                'main(... int)', 
+                'Missing ")" before "int".', 
+            ], 
+            'ELLIPSIS COMMA param "main(..., int)"' => [
+                [ 1, 2, 4, 8, ], 
+                'main(..., int)', 
+                'Missing ")" before ",".', 
+            ], 
+            'Param COMMA ELLIPSIS param "main(int, ... int)"' => [
+                [ 1, 2, 4, 8, ], 
+                'main(int, ... int)', 
+                'Missing ")" before "int".', 
+            ], 
+            'Param COMMA ELLIPSIS COMMA param "main(int, ..., int)"' => [
+                [ 1, 2, 4, 8, ], 
+                'main(int, ..., int)', 
+                'Missing ")" before ",".', 
+            ], 
+            // 
+            '3 parameters "main(, int, int)" first is missing' => [
+                [ 1, 2, 4, 8, ], 
+                'main(, int, int)', 
+                'Missing ")" before ",".', 
+            ], 
+            '3 parameters "main(int, , int)" second is missing' => [
+                [ 1, 2, 4, 8, ], 
+                'main(int, , int)', 
+                'Unexpected ",", expected decl-specifier.', 
+            ], 
+            '3 parameters "main(int, int,)" third is missing' => [
+                [ 1, 2, 4, 8, ], 
+                'main(int, int,)', 
+                'Unexpected ")", expected decl-specifier.', 
             ], 
         ];
     }

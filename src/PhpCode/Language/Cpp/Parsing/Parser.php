@@ -161,7 +161,8 @@ class Parser
      * Parse a parameter declaration clause.
      * 
      * parameter-declaration-clause:
-     *     ...[opt]
+     *     parameter-declaration-list[opt] ...[opt]
+     *     parameter-declaration-list , ...
      * 
      * @return  ParameterDeclarationClause
      */
@@ -169,7 +170,23 @@ class Parser
     {
         $prmDeclClause = new ParameterDeclarationClause();
         
-        if ($this->moveIf(Tag::PN_ELLIPSIS)) {
+        if (!$this->tokenIsOneOf([Tag::KW_INT, Tag::PN_ELLIPSIS])) {
+            return $prmDeclClause;
+        }
+        
+        if (!$this->tokenIs(Tag::PN_ELLIPSIS)) {
+            $prmDeclList = $this->parseParameterDeclarationList();
+            $prmDeclClause->setParameterDeclarationList($prmDeclList);
+        }
+
+        if ($this->tokenIs(Tag::PN_COMMA) && 
+            $this->lookAhead(1)->getTag() == Tag::PN_ELLIPSIS) {
+            // Connsume the comma and the ellipsis.
+            $this->move();
+            $this->move();
+
+            $prmDeclClause->addEllipsis();
+        } elseif ($this->moveIf(Tag::PN_ELLIPSIS)) {
             $prmDeclClause->addEllipsis();
         }
         
@@ -320,6 +337,17 @@ class Parser
     private function tokenIs(int $tag): bool
     {
         return $this->tkn->getTag() === $tag;
+    }
+    
+    /**
+     * Indicates whether the token to process matches one of the specified tags.
+     * 
+     * @param   int[]   $tags   One of the tags to match.
+     * @return  bool    TRUE if the token to process matches one of the specified tags, otherwise FALSE.
+     */
+    private function tokenIsOneOf(array $tags): bool
+    {
+        return \in_array($this->tkn->getTag(), $tags, TRUE);
     }
     
     /**
