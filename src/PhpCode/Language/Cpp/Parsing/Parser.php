@@ -16,6 +16,7 @@ use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
@@ -172,6 +173,22 @@ class Parser
         }
         
         return $prmDeclClause;
+    }
+    
+    /**
+     * Parse a parameter declaration.
+     * 
+     * parameter-declaration:
+     *     decl-specifier-seq
+     * 
+     * @return  ParameterDeclaration
+     */
+    public function parseParameterDeclaration(): ParameterDeclaration
+    {
+        $declSpecSeq = $this->parseDeclarationSpecifierSequence();
+        $prmDecl = new ParameterDeclaration($declSpecSeq);
+        
+        return $prmDecl;
     }
     
     /**
