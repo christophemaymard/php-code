@@ -15,8 +15,16 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
+        <whitelist addUncoveredFilesFromWhitelist="true"
+                   processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src/</directory>
+            <directory suffix=".php">test/PhpCode/Test/Language/</directory>
+            <exclude>
+                <file>test/PhpCode/Test/Language/Cpp/Lexical/TokenAssertionTrait.php</file>
+                <file>test/PhpCode/Test/Language/Cpp/Lexical/TokenTableInterfaceDoubleBuilder.php</file>
+                <file>test/PhpCode/Test/Language/Cpp/Specification/LanguageContextInterfaceDoubleBuilder.php</file>
+                <file>test/PhpCode/Test/Language/Cpp/Specification/LanguageContextInterfaceDoubleFactory.php</file>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
