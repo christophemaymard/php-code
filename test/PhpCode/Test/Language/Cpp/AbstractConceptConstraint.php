@@ -75,5 +75,40 @@ abstract class AbstractConceptConstraint extends Constraint
             $expected
         );
     }
+    
+    /**
+     * Formats the reason, like:
+     * "CONCEPT: It should [not] be SUBJECT."
+     * 
+     * @param   bool    $expected   TRUE means that it should be, otherwise it should not be (not appears).
+     * @param   string  $subject    The subject.
+     * @return  string
+     */
+    protected function isReason(bool $expected, string $subject): string
+    {
+        return \sprintf(
+            '%s: It should%s be %s.', 
+            $this->getConceptName(), 
+            !$expected ? ' not' : '', 
+            $subject
+        );
+    }
+    
+    /**
+     * Prepends two spaces to each lines of the specified text.
+     * 
+     * @param   string  $text   The text to indent.
+     * @return  string
+     */
+    protected function indent(string $text): string
+    {
+        $lines = [];
+        
+        foreach (\explode("\n", $text) as $line) {
+            $lines[] = '  '.$line;
+        }
+        
+        return \implode("\n", $lines);
+    }
 }
 
