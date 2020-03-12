@@ -95,6 +95,47 @@ abstract class AbstractConceptConstraint extends Constraint
     }
     
     /**
+     * Formats the reason, like:
+     * "CONCEPT: CONCEPT_TO_STRING should have EXPECTED SUBJECT, got ACTUAL."
+     * 
+     * @param   int     $expected   The expected count.
+     * @param   int     $actual     The actual count.
+     * @param   string  $subject    The name of an element (plural).
+     * @return  string
+     */
+    protected function countReason(
+        int $expected, 
+        int $actual, 
+        string $subject
+    ): string
+    {
+        return \sprintf(
+            '%s: %s should have %s %s, got %s.', 
+            $this->getConceptName(), 
+            $this->toString(), 
+            $expected, 
+            $subject, 
+            $actual
+        );
+    }
+    
+    /**
+     * Returns a text with name of the concept (in the first line) followed 
+     * by the specified text (that is indented).
+     * 
+     * @param   string  $text   The text to indent.
+     * @return  string
+     */
+    protected function conceptIndent(string $text): string
+    {
+        return \sprintf(
+            "%s\n%s", 
+            $this->getConceptName(), 
+            $this->indent($text)
+        );
+    }
+    
+    /**
      * Prepends two spaces to each lines of the specified text.
      * 
      * @param   string  $text   The text to indent.
