@@ -8,13 +8,14 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declaration;
 
 use PhpCode\Exception\ArgumentException;
-use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraintDoubleFactory;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint} 
@@ -27,6 +28,31 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  */
 class DeclarationSpecifierSequenceConstraintTest extends TestCase
 {
+    /**
+     * @var DeclarationSpecifierDoubleFactory
+     */
+    private $declSpecFactory;
+    
+    /**
+     * @var DeclarationSpecifierSequenceDoubleFactory
+     */
+    private $declSpecSeqFactory;
+    
+    /**
+     * @var DeclarationSpecifierConstraintDoubleFactory
+     */
+    private $declSpecConstFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->declSpecFactory = new DeclarationSpecifierDoubleFactory($this);
+        $this->declSpecSeqFactory = new DeclarationSpecifierSequenceDoubleFactory($this);
+        $this->declSpecConstFactory = new DeclarationSpecifierConstraintDoubleFactory($this);
+    }
+    
     /**
      * Tests that __construct() throws an exception.
      */
@@ -64,8 +90,8 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
         ));
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         $consts[] = NULL;
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
@@ -78,7 +104,7 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testToStringReturnsStringWhenCreate(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame('declaration specifier sequence', $sut->toString());
@@ -91,7 +117,7 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testGetConceptNameReturnsStringWhenCreate(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame('Declaration specifier sequence', $sut->getConceptName());
@@ -104,7 +130,7 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testFailureDefaultReasonReturnsStringWhenCreate(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame('Declaration specifier sequence: Unknown reason.', $sut->failureDefaultReason(NULL));
@@ -117,9 +143,9 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testConstraintDescriptionReturnsStringWhenCreate(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription('foo');
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription('bar');
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription('baz');
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription('foo');
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription('bar');
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription('baz');
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame(
@@ -135,7 +161,7 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenCreateAndNotInstanceDeclarationSpecifierSequence(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertFalse($sut->matches(NULL));
@@ -148,12 +174,12 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenCreateAndConstraintCountNotEqualDeclarationSpecifierCount(): void
     {
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCount(0);
+        $declSpecSeq = $this->declSpecSeqFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertFalse($sut->matches($declSpecSeq));
@@ -166,18 +192,15 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenCreateAndDeclarationSpecifierIsNotValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            3, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(3, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[0], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[1], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[2], FALSE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[0], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[1], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[2], FALSE);
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertFalse($sut->matches($declSpecSeq));
@@ -190,18 +213,15 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testMatchesReturnsTrueWhenCreateAndDeclarationSpecifierSequenceIsValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            3, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(3, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[0], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[1], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[2], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[0], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[1], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[2], TRUE);
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertTrue($sut->matches($declSpecSeq));
@@ -214,7 +234,7 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenCreateAndNotInstanceDeclarationSpecifierSequence(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertRegExp(
@@ -233,12 +253,12 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenCreateAndConstraintCountNotEqualDeclarationSpecifierCount(): void
     {
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCount(0);
+        $declSpecSeq = $this->declSpecSeqFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
-        $consts[] = $this->createDeclarationSpecifierConstraintDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
+        $consts[] = $this->declSpecConstFactory->createDummy();
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame(
@@ -255,18 +275,15 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenCreateAndDeclarationSpecifierIsNotValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            3, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(3, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[0], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[1], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatchesFailureReason(
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[0], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[1], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatchesFailureReason(
             $declSpecs[2], 
             FALSE, 
             'foo reason.'
@@ -287,18 +304,15 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenCreateAndDeclarationSpecifierSequenceIsValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            3, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(3, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[0], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[1], TRUE);
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatches($declSpecs[2], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[0], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[1], TRUE);
+        $consts[] = $this->declSpecConstFactory->createMatches($declSpecs[2], TRUE);
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame(
@@ -315,9 +329,9 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndNotInstanceDeclarationSpecifierSequence(): void
     {
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription("foo\n  foo sub");
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription("bar\n  bar sub");
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription("baz\n  baz sub");
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription("foo\n  foo sub");
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription("bar\n  bar sub");
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription("baz\n  baz sub");
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertRegExp(
@@ -345,10 +359,10 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndConstraintCountNotEqualDeclarationSpecifierCount(): void
     {
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCount(0);
+        $declSpecSeq = $this->declSpecSeqFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription("foo\n  foo sub");
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription("foo\n  foo sub");
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         self::assertSame(
@@ -371,14 +385,11 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndDeclarationSpecifierIsNotValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            1, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(1, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatchesFailureReasonConstraintDescription(
+        $consts[] = $this->declSpecConstFactory->createMatchesFailureReasonConstraintDescription(
             $declSpecs[0], 
             FALSE, 
             "foo reason", 
@@ -405,14 +416,11 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndDeclarationSpecifierSequenceIsValid(): void
     {
         $declSpecs = [];
-        $declSpecs[] = $this->createDeclarationSpecifierDummy();
-        $declSpecSeq = $this->createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-            1, 
-            $declSpecs
-        );
+        $declSpecs[] = $this->declSpecFactory->createDummy();
+        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(1, $declSpecs);
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleMatchesConstraintDescription(
+        $consts[] = $this->declSpecConstFactory->createMatchesConstraintDescription(
             $declSpecs[0], 
             TRUE, 
             'foo description'
@@ -439,206 +447,10 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
         $this->expectExceptionMessageMatches('` is a declaration specifier sequence`');
         
         $consts = [];
-        $consts[] = $this->createDeclarationSpecifierConstraintDoubleConstraintDescription(
-            'foo description'
-        );
+        $consts[] = $this->declSpecConstFactory->createConstraintDescription('foo description');
         
         $sut = DeclarationSpecifierSequenceConstraint::create($consts);
         $sut->evaluate(NULL, '', FALSE);
-    }
-    
-    /**
-     * Creates a dummy of the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifier} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(DeclarationSpecifier::class)->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence} 
-     * class where count() can be called.
-     * 
-     * @param   int $count  The value to return when count() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierSequenceDoubleCount(
-        int $count
-    ): ProphecySubjectInterface
-    {
-        $declSpecSeqProphecy = $this->prophesize(DeclarationSpecifierSequence::class);
-        $declSpecSeqProphecy
-            ->count()
-            ->willReturn($count);
-        
-        return $declSpecSeqProphecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence} 
-     * class where count() and getDeclarationSpecifiers() can be called.
-     * 
-     * @param   int                     $count      The value to return when count() is called.
-     * @param   DeclarationSpecifier[]  $declSpecs  The value to return when getDeclarationSpecifiers() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierSequenceDoubleCountGetDeclarationSpecifiers(
-        int $count, 
-        array $declSpecs
-    ): ProphecySubjectInterface
-    {
-        $declSpecSeqProphecy = $this->prophesize(DeclarationSpecifierSequence::class);
-        $declSpecSeqProphecy
-            ->count()
-            ->willReturn($count);
-        
-        $declSpecSeqProphecy
-            ->getDeclarationSpecifiers()
-            ->willReturn($declSpecs);
-        
-        return $declSpecSeqProphecy->reveal();
-    }
-    
-    /**
-     * Creates a dummy of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(DeclarationSpecifierConstraint::class)->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class where constraintDescription() can be called.
-     * 
-     * @param   string  $return The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDoubleConstraintDescription(
-        string $return
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(DeclarationSpecifierConstraint::class);
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class where matches() can be called.
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The value of the first argument when matches() is called.
-     * @param   bool                    $return     The value to return when matches() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDoubleMatches(
-        DeclarationSpecifier $declSpec, 
-        bool $return
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(DeclarationSpecifierConstraint::class);
-        $prophecy
-            ->matches($declSpec)
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class where matches() and failureReason() can be called.
-     * 
-     * @param   DeclarationSpecifier    $declSpec               The value of the first argument when matches() or failureReason() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnFailureReason    The value to return when failureReason() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDoubleMatchesFailureReason(
-        DeclarationSpecifier $declSpec, 
-        bool $returnMatches, 
-        string $returnFailureReason
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(DeclarationSpecifierConstraint::class);
-        $prophecy
-            ->matches($declSpec)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->failureReason($declSpec)
-            ->willReturn($returnFailureReason);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class where matches() and constraintDescription() can be called.
-     * 
-     * @param   DeclarationSpecifier    $declSpec               The value of the first argument when matches() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnConstraintDesc   The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDoubleMatchesConstraintDescription(
-        DeclarationSpecifier $declSpec, 
-        bool $returnMatches, 
-        string $returnConstraintDesc
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(DeclarationSpecifierConstraint::class);
-        $prophecy
-            ->matches($declSpec)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($returnConstraintDesc);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
-     * class where matches(), failureReason() and constraintDescription() 
-     * can be called.
-     * 
-     * @param   DeclarationSpecifier    $declSpec               The value of the first argument when matches() or failureReason() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnFailureReason    The value to return when failureReason() is called.
-     * @param   string                  $returnConstraintDesc   The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierConstraintDoubleMatchesFailureReasonConstraintDescription(
-        DeclarationSpecifier $declSpec, 
-        bool $returnMatches, 
-        string $returnFailureReason, 
-        string $returnConstraintDesc
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(DeclarationSpecifierConstraint::class);
-        $prophecy
-            ->matches($declSpec)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->failureReason($declSpec)
-            ->willReturn($returnFailureReason);
-        
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($returnConstraintDesc);
-        
-        return $prophecy->reveal();
     }
 }
 

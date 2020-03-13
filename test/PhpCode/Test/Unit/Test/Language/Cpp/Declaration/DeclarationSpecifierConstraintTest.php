@@ -12,6 +12,7 @@ use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ProphecySubjectInterface;
@@ -27,6 +28,19 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  */
 class DeclarationSpecifierConstraintTest extends TestCase
 {
+    /**
+     * @var DeclarationSpecifierDoubleFactory
+     */
+    private $declSpecFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->declSpecFactory = new DeclarationSpecifierDoubleFactory($this);
+    }
+    
     /**
      * Tests that __construct() throws an exception.
      */
@@ -256,13 +270,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->willReturn($typeSpec);
         $defTypeSpec = $defTypeSpecProphecy->reveal();
         
-        $declSpecProphecy = $this->prophesize(DeclarationSpecifier::class);
-        $declSpecProphecy
-            ->getDefiningTypeSpecifier()
-            ->willReturn($defTypeSpec);
-        $declSpec = $declSpecProphecy->reveal();
-        
-        return $declSpec;
+        return $this->declSpecFactory->createGetDefiningTypeSpecifier($defTypeSpec);
     }
 }
 

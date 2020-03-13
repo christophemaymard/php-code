@@ -9,6 +9,7 @@ namespace PhpCode\Test\Unit\Test\Language\Cpp\Lexical;
 
 use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,19 @@ use PHPUnit\Framework\TestCase;
  */
 class IdentifierConstraintTest extends TestCase
 {
+    /**
+     * @var IdentifierDoubleFactory
+     */
+    private $idFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->idFactory =  new IdentifierDoubleFactory($this);
+    }
+    
     /**
      * Tests that toString() returns a string.
      */
@@ -73,11 +87,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenNotSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('bar');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('bar');
         
         $sut = new IdentifierConstraint('foo');
         self::assertFalse($sut->matches($id));
@@ -88,11 +98,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testMatchesReturnsTrueWhenSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('foo');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('foo');
         
         $sut = new IdentifierConstraint('foo');
         self::assertTrue($sut->matches($id));
@@ -119,11 +125,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenNotSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('bar');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('bar');
         
         $sut = new IdentifierConstraint('foo');
         self::assertSame(
@@ -137,11 +139,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('foo');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('foo');
         
         $sut = new IdentifierConstraint('foo');
         self::assertSame('Identifier: Unknown reason.', $sut->failureReason($id));
@@ -168,11 +166,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenNotSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('bar');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('bar');
         
         $sut = new IdentifierConstraint('foo');
         self::assertSame(
@@ -187,11 +181,7 @@ class IdentifierConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenSameIdentifier(): void
     {
-        $idProphecy = $this->prophesize(Identifier::class);
-        $idProphecy
-            ->getIdentifier()
-            ->willReturn('foo');
-        $id = $idProphecy->reveal();
+        $id = $this->idFactory->createGetIdentifier('foo');
         
         $sut = new IdentifierConstraint('foo');
         self::assertSame(

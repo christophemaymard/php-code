@@ -8,13 +8,14 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Exception\ArgumentException;
-use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraintDoubleFactory;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint} 
@@ -27,6 +28,31 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  */
 class ParameterDeclarationListConstraintTest extends TestCase
 {
+    /**
+     * @var ParameterDeclarationDoubleFactory
+     */
+    private $prmDeclFactory;
+    
+    /**
+     * @var ParameterDeclarationListDoubleFactory
+     */
+    private $prmDeclListFactory;
+    
+    /**
+     * @var ParameterDeclarationConstraintDoubleFactory
+     */
+    private $prmDeclConstFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->prmDeclFactory =  new ParameterDeclarationDoubleFactory($this);
+        $this->prmDeclListFactory =  new ParameterDeclarationListDoubleFactory($this);
+        $this->prmDeclConstFactory =  new ParameterDeclarationConstraintDoubleFactory($this);
+    }
+    
     /**
      * Tests that __construct() throws an exception when contraints are empty.
      */
@@ -51,8 +77,8 @@ class ParameterDeclarationListConstraintTest extends TestCase
         ));
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         $consts[] = NULL;
         
         $sut = new ParameterDeclarationListConstraint($consts);
@@ -65,7 +91,7 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testToStringReturnsString(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame('parameter declaration list', $sut->toString());
@@ -77,7 +103,7 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testGetConceptNameReturnsString(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame('Parameter declaration list', $sut->getConceptName());
@@ -89,7 +115,7 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureDefaultReasonReturnsString(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame('Parameter declaration list: Unknown reason.', $sut->failureDefaultReason(NULL));
@@ -101,9 +127,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testConstraintDescriptionReturnsString(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription('foo');
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription('bar');
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription('baz');
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription('foo');
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription('bar');
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription('baz');
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame(
@@ -119,7 +145,7 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenNotInstanceParameterDeclarationList(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertFalse($sut->matches(NULL));
@@ -131,12 +157,12 @@ class ParameterDeclarationListConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenConstraintCountNotEqualParameterDeclarationCount(): void
     {
-        $prmDeclList = $this->createParameterDeclarationListDoubleCount(0);
+        $prmDeclList = $this->prmDeclListFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertFalse($sut->matches($prmDeclList));
@@ -149,18 +175,15 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenParameterDeclarationIsNotValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            3, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[0], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[1], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[2], FALSE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[0], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[1], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[2], FALSE);
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertFalse($sut->matches($prmDeclList));
@@ -173,18 +196,15 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testMatchesReturnsTrueWhenParameterDeclarationListIsValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            3, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[0], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[1], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[2], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[0], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[1], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[2], TRUE);
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertTrue($sut->matches($prmDeclList));
@@ -197,7 +217,7 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenNotInstanceParameterDeclarationList(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertRegExp(
@@ -215,12 +235,12 @@ class ParameterDeclarationListConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenConstraintCountNotEqualParameterDeclarationCount(): void
     {
-        $prmDeclList = $this->createParameterDeclarationListDoubleCount(0);
+        $prmDeclList = $this->prmDeclListFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
-        $consts[] = $this->createParameterDeclarationConstraintDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
+        $consts[] = $this->prmDeclConstFactory->createDummy();
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame(
@@ -237,18 +257,15 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenParameterDeclarationIsNotValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            3, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[0], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[1], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatchesFailureReason(
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[0], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[1], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatchesFailureReason(
             $prmDecls[2], 
             FALSE, 
             "foo parameter\n".
@@ -273,18 +290,15 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenParameterDeclarationListIsValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            3, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[0], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[1], TRUE);
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatches($prmDecls[2], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[0], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[1], TRUE);
+        $consts[] = $this->prmDeclConstFactory->createMatches($prmDecls[2], TRUE);
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame(
@@ -300,9 +314,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenNotInstanceParameterDeclarationList(): void
     {
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription("foo\n  foo sub");
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription("bar\n  bar sub");
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription("baz\n  baz sub");
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription("foo\n  foo sub");
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription("bar\n  bar sub");
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription("baz\n  baz sub");
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertRegExp(
@@ -330,10 +344,10 @@ class ParameterDeclarationListConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenConstraintCountNotEqualParameterDeclarationCount(): void
     {
-        $prmDeclList = $this->createParameterDeclarationListDoubleCount(0);
+        $prmDeclList = $this->prmDeclListFactory->createCount(0);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription("foo\n  foo sub");
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription("foo\n  foo sub");
         
         $sut = new ParameterDeclarationListConstraint($consts);
         self::assertSame(
@@ -355,14 +369,11 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenParameterDeclarationIsNotValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            1, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(1, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatchesFailureReasonConstraintDescription(
+        $consts[] = $this->prmDeclConstFactory->createMatchesFailureReasonConstraintDescription(
             $prmDecls[0], 
             FALSE, 
             "foo reason", 
@@ -388,14 +399,11 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenParameterDeclarationListIsValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->createParameterDeclarationDummy();
-        $prmDeclList = $this->createParameterDeclarationListDoubleCountGetParameterDeclarations(
-            1, 
-            $prmDecls
-        );
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(1, $prmDecls);
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleMatchesConstraintDescription(
+        $consts[] = $this->prmDeclConstFactory->createMatchesConstraintDescription(
             $prmDecls[0], 
             TRUE, 
             'foo description'
@@ -421,206 +429,10 @@ class ParameterDeclarationListConstraintTest extends TestCase
         $this->expectExceptionMessageMatches('` is a parameter declaration list`');
         
         $consts = [];
-        $consts[] = $this->createParameterDeclarationConstraintDoubleConstraintDescription(
-            'foo description'
-        );
+        $consts[] = $this->prmDeclConstFactory->createConstraintDescription('foo description');
         
         $sut = new ParameterDeclarationListConstraint($consts);
         $sut->evaluate(NULL, '', FALSE);
-    }
-    
-    /**
-     * Creates a dummy for the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclaration} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(ParameterDeclaration::class)->reveal();
-    }
-    
-    /**
-     * Creates a dummy for the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(ParameterDeclarationConstraint::class)->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class where constraintDescription() can be called.
-     * 
-     * @param   string  $return The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDoubleConstraintDescription(
-        string $return
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationConstraint::class);
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class where matches() can be called.
-     * 
-     * @param   ParameterDeclaration    $prmDecl    The first argument when matches() is called.
-     * @param   bool                    $return     The value to return when matches() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDoubleMatches(
-        ParameterDeclaration $prmDecl, 
-        bool $return
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationConstraint::class);
-        $prophecy
-            ->matches($prmDecl)
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class where matches() and failureReason() can be called.
-     * 
-     * @param   ParameterDeclaration    $prmDecl                The first argument when matches() or failureReason() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnFailureReason    The value to return when failureReason() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDoubleMatchesFailureReason(
-        ParameterDeclaration $prmDecl, 
-        bool $returnMatches, 
-        string $returnFailureReason
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationConstraint::class);
-        $prophecy
-            ->matches($prmDecl)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->failureReason($prmDecl)
-            ->willReturn($returnFailureReason);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class where matches(), failureReason() and constraintDescription() can 
-     * be called.
-     * 
-     * @param   ParameterDeclaration    $prmDecl                The first argument when matches() or failureReason() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnFailureReason    The value to return when failureReason() is called.
-     * @param   string                  $returnConstDesc        The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDoubleMatchesFailureReasonConstraintDescription(
-        ParameterDeclaration $prmDecl, 
-        bool $returnMatches, 
-        string $returnFailureReason, 
-        string $returnConstDesc
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationConstraint::class);
-        $prophecy
-            ->matches($prmDecl)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->failureReason($prmDecl)
-            ->willReturn($returnFailureReason);
-        
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($returnConstDesc);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint} 
-     * class where matches() and constraintDescription() can be called.
-     * 
-     * @param   ParameterDeclaration    $prmDecl                The first argument when matches() is called.
-     * @param   bool                    $returnMatches          The value to return when matches() is called.
-     * @param   string                  $returnConstDesc        The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationConstraintDoubleMatchesConstraintDescription(
-        ParameterDeclaration $prmDecl, 
-        bool $returnMatches, 
-        string $returnConstDesc
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationConstraint::class);
-        $prophecy
-            ->matches($prmDecl)
-            ->willReturn($returnMatches);
-        
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($returnConstDesc);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclarationList} 
-     * class where count() can be called.
-     * 
-     * @param   int $return The value to return when count() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationListDoubleCount(
-        int $return
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationList::class);
-        $prophecy
-            ->count()
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclarationList} 
-     * class where count() and getParameterDeclarations() can be called.
-     * 
-     * @param   int                     $returnCount    The value to return when count() is called.
-     * @param   ParameterDeclaration[]  $returnPrmDecls The value to return when getParameterDeclarations() is called.
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationListDoubleCountGetParameterDeclarations(
-        int $returnCount, 
-        array $returnPrmDecls
-    ): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize(ParameterDeclarationList::class);
-        $prophecy
-            ->count()
-            ->willReturn($returnCount);
-        
-        $prophecy
-            ->getParameterDeclarations()
-            ->willReturn($returnPrmDecls);
-        
-        return $prophecy->reveal();
     }
 }
 
