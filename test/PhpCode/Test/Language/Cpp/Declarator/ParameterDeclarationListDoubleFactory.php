@@ -9,8 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
-use PhpCode\Test\ProphecyFactory;
-use PHPUnit\Framework\TestCase;
+use PhpCode\Test\AbstractDoubleFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
@@ -20,32 +19,14 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class ParameterDeclarationListDoubleFactory
+class ParameterDeclarationListDoubleFactory extends AbstractDoubleFactory
 {
     /**
-     * The factory of prophecies.
-     * @var ProphecyFactory
+     * {@inheritDoc}
      */
-    private $prophecyFactory;
-    
-    /**
-     * Constructor.
-     * 
-     * @param   TestCase    $testCase   The test case used to create the factory of prophecies.
-     */
-    public function __construct(TestCase $testCase)
+    protected function getClassName(): string
     {
-        $this->prophecyFactory = new ProphecyFactory($testCase);
-    }
-    
-    /**
-     * Creates a dummy.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    public function createDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize()->reveal();
+        return ParameterDeclarationList::class;
     }
     
     /**
@@ -57,9 +38,7 @@ class ParameterDeclarationListDoubleFactory
     public function createCount(int $count): ProphecySubjectInterface
     {
         $prophecy = $this->prophesize();
-        $prophecy
-            ->count()
-            ->willReturn($count);
+        $this->buildCount($prophecy, $count);
         
         return $prophecy->reveal();
     }
@@ -78,9 +57,7 @@ class ParameterDeclarationListDoubleFactory
     ): ProphecySubjectInterface
     {
         $prophecy = $this->prophesize();
-        $prophecy
-            ->count()
-            ->willReturn($count);
+        $this->buildCount($prophecy, $count);
         
         $prophecy
             ->getParameterDeclarations()
@@ -90,13 +67,19 @@ class ParameterDeclarationListDoubleFactory
     }
     
     /**
-     * Creates a prophecy.
+     * Builds and adds a prophecy of count() to the specified prophecy.
      * 
-     * @return  ObjectProphecy
+     * @param   ObjectProphecy  $prophecy   The prophecy to build to.
+     * @param   int             $return     The value to return when count() is called.
      */
-    private function prophesize(): ObjectProphecy
+    private function buildCount(
+        ObjectProphecy $prophecy, 
+        int $return
+    ): void
     {
-        return $this->prophecyFactory->createProphecy(ParameterDeclarationList::class);
+        $prophecy
+            ->count()
+            ->willReturn($return);
     }
 }
 

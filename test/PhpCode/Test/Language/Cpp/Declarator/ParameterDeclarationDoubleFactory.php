@@ -9,9 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
-use PhpCode\Test\ProphecyFactory;
-use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
+use PhpCode\Test\AbstractDoubleFactory;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
@@ -20,32 +18,14 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class ParameterDeclarationDoubleFactory
+class ParameterDeclarationDoubleFactory extends AbstractDoubleFactory
 {
     /**
-     * The factory of prophecies.
-     * @var ProphecyFactory
+     * {@inheritDoc}
      */
-    private $prophecyFactory;
-    
-    /**
-     * Constructor.
-     * 
-     * @param   TestCase    $testCase   The test case used to create the factory of prophecies.
-     */
-    public function __construct(TestCase $testCase)
+    protected function getClassName(): string
     {
-        $this->prophecyFactory = new ProphecyFactory($testCase);
-    }
-    
-    /**
-     * Creates a dummy.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    public function createDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize()->reveal();
+        return ParameterDeclaration::class;
     }
     
     /**
@@ -64,16 +44,6 @@ class ParameterDeclarationDoubleFactory
             ->willReturn($declSpecSeq);
         
         return $prophecy->reveal();
-    }
-    
-    /**
-     * Creates a prophecy.
-     * 
-     * @return  ObjectProphecy
-     */
-    private function prophesize(): ObjectProphecy
-    {
-        return $this->prophecyFactory->createProphecy(ParameterDeclaration::class);
     }
 }
 
