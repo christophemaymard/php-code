@@ -8,8 +8,7 @@
 namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
-use PhpCode\Test\ProphecyFactory;
-use PHPUnit\Framework\TestCase;
+use PhpCode\Test\Language\Cpp\AbstractConceptConstraintDoubleFactory;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
@@ -19,48 +18,14 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class DeclarationSpecifierConstraintDoubleFactory
+class DeclarationSpecifierConstraintDoubleFactory extends AbstractConceptConstraintDoubleFactory
 {
     /**
-     * The factory of prophecies.
-     * @var ProphecyFactory
+     * {@inheritDoc}
      */
-    private $prophecyFactory;
-    
-    /**
-     * Constructor.
-     * 
-     * @param   TestCase    $testCase   The test case used to create the factory of prophecies.
-     */
-    public function __construct(TestCase $testCase)
+    protected function getClassName(): string
     {
-        $this->prophecyFactory = new ProphecyFactory($testCase);
-    }
-    
-    /**
-     * Creates a dummy.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    public function createDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize()->reveal();
-    }
-    
-    /**
-     * Creates a double where constraintDescription() can be called.
-     * 
-     * @param   string  $return The value to return when constraintDescription() is called.
-     * @return  ProphecySubjectInterface
-     */
-    public function createConstraintDescription(string $return): ProphecySubjectInterface
-    {
-        $prophecy = $this->prophesize();
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($return);
-        
-        return $prophecy->reveal();
+        return DeclarationSpecifierConstraint::class;
     }
     
     /**
@@ -182,33 +147,6 @@ class DeclarationSpecifierConstraintDoubleFactory
         $prophecy
             ->failureReason($declSpec)
             ->willReturn($return);
-    }
-    
-    /**
-     * Builds and adds a prophecy of constraintDescription() to the 
-     * specified prophecy.
-     * 
-     * @param   ObjectProphecy  $prophecy   The prophecy to build to.
-     * @param   string          $return     The value to return when constraintDescription() is called.
-     */
-    private function buildConstraintDescription(
-        ObjectProphecy $prophecy, 
-        string $return
-    ): void
-    {
-        $prophecy
-            ->constraintDescription()
-            ->willReturn($return);
-    }
-    
-    /**
-     * Creates a prophecy.
-     * 
-     * @return  ObjectProphecy
-     */
-    private function prophesize(): ObjectProphecy
-    {
-        return $this->prophecyFactory->createProphecy(DeclarationSpecifierConstraint::class);
     }
 }
 
