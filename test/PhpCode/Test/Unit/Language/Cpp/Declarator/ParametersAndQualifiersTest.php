@@ -7,8 +7,8 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
-use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,12 +23,25 @@ use PHPUnit\Framework\TestCase;
 class ParametersAndQualifiersTest extends TestCase
 {
     /**
+     * @var ParameterDeclarationClauseDoubleFactory
+     */
+    private $prmDeclClauseFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->prmDeclClauseFactory = new ParameterDeclarationClauseDoubleFactory($this);
+    }
+    
+    /**
      * Tests that __construct() stores the instance of 
      * ParameterDeclarationClause.
      */
     public function test__constructStoresParameterDeclarationClause(): void
     {
-        $prmDeclClause = $this->prophesize(ParameterDeclarationClause::class)->reveal();
+        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
         
         $sut = new ParametersAndQualifiers($prmDeclClause);
         self::assertSame($prmDeclClause, $sut->getParameterDeclarationClause());

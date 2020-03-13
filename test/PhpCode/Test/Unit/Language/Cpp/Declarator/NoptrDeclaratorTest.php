@@ -7,9 +7,9 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
-use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
-use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
+use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleFactory;
+use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,14 +24,33 @@ use PHPUnit\Framework\TestCase;
 class NoptrDeclaratorTest extends TestCase
 {
     /**
+     * @var DeclaratorIdDoubleFactory
+     */
+    private $didFactory;
+    
+    /**
+     * @var ParametersAndQualifiersDoubleFactory
+     */
+    private $prmQualFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->didFactory = new DeclaratorIdDoubleFactory($this);
+        $this->prmQualFactory = new ParametersAndQualifiersDoubleFactory($this);
+    }
+    
+    /**
      * Tests that createDeclaratorId() returns new instances of NoptrDeclarator.
      */
     public function testCreateDeclaratorIdReturnsNewInstanceNoptrDeclarator(): void
     {
-        $didDummy = $this->prophesize(DeclaratorId::class)->reveal();
+        $did = $this->didFactory->createDummy();
         
-        $dcltor1 = NoptrDeclarator::createDeclaratorId($didDummy);
-        $dcltor2 = NoptrDeclarator::createDeclaratorId($didDummy);
+        $dcltor1 = NoptrDeclarator::createDeclaratorId($did);
+        $dcltor2 = NoptrDeclarator::createDeclaratorId($did);
         self::assertNotSame($dcltor1, $dcltor2);
     }
     
@@ -51,10 +70,10 @@ class NoptrDeclaratorTest extends TestCase
      */
     public function testGetDeclaratorIdReturnsDeclaratorIdWhenCreateDeclaratorId(): void
     {
-        $didDummy = $this->prophesize(DeclaratorId::class)->reveal();
+        $did = $this->didFactory->createDummy();
         
-        $sut = NoptrDeclarator::createDeclaratorId($didDummy);
-        self::assertSame($didDummy, $sut->getDeclaratorId());
+        $sut = NoptrDeclarator::createDeclaratorId($did);
+        self::assertSame($did, $sut->getDeclaratorId());
     }
     
     /**
@@ -68,9 +87,9 @@ class NoptrDeclaratorTest extends TestCase
         
         self::assertNull($sut->getParametersAndQualifiers());
         
-        $prmQualDummy = $this->prophesize(ParametersAndQualifiers::class)->reveal();
-        $sut->setParametersAndQualifiers($prmQualDummy);
-        self::assertSame($prmQualDummy, $sut->getParametersAndQualifiers());
+        $prmQual = $this->prmQualFactory->createDummy();
+        $sut->setParametersAndQualifiers($prmQual);
+        self::assertSame($prmQual, $sut->getParametersAndQualifiers());
     }
     
     /**
@@ -83,8 +102,8 @@ class NoptrDeclaratorTest extends TestCase
         
         self::assertFalse($sut->hasParametersAndQualifiers());
         
-        $prmQualDummy = $this->prophesize(ParametersAndQualifiers::class)->reveal();
-        $sut->setParametersAndQualifiers($prmQualDummy);
+        $prmQual = $this->prmQualFactory->createDummy();
+        $sut->setParametersAndQualifiers($prmQual);
         
         self::assertTrue($sut->hasParametersAndQualifiers());
     }

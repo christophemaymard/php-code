@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\Declarator;
-use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
+use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +23,27 @@ use PHPUnit\Framework\TestCase;
 class DeclaratorTest extends TestCase
 {
     /**
+     * @var PtrDeclaratorDoubleFactory
+     */
+    private $ptrDeclFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->ptrDeclFactory = new PtrDeclaratorDoubleFactory($this);
+    }
+    
+    /**
      * Tests that createPtrDeclarator() returns new instances of Declarator.
      */
     public function testCreatePtrDeclaratorReturnsNewInstanceDeclarator(): void
     {
-        $ptrDummy = $this->prophesize(PtrDeclarator::class)->reveal();
+        $ptrDecl = $this->ptrDeclFactory->createDummy();
         
-        $dcltor1 = Declarator::createPtrDeclarator($ptrDummy);
-        $dcltor2 = Declarator::createPtrDeclarator($ptrDummy);
+        $dcltor1 = Declarator::createPtrDeclarator($ptrDecl);
+        $dcltor2 = Declarator::createPtrDeclarator($ptrDecl);
         self::assertNotSame($dcltor1, $dcltor2);
     }
     
@@ -50,10 +63,10 @@ class DeclaratorTest extends TestCase
      */
     public function testGetPtrDeclaratorReturnsPtrDeclaratorWhenCreatePtrDeclarator(): void
     {
-        $ptrDummy = $this->prophesize(PtrDeclarator::class)->reveal();
+        $ptrDecl = $this->ptrDeclFactory->createDummy();
         
-        $sut = Declarator::createPtrDeclarator($ptrDummy);
-        self::assertSame($ptrDummy, $sut->getPtrDeclarator());
+        $sut = Declarator::createPtrDeclarator($ptrDecl);
+        self::assertSame($ptrDecl, $sut->getPtrDeclarator());
     }
 }
 

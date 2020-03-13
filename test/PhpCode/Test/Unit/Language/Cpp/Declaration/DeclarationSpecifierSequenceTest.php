@@ -7,10 +7,9 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
-use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence} 
@@ -30,11 +29,17 @@ class DeclarationSpecifierSequenceTest extends TestCase
     private $sut;
     
     /**
+     * @var DeclarationSpecifierDoubleFactory
+     */
+    private $declSpecFactory;
+    
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->sut = new DeclarationSpecifierSequence();
+        $this->declSpecFactory = new DeclarationSpecifierDoubleFactory($this);
     }
     
     /**
@@ -47,15 +52,15 @@ class DeclarationSpecifierSequenceTest extends TestCase
         
         self::assertSame($specs, $this->sut->getDeclarationSpecifiers());
         
-        $specs[] = $this->createDeclarationSpecifierDummy();
+        $specs[] = $this->declSpecFactory->createDummy();
         $this->sut->addDeclarationSpecifier($specs[0]);
         self::assertSame($specs, $this->sut->getDeclarationSpecifiers());
         
-        $specs[] = $this->createDeclarationSpecifierDummy();
+        $specs[] = $this->declSpecFactory->createDummy();
         $this->sut->addDeclarationSpecifier($specs[1]);
         self::assertSame($specs, $this->sut->getDeclarationSpecifiers());
         
-        $specs[] = $this->createDeclarationSpecifierDummy();
+        $specs[] = $this->declSpecFactory->createDummy();
         $this->sut->addDeclarationSpecifier($specs[2]);
         self::assertSame($specs, $this->sut->getDeclarationSpecifiers());
     }
@@ -67,25 +72,14 @@ class DeclarationSpecifierSequenceTest extends TestCase
     {
         self::assertSame(0, $this->sut->count());
         
-        $this->sut->addDeclarationSpecifier($this->createDeclarationSpecifierDummy());
+        $this->sut->addDeclarationSpecifier($this->declSpecFactory->createDummy());
         self::assertSame(1, $this->sut->count());
         
-        $this->sut->addDeclarationSpecifier($this->createDeclarationSpecifierDummy());
+        $this->sut->addDeclarationSpecifier($this->declSpecFactory->createDummy());
         self::assertSame(2, $this->sut->count());
         
-        $this->sut->addDeclarationSpecifier($this->createDeclarationSpecifierDummy());
+        $this->sut->addDeclarationSpecifier($this->declSpecFactory->createDummy());
         self::assertSame(3, $this->sut->count());
-    }
-    
-    /**
-     * Creates a dummy of the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifier} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(DeclarationSpecifier::class)->reveal();
     }
 }
 

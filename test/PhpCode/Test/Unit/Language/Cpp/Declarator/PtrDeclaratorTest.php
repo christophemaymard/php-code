@@ -7,8 +7,8 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
-use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
+use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +23,27 @@ use PHPUnit\Framework\TestCase;
 class PtrDeclaratorTest extends TestCase
 {
     /**
+     * @var NoptrDeclaratorDoubleFactory
+     */
+    private $noptrDeclFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->noptrDeclFactory = new NoptrDeclaratorDoubleFactory($this);
+    }
+    
+    /**
      * Tests that __construct() stores NoptrDeclarator instance.
      */
     public function test__constructStoresNoptrDeclarator(): void
     {
-        $noptrDummy = $this->prophesize(NoptrDeclarator::class)->reveal();
+        $noptr = $this->noptrDeclFactory->createDummy();
         
-        $sut = new PtrDeclarator($noptrDummy);
-        self::assertSame($noptrDummy, $sut->getNoptrDeclarator());
+        $sut = new PtrDeclarator($noptr);
+        self::assertSame($noptr, $sut->getNoptrDeclarator());
     }
 }
 

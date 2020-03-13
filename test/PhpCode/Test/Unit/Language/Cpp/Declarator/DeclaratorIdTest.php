@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
-use PhpCode\Language\Cpp\Expression\IdExpression;
+use PhpCode\Test\Language\Cpp\Expression\IdExpressionDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +23,27 @@ use PHPUnit\Framework\TestCase;
 class DeclaratorIdTest extends TestCase
 {
     /**
+     * @var IdExpressionDoubleFactory
+     */
+    private $idExprFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->idExprFactory = new IdExpressionDoubleFactory($this);
+    }
+    
+    /**
      * Tests that createIdExpression() returns new instances of DeclaratorId.
      */
     public function testCreateIdExpressionReturnsNewInstanceDeclaratorId(): void
     {
-        $idExprDummy = $this->prophesize(IdExpression::class)->reveal();
+        $idExpr = $this->idExprFactory->createDummy();
         
-        $did1 = DeclaratorId::createIdExpression($idExprDummy);
-        $did2 = DeclaratorId::createIdExpression($idExprDummy);
+        $did1 = DeclaratorId::createIdExpression($idExpr);
+        $did2 = DeclaratorId::createIdExpression($idExpr);
         self::assertNotSame($did1, $did2);
     }
     
@@ -50,10 +63,10 @@ class DeclaratorIdTest extends TestCase
      */
     public function testGetIdExpressionReturnsIdExpressionWhenCreateIdExpression(): void
     {
-        $idExprDummy = $this->prophesize(IdExpression::class)->reveal();
+        $idExpr = $this->idExprFactory->createDummy();
         
-        $sut = DeclaratorId::createIdExpression($idExprDummy);
-        self::assertSame($idExprDummy, $sut->getIdExpression());
+        $sut = DeclaratorId::createIdExpression($idExpr);
+        self::assertSame($idExpr, $sut->getIdExpression());
     }
 }
 

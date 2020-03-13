@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Expression;
 
 use PhpCode\Language\Cpp\Expression\IdExpression;
-use PhpCode\Language\Cpp\Expression\UnqualifiedId;
+use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +23,27 @@ use PHPUnit\Framework\TestCase;
 class IdExpressionTest extends TestCase
 {
     /**
+     * @var UnqualifiedIdDoubleFactory
+     */
+    private $uidFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->uidFactory = new UnqualifiedIdDoubleFactory($this);
+    }
+    
+    /**
      * Tests that createUnqualifiedId() returns new instances of IdExpression.
      */
     public function testCreateUnqualifiedIdReturnsNewInstanceIdExpression(): void
     {
-        $uidDummy = $this->prophesize(UnqualifiedId::class)->reveal();
+        $uid = $this->uidFactory->createDummy();
         
-        $idExpr1 = IdExpression::createUnqualifiedId($uidDummy);
-        $idExpr2 = IdExpression::createUnqualifiedId($uidDummy);
+        $idExpr1 = IdExpression::createUnqualifiedId($uid);
+        $idExpr2 = IdExpression::createUnqualifiedId($uid);
         self::assertNotSame($idExpr1, $idExpr2);
     }
     
@@ -50,10 +63,10 @@ class IdExpressionTest extends TestCase
      */
     public function testGetUnqualifiedIdReturnsUnqualifiedIdWhenCreateUnqualifiedId(): void
     {
-        $uidDummy = $this->prophesize(UnqualifiedId::class)->reveal();
+        $uid = $this->uidFactory->createDummy();
         
-        $sut = IdExpression::createUnqualifiedId($uidDummy);
-        self::assertSame($uidDummy, $sut->getUnqualifiedId());
+        $sut = IdExpression::createUnqualifiedId($uid);
+        self::assertSame($uid, $sut->getUnqualifiedId());
     }
 }
 

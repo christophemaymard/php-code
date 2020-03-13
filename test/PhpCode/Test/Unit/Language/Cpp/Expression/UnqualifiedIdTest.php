@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Expression;
 
 use PhpCode\Language\Cpp\Expression\UnqualifiedId;
-use PhpCode\Language\Cpp\Lexical\Identifier;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,14 +23,27 @@ use PHPUnit\Framework\TestCase;
 class UnqualifiedIdTest extends TestCase
 {
     /**
+     * @var IdentifierDoubleFactory
+     */
+    private $idFactory;
+    
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->idFactory =  new IdentifierDoubleFactory($this);
+    }
+    
+    /**
      * Tests that createIdentifier() returns new instances of UnqualifiedId.
      */
     public function testCreateIdentifierReturnsNewInstanceUnqualifiedId(): void
     {
-        $idDummy = $this->prophesize(Identifier::class)->reveal();
+        $id = $this->idFactory->createDummy();
         
-        $uid1 = UnqualifiedId::createIdentifier($idDummy);
-        $uid2 = UnqualifiedId::createIdentifier($idDummy);
+        $uid1 = UnqualifiedId::createIdentifier($id);
+        $uid2 = UnqualifiedId::createIdentifier($id);
         self::assertNotSame($uid1, $uid2);
     }
     
@@ -50,10 +63,10 @@ class UnqualifiedIdTest extends TestCase
      */
     public function testGetIdentifierReturnsIdentifierWhenCreateIdentifier(): void
     {
-        $idDummy = $this->prophesize(Identifier::class)->reveal();
+        $id = $this->idFactory->createDummy();
         
-        $sut = UnqualifiedId::createIdentifier($idDummy);
-        self::assertSame($idDummy, $sut->getIdentifier());
+        $sut = UnqualifiedId::createIdentifier($id);
+        self::assertSame($id, $sut->getIdentifier());
     }
 }
 

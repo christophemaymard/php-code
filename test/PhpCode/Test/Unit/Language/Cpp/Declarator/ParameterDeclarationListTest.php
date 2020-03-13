@@ -7,10 +7,9 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
-use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationDoubleFactory;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclarationList} 
@@ -30,11 +29,17 @@ class ParameterDeclarationListTest extends TestCase
     private $sut;
     
     /**
+     * @var ParameterDeclarationDoubleFactory
+     */
+    private $prmDeclFactory;
+    
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->sut =  new ParameterDeclarationList();
+        $this->prmDeclFactory =  new ParameterDeclarationDoubleFactory($this);
     }
     
     /**
@@ -47,15 +52,15 @@ class ParameterDeclarationListTest extends TestCase
         
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->createParameterDeclarationDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
         $this->sut->addParameterDeclaration($prmDecls[0]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->createParameterDeclarationDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
         $this->sut->addParameterDeclaration($prmDecls[1]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->createParameterDeclarationDummy();
+        $prmDecls[] = $this->prmDeclFactory->createDummy();
         $this->sut->addParameterDeclaration($prmDecls[2]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
     }
@@ -67,25 +72,14 @@ class ParameterDeclarationListTest extends TestCase
     {
         self::assertSame(0, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->createParameterDeclarationDummy());
+        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
         self::assertSame(1, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->createParameterDeclarationDummy());
+        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
         self::assertSame(2, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->createParameterDeclarationDummy());
+        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
         self::assertSame(3, $this->sut->count());
-    }
-    
-    /**
-     * Creates a dummy of the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclaration} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(ParameterDeclaration::class)->reveal();
     }
 }
 

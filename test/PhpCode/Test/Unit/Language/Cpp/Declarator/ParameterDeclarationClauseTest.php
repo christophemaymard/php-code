@@ -8,9 +8,8 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
-use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListDoubleFactory;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause} 
@@ -30,11 +29,17 @@ class ParameterDeclarationClauseTest extends TestCase
     private $sut;
     
     /**
+     * @var ParameterDeclarationListDoubleFactory
+     */
+    private $prmDeclListFactory;
+    
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->sut = new ParameterDeclarationClause();
+        $this->prmDeclListFactory = new ParameterDeclarationListDoubleFactory($this);
     }
     
     /**
@@ -63,11 +68,11 @@ class ParameterDeclarationClauseTest extends TestCase
     {
         self::assertNull($this->sut->getParameterDeclarationList());
         
-        $prmDeclList1 = $this->createParameterDeclarationListDummy();
+        $prmDeclList1 = $this->prmDeclListFactory->createDummy();
         $this->sut->setParameterDeclarationList($prmDeclList1);
         self::assertSame($prmDeclList1, $this->sut->getParameterDeclarationList());
         
-        $prmDeclList2 = $this->createParameterDeclarationListDummy();
+        $prmDeclList2 = $this->prmDeclListFactory->createDummy();
         $this->sut->setParameterDeclarationList($prmDeclList2);
         self::assertSame($prmDeclList2, $this->sut->getParameterDeclarationList());
     }
@@ -82,24 +87,13 @@ class ParameterDeclarationClauseTest extends TestCase
     {
         self::assertFalse($this->sut->hasParameterDeclarationList());
         
-        $prmDeclList1 = $this->createParameterDeclarationListDummy();
+        $prmDeclList1 = $this->prmDeclListFactory->createDummy();
         $this->sut->setParameterDeclarationList($prmDeclList1);
         self::assertTrue($this->sut->hasParameterDeclarationList());
         
-        $prmDeclList2 = $this->createParameterDeclarationListDummy();
+        $prmDeclList2 = $this->prmDeclListFactory->createDummy();
         $this->sut->setParameterDeclarationList($prmDeclList2);
         self::assertTrue($this->sut->hasParameterDeclarationList());
-    }
-    
-    /**
-     * Creates a dummy of the {@see PhpCode\Language\Cpp\Declarator\ParameterDeclarationList} 
-     * class.
-     * 
-     * @return  ProphecySubjectInterface
-     */
-    private function createParameterDeclarationListDummy(): ProphecySubjectInterface
-    {
-        return $this->prophesize(ParameterDeclarationList::class)->reveal();
     }
 }
 
