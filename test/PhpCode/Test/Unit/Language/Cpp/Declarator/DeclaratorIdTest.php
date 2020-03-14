@@ -36,36 +36,13 @@ class DeclaratorIdTest extends TestCase
     }
     
     /**
-     * Tests that createIdExpression() returns new instances of DeclaratorId.
+     * Tests that __construct() stores the identifier expression.
      */
-    public function testCreateIdExpressionReturnsNewInstanceDeclaratorId(): void
+    public function test__constructStoresIdExpression(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
         
-        $did1 = DeclaratorId::createIdExpression($idExpr);
-        $did2 = DeclaratorId::createIdExpression($idExpr);
-        self::assertNotSame($did1, $did2);
-    }
-    
-    /**
-     * Tests that getIdExpression() returns NULL when the class has been 
-     * instantiated.
-     */
-    public function testGetIdExpressionReturnsNullWhenInstantiated(): void
-    {
-        $sut = new DeclaratorId();
-        self::assertNull($sut->getIdExpression());
-    }
-    
-    /**
-     * Tests that getIdExpression() returns the instance of IdExpression when 
-     * the instance has been created by createIdExpression().
-     */
-    public function testGetIdExpressionReturnsIdExpressionWhenCreateIdExpression(): void
-    {
-        $idExpr = $this->idExprFactory->createDummy();
-        
-        $sut = DeclaratorId::createIdExpression($idExpr);
+        $sut = new DeclaratorId($idExpr);
         self::assertSame($idExpr, $sut->getIdExpression());
     }
 }

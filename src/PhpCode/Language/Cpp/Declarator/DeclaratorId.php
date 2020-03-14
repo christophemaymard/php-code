@@ -21,30 +21,26 @@ class DeclaratorId
 {
     /**
      * The identifier expression.
-     * @var IdExpression|NULL
+     * @var IdExpression
      */
     private $idExpr;
     
     /**
-     * Creates an instance of a declarator identifier defined with an identifier expression.
+     * Constructor.
      * 
-     * @param   IdExpression    $idExpr The identifier expression to use.
-     * @return  DeclaratorId    The created instance of DeclaratorId.
+     * @param   IdExpression    $idExpr The identifier expression to set.
      */
-    public static function createIdExpression(IdExpression $idExpr): self
+    public function __construct(IdExpression $idExpr)
     {
-        $did = new self();
-        $did->idExpr = $idExpr;
-        
-        return $did;
+        $this->idExpr = $idExpr;
     }
     
     /**
      * Returns the identifier expression.
      * 
-     * @return  IdExpression|NULL   The instance of the identifier expression if this declarator identifier has been defined with an identifier expression, otherwise NULL.
+     * @return  IdExpression    The instance of the identifier expression.
      */
-    public function getIdExpression(): ?IdExpression
+    public function getIdExpression(): IdExpression
     {
         return $this->idExpr;
     }

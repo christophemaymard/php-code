@@ -110,7 +110,7 @@ class Parser
         $this->move();
         $uid = UnqualifiedId::createIdentifier($id);
         $idExpr = IdExpression::createUnqualifiedId($uid);
-        $did = DeclaratorId::createIdExpression($idExpr);
+        $did = new DeclaratorId($idExpr);
         
         if ($this->tokenIs(Tag::ID)) {
             throw new FormatException(\sprintf('Unexpected identifier "%s".', $this->tkn->getLexeme()));
