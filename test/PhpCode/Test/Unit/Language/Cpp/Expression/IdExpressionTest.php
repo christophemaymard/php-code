@@ -36,6 +36,16 @@ class IdExpressionTest extends TestCase
     }
     
     /**
+     * Tests that __construct() throws an exception.
+     */
+    public function test__constructThrowsException(): void
+    {
+        $this->expectException(\Throwable::class);
+        $this->expectExceptionMessageMatches('`private `');
+        $sut = new IdExpression();
+    }
+    
+    /**
      * Tests that createUnqualifiedId() returns new instances of IdExpression.
      */
     public function testCreateUnqualifiedIdReturnsNewInstanceIdExpression(): void
@@ -45,16 +55,6 @@ class IdExpressionTest extends TestCase
         $idExpr1 = IdExpression::createUnqualifiedId($uid);
         $idExpr2 = IdExpression::createUnqualifiedId($uid);
         self::assertNotSame($idExpr1, $idExpr2);
-    }
-    
-    /**
-     * Tests that getUnqualifiedId() returns NULL when the class has been 
-     * instantiated.
-     */
-    public function testGetUnqualifiedIdReturnsNullWhenInstantiated(): void
-    {
-        $sut = new IdExpression();
-        self::assertNull($sut->getUnqualifiedId());
     }
     
     /**

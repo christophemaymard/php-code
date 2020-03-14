@@ -38,6 +38,13 @@ class IdExpression
     }
     
     /**
+     * Private constructor.
+     */
+    private function __construct()
+    {
+    }
+    
+    /**
      * Returns the unqualified identifier.
      * 
      * @return  UnqualifiedId|NULL  The instance of the unqualified identifier if this identifier expression has been defined with an unqualified identifier, otherwise NULL.
