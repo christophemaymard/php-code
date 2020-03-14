@@ -78,6 +78,41 @@ abstract class AbstractConceptConstraint extends Constraint
     
     /**
      * Formats the reason, like:
+     * "CONCEPT: Unexpected SUBJECT."
+     * 
+     * @param   string  $subject    The subject.
+     * @return  string
+     */
+    protected function unexpectedReason(string $subject): string
+    {
+        return \sprintf(
+            '%s: Unexpected %s.', 
+            $this->getConceptName(), 
+            $subject
+        );
+    }
+    
+    /**
+     * Formats the reason, like:
+     * "CONCEPT: SUBJECT present|absent whereas it should be present|absent."
+     * 
+     * @param   bool    $expected   TRUE means that it should be present, otherwise it should be absent.
+     * @param   string  $subject    The subject.
+     * @return  string
+     */
+    protected function hasReason(bool $expected, string $subject): string
+    {
+        return \sprintf(
+            '%s: %s %s whereas it should be %s.', 
+            $this->getConceptName(), 
+            $subject, 
+            !$expected ? 'present' : 'absent',
+            $expected ? 'present' : 'absent'
+        );
+    }
+    
+    /**
+     * Formats the reason, like:
      * "CONCEPT: It should [not] be SUBJECT."
      * 
      * @param   bool    $expected   TRUE means that it should be, otherwise it should not be (not appears).
