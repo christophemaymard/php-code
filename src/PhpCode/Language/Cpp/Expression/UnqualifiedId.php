@@ -40,6 +40,13 @@ class UnqualifiedId
     }
     
     /**
+     * Private constructor.
+     */
+    private function __construct()
+    {
+    }
+    
+    /**
      * Returns the identifier.
      * 
      * @return  Identifier|NULL The instance of the identifier if this unqualified identifier has been defined with an identifier, otherwise NULL.

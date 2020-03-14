@@ -36,6 +36,16 @@ class UnqualifiedIdTest extends TestCase
     }
     
     /**
+     * Tests that __construct() throws an exception.
+     */
+    public function test__constructThrowsException(): void
+    {
+        $this->expectException(\Throwable::class);
+        $this->expectExceptionMessageMatches('`private `');
+        $sut = new UnqualifiedId();
+    }
+    
+    /**
      * Tests that createIdentifier() returns new instances of UnqualifiedId.
      */
     public function testCreateIdentifierReturnsNewInstanceUnqualifiedId(): void
@@ -45,16 +55,6 @@ class UnqualifiedIdTest extends TestCase
         $uid1 = UnqualifiedId::createIdentifier($id);
         $uid2 = UnqualifiedId::createIdentifier($id);
         self::assertNotSame($uid1, $uid2);
-    }
-    
-    /**
-     * Tests that getIdentifier() returns NULL when the class has been 
-     * instantiated.
-     */
-    public function testGetIdentifierReturnsNullWhenInstantiated(): void
-    {
-        $sut = new UnqualifiedId();
-        self::assertNull($sut->getIdentifier());
     }
     
     /**
