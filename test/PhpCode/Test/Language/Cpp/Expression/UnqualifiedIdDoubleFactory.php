@@ -8,7 +8,9 @@
 namespace PhpCode\Test\Language\Cpp\Expression;
 
 use PhpCode\Language\Cpp\Expression\UnqualifiedId;
+use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleFactory;
+use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents a factory of doubles for the {@see PhpCode\Language\Cpp\Expression\UnqualifiedId} 
@@ -24,6 +26,22 @@ class UnqualifiedIdDoubleFactory extends AbstractDoubleFactory
     protected function getClassName(): string
     {
         return UnqualifiedId::class;
+    }
+    
+    /**
+     * Creates a double where getIdentifier() can be called.
+     * 
+     * @param   Identifier  $return The value to return when getIdentifier() is called (optional)(default to NULL).
+     * @return  ProphecySubjectInterface
+     */
+    public function createGetIdentifier(Identifier $return = NULL): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesize();
+        $prophecy
+            ->getIdentifier()
+            ->willReturn($return);
+        
+        return $prophecy->reveal();
     }
 }
 
