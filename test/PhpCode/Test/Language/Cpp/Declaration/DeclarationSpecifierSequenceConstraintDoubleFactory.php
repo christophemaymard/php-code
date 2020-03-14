@@ -9,7 +9,6 @@ namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraintDoubleFactory;
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
@@ -113,43 +112,6 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
         $this->buildConstraintDescription($prophecy, $constDesc);
         
         return $prophecy->reveal();
-    }
-    
-    /**
-     * Builds and adds a prophecy of matches() to the specified prophecy.
-     * 
-     * @param   ObjectProphecy                  $prophecy       The prophecy to build to.
-     * @param   DeclarationSpecifierSequence    $declSpecSeq    The value of the first argument when matches() is called.
-     * @param   bool                            $return         The value to return when matches() is called.
-     */
-    private function buildMatches(
-        ObjectProphecy $prophecy, 
-        DeclarationSpecifierSequence $declSpecSeq, 
-        bool $return
-    ): void
-    {
-        $prophecy
-            ->matches($declSpecSeq)
-            ->willReturn($return);
-    }
-    
-    /**
-     * Builds and adds a prophecy of failureReason() to the specified 
-     * prophecy.
-     * 
-     * @param   ObjectProphecy                  $prophecy       The prophecy to build to.
-     * @param   DeclarationSpecifierSequence    $declSpecSeq    The value of the first argument when failureReason() is called.
-     * @param   string                          $return         The value to return when failureReason() is called.
-     */
-    private function buildFailureReason(
-        ObjectProphecy $prophecy, 
-        DeclarationSpecifierSequence $declSpecSeq, 
-        string $return
-    ): void
-    {
-        $prophecy
-            ->failureReason($declSpecSeq)
-            ->willReturn($return);
     }
 }
 

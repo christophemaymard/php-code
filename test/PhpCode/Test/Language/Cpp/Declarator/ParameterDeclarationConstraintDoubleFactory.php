@@ -9,7 +9,6 @@ namespace PhpCode\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraintDoubleFactory;
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
@@ -110,43 +109,6 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
         $this->buildConstraintDescription($prophecy, $constDesc);
         
         return $prophecy->reveal();
-    }
-    
-    /**
-     * Builds and adds a prophecy of matches() to the specified prophecy.
-     * 
-     * @param   ObjectProphecy          $prophecy   The prophecy to build to.
-     * @param   ParameterDeclaration    $prmDecl    The value of the first argument when matches() is called.
-     * @param   bool                    $return     The value to return when matches() is called.
-     */
-    private function buildMatches(
-        ObjectProphecy $prophecy, 
-        ParameterDeclaration $prmDecl, 
-        bool $return
-    ): void
-    {
-        $prophecy
-            ->matches($prmDecl)
-            ->willReturn($return);
-    }
-    
-    /**
-     * Builds and adds a prophecy of failureReason() to the specified 
-     * prophecy.
-     * 
-     * @param   ObjectProphecy          $prophecy   The prophecy to build to.
-     * @param   ParameterDeclaration    $prmDecl    The value of the first argument when failureReason() is called.
-     * @param   string                  $return     The value to return when failureReason() is called.
-     */
-    private function buildFailureReason(
-        ObjectProphecy $prophecy, 
-        ParameterDeclaration $prmDecl, 
-        string $return
-    ): void
-    {
-        $prophecy
-            ->failureReason($prmDecl)
-            ->willReturn($return);
     }
 }
 

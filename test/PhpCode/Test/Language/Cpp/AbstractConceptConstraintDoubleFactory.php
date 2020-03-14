@@ -48,5 +48,42 @@ abstract class AbstractConceptConstraintDoubleFactory extends AbstractDoubleFact
             ->constraintDescription()
             ->willReturn($return);
     }
+    
+    /**
+     * Builds and adds a prophecy of matches() to the specified prophecy.
+     * 
+     * @param   ObjectProphecy  $prophecy   The prophecy to build to.
+     * @param   mixed           $other      The value of the first argument when matches() is called.
+     * @param   bool            $return     The value to return when matches() is called.
+     */
+    protected function buildMatches(
+        ObjectProphecy $prophecy, 
+        $other, 
+        bool $return
+    ): void
+    {
+        $prophecy
+            ->matches($other)
+            ->willReturn($return);
+    }
+    
+    /**
+     * Builds and adds a prophecy of failureReason() to the specified 
+     * prophecy.
+     * 
+     * @param   ObjectProphecy  $prophecy   The prophecy to build to.
+     * @param   mixed           $other      The value of the first argument when failureReason() is called.
+     * @param   string          $return     The value to return when failureReason() is called.
+     */
+    protected function buildFailureReason(
+        ObjectProphecy $prophecy, 
+        $other, 
+        string $return
+    ): void
+    {
+        $prophecy
+            ->failureReason($other)
+            ->willReturn($return);
+    }
 }
 
