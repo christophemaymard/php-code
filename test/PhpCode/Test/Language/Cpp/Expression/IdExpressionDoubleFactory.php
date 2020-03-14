@@ -8,7 +8,9 @@
 namespace PhpCode\Test\Language\Cpp\Expression;
 
 use PhpCode\Language\Cpp\Expression\IdExpression;
+use PhpCode\Language\Cpp\Expression\UnqualifiedId;
 use PhpCode\Test\AbstractDoubleFactory;
+use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents a factory of doubles for the {@see PhpCode\Language\Cpp\Expression\IdExpression} 
@@ -24,6 +26,22 @@ class IdExpressionDoubleFactory extends AbstractDoubleFactory
     protected function getClassName(): string
     {
         return IdExpression::class;
+    }
+    
+    /**
+     * Creates a double where getUnqualifiedId() can be called.
+     * 
+     * @param   UnqualifiedId   $return The value to return when getUnqualifiedId() is called (optional)(default to NULL).
+     * @return  ProphecySubjectInterface
+     */
+    public function createGetUnqualifiedId(UnqualifiedId $return = NULL): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesize();
+        $prophecy
+            ->getUnqualifiedId()
+            ->willReturn($return);
+        
+        return $prophecy->reveal();
     }
 }
 
