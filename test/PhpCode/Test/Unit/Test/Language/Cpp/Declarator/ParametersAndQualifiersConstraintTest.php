@@ -8,10 +8,10 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseConstraintDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraint;
-use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -27,11 +27,6 @@ use PHPUnit\Framework\TestCase;
 class ParametersAndQualifiersConstraintTest extends TestCase
 {
     /**
-     * @var ParametersAndQualifiersDoubleFactory
-     */
-    private $prmQualFactory;
-    
-    /**
      * @var ParameterDeclarationClauseDoubleFactory
      */
     private $prmDeclClauseFactory;
@@ -46,7 +41,6 @@ class ParametersAndQualifiersConstraintTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->prmQualFactory = new ParametersAndQualifiersDoubleFactory($this);
         $this->prmDeclClauseFactory = new ParameterDeclarationClauseDoubleFactory($this);
         $this->prmDeclClauseConstFactory = new ParameterDeclarationClauseConstraintDoubleFactory(
             $this
@@ -127,7 +121,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenInstantiatedAndParameterDeclarationClauseIsInvalid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatches(
             $prmDeclClause, 
@@ -145,7 +141,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenInstantiatedAndParametersAndQualifiersAreValid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatches(
             $prmDeclClause, 
@@ -181,7 +179,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndParameterDeclarationClauseIsInvalid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesFailureReason(
             $prmDeclClause, 
@@ -206,7 +206,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndParametersAndQualifiersAreValid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatches(
             $prmDeclClause, 
@@ -251,7 +253,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParameterDeclarationClauseIsInvalid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesFailureReasonConstraintDescription(
             $prmDeclClause, 
@@ -283,7 +287,9 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParametersAndQualifiersAreValid(): void
     {
         $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = $this->prmQualFactory->createGetParameterDeclarationClause($prmDeclClause);
+        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->buildGetParameterDeclarationClause($prmDeclClause)
+            ->getDouble();
         
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
             $prmDeclClause, 

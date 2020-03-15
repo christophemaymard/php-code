@@ -8,8 +8,8 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleFactory;
-use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,17 +29,11 @@ class NoptrDeclaratorTest extends TestCase
     private $didFactory;
     
     /**
-     * @var ParametersAndQualifiersDoubleFactory
-     */
-    private $prmQualFactory;
-    
-    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->didFactory = new DeclaratorIdDoubleFactory($this);
-        $this->prmQualFactory = new ParametersAndQualifiersDoubleFactory($this);
     }
     
     /**
@@ -87,9 +81,15 @@ class NoptrDeclaratorTest extends TestCase
         
         self::assertNull($sut->getParametersAndQualifiers());
         
-        $prmQual = $this->prmQualFactory->createDummy();
-        $sut->setParametersAndQualifiers($prmQual);
-        self::assertSame($prmQual, $sut->getParametersAndQualifiers());
+        $prmQual1 = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->getDouble();
+        $sut->setParametersAndQualifiers($prmQual1);
+        self::assertSame($prmQual1, $sut->getParametersAndQualifiers());
+        
+        $prmQual2 = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->getDouble();
+        $sut->setParametersAndQualifiers($prmQual2);
+        self::assertSame($prmQual2, $sut->getParametersAndQualifiers());
     }
     
     /**
@@ -102,8 +102,15 @@ class NoptrDeclaratorTest extends TestCase
         
         self::assertFalse($sut->hasParametersAndQualifiers());
         
-        $prmQual = $this->prmQualFactory->createDummy();
-        $sut->setParametersAndQualifiers($prmQual);
+        $prmQual1 = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->getDouble();
+        $sut->setParametersAndQualifiers($prmQual1);
+        
+        self::assertTrue($sut->hasParametersAndQualifiers());
+        
+        $prmQual2 = ConceptDoubleBuilder::createParametersAndQualifiers($this)
+            ->getDouble();
+        $sut->setParametersAndQualifiers($prmQual2);
         
         self::assertTrue($sut->hasParametersAndQualifiers());
     }
