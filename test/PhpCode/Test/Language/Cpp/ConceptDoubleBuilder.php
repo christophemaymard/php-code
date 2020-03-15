@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Language\Cpp;
 
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -18,6 +19,18 @@ use PHPUnit\Framework\TestCase;
  */
 class ConceptDoubleBuilder
 {
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\NoptrDeclarator} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  NoptrDeclaratorDoubleBuilder    The created instance of NoptrDeclaratorDoubleBuilder.
+     */
+    public static function createNoptrDeclarator(TestCase $testCase): NoptrDeclaratorDoubleBuilder
+    {
+        return new NoptrDeclaratorDoubleBuilder($testCase);
+    }
+    
     /**
      * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\DeclaratorId} 
      * class.
