@@ -9,7 +9,6 @@ namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
 use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
-use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,24 +23,11 @@ use PHPUnit\Framework\TestCase;
 class NoptrDeclaratorTest extends TestCase
 {
     /**
-     * @var DeclaratorIdDoubleFactory
-     */
-    private $didFactory;
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp(): void
-    {
-        $this->didFactory = new DeclaratorIdDoubleFactory($this);
-    }
-    
-    /**
      * Tests that createDeclaratorId() returns new instances of NoptrDeclarator.
      */
     public function testCreateDeclaratorIdReturnsNewInstanceNoptrDeclarator(): void
     {
-        $did = $this->didFactory->createDummy();
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
         
         $dcltor1 = NoptrDeclarator::createDeclaratorId($did);
         $dcltor2 = NoptrDeclarator::createDeclaratorId($did);
@@ -64,7 +50,7 @@ class NoptrDeclaratorTest extends TestCase
      */
     public function testGetDeclaratorIdReturnsDeclaratorIdWhenCreateDeclaratorId(): void
     {
-        $did = $this->didFactory->createDummy();
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
         
         $sut = NoptrDeclarator::createDeclaratorId($did);
         self::assertSame($did, $sut->getDeclaratorId());

@@ -8,8 +8,8 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraint;
-use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleFactory;
 use PhpCode\Test\Language\Cpp\Expression\IdExpressionConstraintDoubleFactory;
 use PhpCode\Test\Language\Cpp\Expression\IdExpressionDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -27,11 +27,6 @@ use PHPUnit\Framework\TestCase;
 class DeclaratorIdConstraintTest extends TestCase
 {
     /**
-     * @var DeclaratorIdDoubleFactory
-     */
-    private $didFactory;
-    
-    /**
      * @var IdExpressionDoubleFactory
      */
     private $idExprFactory;
@@ -46,7 +41,6 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->didFactory = new DeclaratorIdDoubleFactory($this);
         $this->idExprFactory = new IdExpressionDoubleFactory($this);
         $this->idExprConstFactory = new IdExpressionConstraintDoubleFactory($this);
     }
@@ -125,7 +119,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenInstantiatedAndIdExpressionIsInvalid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatches($idExpr, FALSE);
         
@@ -140,7 +136,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testMatchesReturnsTrueWhenInstantiatedAndDeclaratorIdIsValid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatches($idExpr, TRUE);
         
@@ -173,7 +171,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndIdExpressionIsInvalid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatchesFailureReason(
             $idExpr, 
@@ -198,7 +198,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndDeclaratorIdIsValid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatches($idExpr, TRUE);
         
@@ -240,7 +242,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndIdExpressionIsInvalid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatchesFailureReasonConstraintDescription(
             $idExpr, 
@@ -272,7 +276,9 @@ class DeclaratorIdConstraintTest extends TestCase
     public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndDeclaratorIdIsValid(): void
     {
         $idExpr = $this->idExprFactory->createDummy();
-        $did = $this->didFactory->createGetIdExpression($idExpr);
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)
+            ->buildGetIdExpression($idExpr)
+            ->getDouble();
         
         $idExprConst = $this->idExprConstFactory->createMatchesConstraintDescription(
             $idExpr, 
