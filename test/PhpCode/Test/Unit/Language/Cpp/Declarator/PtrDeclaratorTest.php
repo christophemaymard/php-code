@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
-use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleFactory;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,27 +23,14 @@ use PHPUnit\Framework\TestCase;
 class PtrDeclaratorTest extends TestCase
 {
     /**
-     * @var NoptrDeclaratorDoubleFactory
-     */
-    private $noptrDeclFactory;
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp(): void
-    {
-        $this->noptrDeclFactory = new NoptrDeclaratorDoubleFactory($this);
-    }
-    
-    /**
      * Tests that __construct() stores NoptrDeclarator instance.
      */
     public function test__constructStoresNoptrDeclarator(): void
     {
-        $noptr = $this->noptrDeclFactory->createDummy();
+        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)->getDouble();
         
-        $sut = new PtrDeclarator($noptr);
-        self::assertSame($noptr, $sut->getNoptrDeclarator());
+        $sut = new PtrDeclarator($noptrDecl);
+        self::assertSame($noptrDecl, $sut->getNoptrDeclarator());
     }
 }
 
