@@ -10,6 +10,7 @@ namespace PhpCode\Test\Language\Cpp;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraintDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraintDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,6 +20,18 @@ use PHPUnit\Framework\TestCase;
  */
 class ConceptConstraintDoubleBuilder
 {
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  PtrDeclaratorConstraintDoubleBuilder    The created instance of PtrDeclaratorConstraintDoubleBuilder.
+     */
+    public static function createPtrDeclaratorConstraint(TestCase $testCase): PtrDeclaratorConstraintDoubleBuilder
+    {
+        return new PtrDeclaratorConstraintDoubleBuilder($testCase);
+    }
+    
     /**
      * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraint} 
      * class.
