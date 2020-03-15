@@ -23,6 +23,16 @@ use PHPUnit\Framework\TestCase;
 class NoptrDeclaratorTest extends TestCase
 {
     /**
+     * Tests that __construct() throws an exception.
+     */
+    public function test__constructThrowsException(): void
+    {
+        $this->expectException(\Throwable::class);
+        $this->expectExceptionMessageMatches('`private `');
+        $sut = new NoptrDeclarator();
+    }
+    
+    /**
      * Tests that createDeclaratorId() returns new instances of NoptrDeclarator.
      */
     public function testCreateDeclaratorIdReturnsNewInstanceNoptrDeclarator(): void
@@ -32,16 +42,6 @@ class NoptrDeclaratorTest extends TestCase
         $dcltor1 = NoptrDeclarator::createDeclaratorId($did);
         $dcltor2 = NoptrDeclarator::createDeclaratorId($did);
         self::assertNotSame($dcltor1, $dcltor2);
-    }
-    
-    /**
-     * Tests that getDeclaratorId() returns NULL when the class has been 
-     * instantiated.
-     */
-    public function testGetDeclaratorIdReturnsNullWhenInstantiated(): void
-    {
-        $sut = new NoptrDeclarator();
-        self::assertNull($sut->getDeclaratorId());
     }
     
     /**
@@ -58,12 +58,14 @@ class NoptrDeclaratorTest extends TestCase
     
     /**
      * Tests that getParametersAndQualifiers() returns the instance of 
-     * ParametersAndQualifiers if the parameters and the qualifiers have been 
-     * set, otherwise NULL.
+     * ParametersAndQualifiers when the instance has been created by 
+     * createDeclaratorId() and if the parameters and the qualifiers have 
+     * been set, otherwise NULL.
      */
-    public function testGetParametersAndQualifiers(): void
+    public function testGetParametersAndQualifiersWhenCreateDeclaratorId(): void
     {
-        $sut = new NoptrDeclarator();
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
+        $sut = NoptrDeclarator::createDeclaratorId($did);
         
         self::assertNull($sut->getParametersAndQualifiers());
         
@@ -79,12 +81,14 @@ class NoptrDeclaratorTest extends TestCase
     }
     
     /**
-     * Tests that hasParametersAndQualifiers() returns TRUE if the parameters 
-     * and the qualifiers have been set, otherwise FALSE.
+     * Tests that hasParametersAndQualifiers() returns TRUE when the 
+     * instance has been created by createDeclaratorId() and if the 
+     * parameters and the qualifiers have been set, otherwise FALSE.
      */
-    public function testHasParametersAndQualifiersReturnsBool(): void
+    public function testHasParametersAndQualifiersReturnsBoolWhenCreateDeclaratorId(): void
     {
-        $sut = new NoptrDeclarator();
+        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
+        $sut = NoptrDeclarator::createDeclaratorId($did);
         
         self::assertFalse($sut->hasParametersAndQualifiers());
         

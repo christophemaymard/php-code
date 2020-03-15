@@ -45,6 +45,13 @@ class NoptrDeclarator
     }
     
     /**
+     * Private constructor.
+     */
+    private function __construct()
+    {
+    }
+    
+    /**
      * Returns the declarator identifier.
      * 
      * @return  DeclaratorId|NULL   The instance of the declarator identifier if this no-pointer declarator has been defined with a declarator identifier, otherwise NULL.
