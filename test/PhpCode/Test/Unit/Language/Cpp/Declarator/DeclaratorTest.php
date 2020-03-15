@@ -23,6 +23,16 @@ use PHPUnit\Framework\TestCase;
 class DeclaratorTest extends TestCase
 {
     /**
+     * Tests that __construct() throws an exception.
+     */
+    public function test__constructThrowsException(): void
+    {
+        $this->expectException(\Throwable::class);
+        $this->expectExceptionMessageMatches('`private `');
+        $sut = new Declarator();
+    }
+    
+    /**
      * Tests that createPtrDeclarator() returns new instances of Declarator.
      */
     public function testCreatePtrDeclaratorReturnsNewInstanceDeclarator(): void
@@ -32,16 +42,6 @@ class DeclaratorTest extends TestCase
         $dcltor1 = Declarator::createPtrDeclarator($ptrDcltor);
         $dcltor2 = Declarator::createPtrDeclarator($ptrDcltor);
         self::assertNotSame($dcltor1, $dcltor2);
-    }
-    
-    /**
-     * Tests that getPtrDeclarator() returns NULL when the class has been 
-     * instantiated.
-     */
-    public function testGetPtrDeclaratorReturnsNullWhenInstantiated(): void
-    {
-        $sut = new Declarator();
-        self::assertNull($sut->getPtrDeclarator());
     }
     
     /**

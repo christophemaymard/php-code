@@ -38,6 +38,13 @@ class Declarator
     }
     
     /**
+     * Private constructor.
+     */
+    private function __construct()
+    {
+    }
+    
+    /**
      * Returns the pointer declarator.
      * 
      * @return  PtrDeclarator|NULL  The instance of the pointer declarator if this declarator has been defined with a pointer declarator, otherwise NULL.
