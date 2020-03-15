@@ -7,7 +7,10 @@
  */
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
+use PhpCode\Language\Cpp\Lexical\Lexer;
+use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
 use PhpCode\Test\Language\Cpp\Specification;
+use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,88 +21,97 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractParserTest extends TestCase
 {
+    use TokenAssertionTrait;
+    
     /**
-     * Returns a set of standards with only C++ 2003.
+     * Creates the lexer used by the system under test.
      * 
-     * @return  array[]
+     * @param   int     $standard   The standard to create the language context for.
+     * @param   string  $stream     The stream for the lexer.
+     * @return  Lexer
      */
-    public function getCpp2003StandardProvider(): array
+    protected function createLexer(int $standard, string $stream): Lexer
     {
-        return [
-            'C++ 2003' => [ 1, ], 
-        ];
+        $factory = new LanguageContextFactory();
+        $ctx = $factory->create($standard);
+        
+        $lexer = new Lexer($ctx);
+        $lexer->setStream($stream);
+        
+        return $lexer;
     }
     
     /**
-     * Returns a set of standards with only C++ 2011.
+     * Creates a set of valid streams.
      * 
-     * @return  array[]
+     * The data set used to create a set of valid streams must be an 
+     * indexed array of indexed arrays where:
+     * - [0] is the standards to create the language context for, 
+     * - [1] is the stream to test, 
+     * - [2] is the constraint used to assert the concept, and 
+     * - [3] is the lexeme and the tag of the next token after parsing.
+     * 
+     * @param   array[] $validDataSet   The data set used to create a set of valid streams.
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the stream to test, 
+     *                  [2] is the constraint used to assert the concept, 
+     *                  [3] is the lexeme of the next token after parsing, and 
+     *                  [4] is the tag of the next token after parsing.
      */
-    public function getCpp2011StandardProvider(): array
+    protected function createValidStreamsProvider(array $validDataSet): array
     {
-        return [
-            'C++ 2011' => [ 2, ], 
-        ];
+        $dataSet = [];
+        
+        foreach ($validDataSet as list($stds, $stream, $constraint, $token)) {
+            foreach ($stds as $std) {
+                $name = \sprintf('%s: stream "%s"', Specification::STANDARDS[$std], $stream);
+                list($lexeme, $tag) = $token;
+                
+                $dataSet[$name] = [
+                    $std, 
+                    $stream, 
+                    $constraint, 
+                    $lexeme, 
+                    $tag, 
+                ];
+            }
+        }
+        
+        return $dataSet;
     }
     
     /**
-     * Returns a set of standards with only C++ 2014.
+     * Creates a set of invalid streams.
      * 
-     * @return  array[]
-     */
-    public function getCpp2014StandardProvider(): array
-    {
-        return [
-            'C++ 2014' => [ 4, ], 
-        ];
-    }
-    
-    /**
-     * Returns a set of standards with only C++ 2017.
+     * The data set used to create a set of invalid streams must be an 
+     * indexed array of indexed arrays where:
+     * - [0] is the standards to create the language context for, 
+     * - [1] is the stream to test, and 
+     * - [2] is the expected message of the exception.
      * 
-     * @return  array[]
-     */
-    public function getCpp2017StandardProvider(): array
-    {
-        return [
-            'C++ 2017' => [ 8, ], 
-        ];
-    }
-    
-    /**
-     * Returns a set of invalid streams.
-     * 
-     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where 
+     * @param   array[] $invalidDataSet The data set used to create a set of invalid streams.
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
      *                  [0] is the standard to create the language context for, 
      *                  [1] is the stream to test, and 
      *                  [2] is the expected message of the exception.
      */
-    public function getInvalidStreamsProvider(): array
+    protected function createInvalidStreamsProvider(array $invalidDataSet): array
     {
-        $dataset = [];
+        $dataSet = [];
         
-        foreach ($this->getInvalidStreams() as $name => list($standards, $stream, $message)) {
-            foreach ($standards as $standard) {
-                $datasetName = \sprintf('%s: %s', Specification::STANDARDS[$standard], $name);
-                $dataset[$datasetName] = [
-                    $standard, 
+        foreach ($invalidDataSet as list($stds, $stream, $message)) {
+            foreach ($stds as $std) {
+                $name = \sprintf('%s: stream "%s"', Specification::STANDARDS[$std], $stream);
+                $dataSet[$name] = [
+                    $std, 
                     $stream, 
                     $message, 
                 ];
             }
         }
         
-        return $dataset;
+        return $dataSet;
     }
-    
-    /**
-     * Returns a set of invalid streams.
-     * 
-     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where 
-     *                  [0] is the standards to create the language context for, 
-     *                  [1] is the stream to test, and 
-     *                  [2] is the expected message of the exception.
-     */
-    abstract protected function getInvalidStreams(): array;
 }
 

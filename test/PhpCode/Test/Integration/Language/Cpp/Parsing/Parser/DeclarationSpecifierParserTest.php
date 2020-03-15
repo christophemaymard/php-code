@@ -8,10 +8,8 @@
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
-use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
-use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -25,35 +23,33 @@ use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
  */
 class DeclarationSpecifierParserTest extends AbstractParserTest
 {
-    use TokenAssertionTrait;
-    
     /**
-     * Tests that parseDeclarationSpecifier() parses "int".
+     * Tests that parseDeclarationSpecifier() returns an instance of 
+     * DeclarationSpecifier.
      * 
-     * @param   int $standard   The standard to create the language context for.
+     * @param   int                             $standard   The standard to create the language context for.
+     * @param   string                          $stream     The stream to test.
+     * @param   DeclarationSpecifierConstraint  $constraint The constraint used to assert the declaration specifier.
+     * @param   string                          $lexeme     The lexeme of the next token after parsing.
+     * @param   int                             $tag        The tag of the next token after parsing.
      * 
-     * @dataProvider    getCpp2003StandardProvider
-     * @dataProvider    getCpp2011StandardProvider
-     * @dataProvider    getCpp2014StandardProvider
-     * @dataProvider    getCpp2017StandardProvider
+     * @dataProvider    getValidStreamsProvider
      */
-    public function testParseInt(int $standard): void
+    public function testParseDeclarationSpecifier(
+        int $standard, 
+        string $stream, 
+        DeclSpecConst $constraint, 
+        string $lexeme, 
+        int $tag 
+    ): void
     {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream('  int ');
-        
+        $lexer = $this->createLexer($standard, $stream);
         $sut = new Parser($lexer);
+        
         $declSpec = $sut->parseDeclarationSpecifier();
+        self::assertThat($declSpec, $constraint);
         
-        $stSpec = $declSpec->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        
-        self::assertTrue($stSpec->isInt());
-        self::assertEOFToken($lexer->getToken());
+        self::assertToken($lexeme, $tag, $lexer->getToken());
     }
     
     /**
@@ -72,12 +68,7 @@ class DeclarationSpecifierParserTest extends AbstractParserTest
         string $message
     ): void
     {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream($stream);
-        
+        $lexer = $this->createLexer($standard, $stream);
         $sut = new Parser($lexer);
         
         $this->expectException(FormatException::class);
@@ -86,17 +77,60 @@ class DeclarationSpecifierParserTest extends AbstractParserTest
     }
     
     /**
-     * {@inheritDoc}
+     * Returns a set of valid streams.
+     * 
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the stream to test, 
+     *                  [2] is the constraint used to assert the declaration specifier, 
+     *                  [3] is the lexeme of the next token after parsing, and 
+     *                  [4] is the tag of the next token after parsing.
      */
-    protected function getInvalidStreams(): array
+    public function getValidStreamsProvider(): array
     {
-        return [
-            'No declaration specifier (empty string)' => [
+        $dataSet = [
+            'int' => [
                 [ 1, 2, 4, 8, ],
-                '#', 
-                'Unexpected "#", expected decl-specifier.', 
+                'int', 
+                DeclSpecConst::createInt(), 
+                [ '', 0, ], 
+            ], 
+            'int int' => [
+                [ 1, 2, 4, 8, ],
+                'int int', 
+                DeclSpecConst::createInt(), 
+                [ 'int', 141000, ], 
+            ], 
+            'int foobarbaz' => [
+                [ 1, 2, 4, 8, ],
+                'int foobarbaz', 
+                DeclSpecConst::createInt(), 
+                [ 'foobarbaz', 2, ], 
             ], 
         ];
+        
+        return $this->createValidStreamsProvider($dataSet);
+    }
+    
+    /**
+     * Returns a set of invalid streams.
+     * 
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the stream to test, and 
+     *                  [2] is the expected message of the exception.
+     */
+    public function getInvalidStreamsProvider(): array
+    {
+        $dataSet = [
+            'No declaration specifier (empty string)' => [
+                [ 1, 2, 4, 8, ],
+                '', 
+                'Unexpected "", expected decl-specifier.', 
+            ], 
+        ];
+        
+        return $this->createInvalidStreamsProvider($dataSet);
     }
 }
 

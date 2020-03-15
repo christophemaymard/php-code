@@ -8,10 +8,11 @@
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
-use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
-use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint as DeclSpecSeqConst;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint as PrmDeclConst;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint as PrmDeclListConst;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -25,215 +26,33 @@ use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
  */
 class ParameterDeclarationListParserTest extends AbstractParserTest
 {
-    use TokenAssertionTrait;
-    
     /**
-     * Tests that parseParameterDeclarationList() parses "int".
+     * Tests that parseParameterDeclarationList() returns an instance of 
+     * ParameterDeclarationList.
      * 
-     * @param   int $standard   The standard to create the language context for.
+     * @param   int                                 $standard   The standard to create the language context for.
+     * @param   string                              $stream     The stream to test.
+     * @param   ParameterDeclarationListConstraint  $constraint The constraint used to assert the parameter declaration list.
+     * @param   string                              $lexeme     The lexeme of the next token after parsing.
+     * @param   int                                 $tag        The tag of the next token after parsing.
      * 
-     * @dataProvider    getCpp2003StandardProvider
-     * @dataProvider    getCpp2011StandardProvider
-     * @dataProvider    getCpp2014StandardProvider
-     * @dataProvider    getCpp2017StandardProvider
+     * @dataProvider    getValidStreamsProvider
      */
-    public function testParseInt(int $standard): void
+    public function testParseParameterDeclarationList(
+        int $standard, 
+        string $stream, 
+        PrmDeclListConst $constraint, 
+        string $lexeme, 
+        int $tag 
+    ): void
     {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream('  int ');
-        
+        $lexer = $this->createLexer($standard, $stream);
         $sut = new Parser($lexer);
+        
         $prmDeclList = $sut->parseParameterDeclarationList();
-        self::assertCount(1, $prmDeclList);
+        self::assertThat($prmDeclList, $constraint);
         
-        $prmDecls = $prmDeclList->getParameterDeclarations();
-        
-        // 
-        $prmDecl = $prmDecls[0];
-        $declSpecSeq = $prmDecl->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq);
-        
-        $declSpec = $declSpecSeq->getDeclarationSpecifiers()[0];
-        $stSpec = $declSpec->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec->isInt());
-        
-        self::assertEOFToken($lexer->getToken());
-    }
-    
-    /**
-     * Tests that parseParameterDeclarationList() parses "int,int,int".
-     * 
-     * @param   int $standard   The standard to create the language context for.
-     * 
-     * @dataProvider    getCpp2003StandardProvider
-     * @dataProvider    getCpp2011StandardProvider
-     * @dataProvider    getCpp2014StandardProvider
-     * @dataProvider    getCpp2017StandardProvider
-     */
-    public function testParseIntCommaIntCommaInt(int $standard): void
-    {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream('int,int,int');
-        
-        $sut = new Parser($lexer);
-        $prmDeclList = $sut->parseParameterDeclarationList();
-        self::assertCount(3, $prmDeclList);
-        
-        $prmDecls = $prmDeclList->getParameterDeclarations();
-        
-        // 
-        $declSpecSeq1 = $prmDecls[0]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq1);
-        
-        $declSpec1 = $declSpecSeq1->getDeclarationSpecifiers()[0];
-        $stSpec1 = $declSpec1->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec1->isInt());
-        
-        // 
-        $declSpecSeq2 = $prmDecls[1]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq2);
-        
-        $declSpec2 = $declSpecSeq2->getDeclarationSpecifiers()[0];
-        $stSpec2 = $declSpec2->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec2->isInt());
-        
-        // 
-        $declSpecSeq3 = $prmDecls[2]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq3);
-        
-        $declSpec3 = $declSpecSeq3->getDeclarationSpecifiers()[0];
-        $stSpec3 = $declSpec3->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec3->isInt());
-        
-        self::assertEOFToken($lexer->getToken());
-    }
-    
-    /**
-     * Tests that parseParameterDeclarationList() parses "int,int,int,...".
-     * 
-     * @param   int $standard   The standard to create the language context for.
-     * 
-     * @dataProvider    getCpp2003StandardProvider
-     * @dataProvider    getCpp2011StandardProvider
-     * @dataProvider    getCpp2014StandardProvider
-     * @dataProvider    getCpp2017StandardProvider
-     */
-    public function testParseIntCommaIntCommaIntCommaEllipsis(int $standard): void
-    {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream('int,int,int,...');
-        
-        $sut = new Parser($lexer);
-        $prmDeclList = $sut->parseParameterDeclarationList();
-        self::assertCount(3, $prmDeclList);
-        
-        $prmDecls = $prmDeclList->getParameterDeclarations();
-        
-        // 
-        $declSpecSeq1 = $prmDecls[0]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq1);
-        
-        $declSpec1 = $declSpecSeq1->getDeclarationSpecifiers()[0];
-        $stSpec1 = $declSpec1->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec1->isInt());
-        
-        // 
-        $declSpecSeq2 = $prmDecls[1]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq2);
-        
-        $declSpec2 = $declSpecSeq2->getDeclarationSpecifiers()[0];
-        $stSpec2 = $declSpec2->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec2->isInt());
-        
-        // 
-        $declSpecSeq3 = $prmDecls[2]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq3);
-        
-        $declSpec3 = $declSpecSeq3->getDeclarationSpecifiers()[0];
-        $stSpec3 = $declSpec3->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec3->isInt());
-        
-        self::assertToken(',', 249000, $lexer->getToken());
-    }
-    
-    /**
-     * Tests that parseParameterDeclarationList() parses "int,int,int ...".
-     * 
-     * @param   int $standard   The standard to create the language context for.
-     * 
-     * @dataProvider    getCpp2003StandardProvider
-     * @dataProvider    getCpp2011StandardProvider
-     * @dataProvider    getCpp2014StandardProvider
-     * @dataProvider    getCpp2017StandardProvider
-     */
-    public function testParseIntCommaIntCommaIntEllipsis(int $standard): void
-    {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream('int,int,int ...');
-        
-        $sut = new Parser($lexer);
-        $prmDeclList = $sut->parseParameterDeclarationList();
-        self::assertCount(3, $prmDeclList);
-        
-        $prmDecls = $prmDeclList->getParameterDeclarations();
-        
-        // 
-        $declSpecSeq1 = $prmDecls[0]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq1);
-        
-        $declSpec1 = $declSpecSeq1->getDeclarationSpecifiers()[0];
-        $stSpec1 = $declSpec1->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec1->isInt());
-        
-        // 
-        $declSpecSeq2 = $prmDecls[1]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq2);
-        
-        $declSpec2 = $declSpecSeq2->getDeclarationSpecifiers()[0];
-        $stSpec2 = $declSpec2->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec2->isInt());
-        
-        // 
-        $declSpecSeq3 = $prmDecls[2]->getDeclarationSpecifierSequence();
-        self::assertCount(1, $declSpecSeq3);
-        
-        $declSpec3 = $declSpecSeq3->getDeclarationSpecifiers()[0];
-        $stSpec3 = $declSpec3->getDefiningTypeSpecifier()
-            ->getTypeSpecifier()
-            ->getSimpleTypeSpecifier();
-        self::assertTrue($stSpec3->isInt());
-        
-        self::assertToken('...', 211000, $lexer->getToken());
+        self::assertToken($lexeme, $tag, $lexer->getToken());
     }
     
     /**
@@ -252,12 +71,7 @@ class ParameterDeclarationListParserTest extends AbstractParserTest
         string $message
     ): void
     {
-        $factory = new LanguageContextFactory();
-        $ctx = $factory->create($standard);
-        
-        $lexer = new Lexer($ctx);
-        $lexer->setStream($stream);
-        
+        $lexer = $this->createLexer($standard, $stream);
         $sut = new Parser($lexer);
         
         $this->expectException(FormatException::class);
@@ -266,31 +80,138 @@ class ParameterDeclarationListParserTest extends AbstractParserTest
     }
     
     /**
-     * {@inheritDoc}
+     * Returns a set of valid streams.
+     * 
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the stream to test,  
+     *                  [2] is the constraint used to assert the parameter declaration list, 
+     *                  [3] is the lexeme of the next token after parsing, and 
+     *                  [4] is the tag of the next token after parsing.
      */
-    protected function getInvalidStreams(): array
+    public function getValidStreamsProvider(): array
     {
-        return [
+        $dataSet = [
+            'int' => [
+                [ 1, 2, 4, 8, ],
+                'int', 
+                new PrmDeclListConst([
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                ]), 
+                [ '', 0, ], 
+            ], 
+            'int,int,int' => [
+                [ 1, 2, 4, 8, ],
+                'int,int,int', 
+                new PrmDeclListConst([
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                ]), 
+                [ '', 0, ], 
+            ], 
+            'int,int,int,...' => [
+                [ 1, 2, 4, 8, ],
+                'int,int,int,...', 
+                new PrmDeclListConst([
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                ]), 
+                [ ',', 249000, ], 
+            ], 
+            'int,int,int ...' => [
+                [ 1, 2, 4, 8, ],
+                'int,int,int ...', 
+                new PrmDeclListConst([
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                    PrmDeclConst::create(
+                        DeclSpecSeqConst::create([
+                            DeclSpecConst::createInt(), 
+                        ])
+                    ), 
+                ]), 
+                [ '...', 211000, ], 
+            ], 
+        ];
+        
+        return $this->createValidStreamsProvider($dataSet);
+    }
+    
+    /**
+     * Returns a set of invalid streams.
+     * 
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the stream to test, and 
+     *                  [2] is the expected message of the exception.
+     */
+    public function getInvalidStreamsProvider(): array
+    {
+        $dataSet = [
+            // General.
+            
             'No declaration specifier (empty string)' => [
                 [ 1, 2, 4, 8, ],
-                '#', 
-                'Unexpected "#", expected decl-specifier.', 
+                '', 
+                'Unexpected "", expected decl-specifier.', 
             ], 
-            '3 parameters ", int, int" first is missing' => [
+            
+            // Parameter is missing.
+            
+           '3 parameters ", int, int" first is missing' => [
                 [ 1, 2, 4, 8, ],
-                ', int, int', 
+                ',int,int', 
                 'Unexpected ",", expected decl-specifier.', 
             ], 
             '3 parameters "int, , int" second is missing' => [
                 [ 1, 2, 4, 8, ],
-                'int, , int', 
+                'int,,int', 
                 'Unexpected ",", expected decl-specifier.', 
             ], 
             '3 parameters "int , , int" third is missing' => [
                 [ 1, 2, 4, 8, ],
-                'int, int,', 
+                'int,int,', 
                 'Unexpected "", expected decl-specifier.', 
             ], 
+            
             // parseParameterDeclarationList() must not be called when only ellipsis.
             'Ellipsis' => [
                 [ 1, 2, 4, 8, ],
@@ -298,6 +219,8 @@ class ParameterDeclarationListParserTest extends AbstractParserTest
                 'Unexpected "...", expected decl-specifier.', 
             ], 
         ];
+        
+        return $this->createInvalidStreamsProvider($dataSet);
     }
 }
 
