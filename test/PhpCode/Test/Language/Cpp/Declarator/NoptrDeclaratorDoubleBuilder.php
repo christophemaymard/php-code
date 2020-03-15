@@ -7,7 +7,9 @@
  */
 namespace PhpCode\Test\Language\Cpp\Declarator;
 
+use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
+use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
@@ -24,6 +26,36 @@ class NoptrDeclaratorDoubleBuilder extends AbstractDoubleBuilder
     protected function getClassInterfaceName(): string
     {
         return NoptrDeclarator::class;
+    }
+    
+    /**
+     * Builds a prophecy where getDeclaratorId() can be called.
+     * 
+     * @param   DeclaratorId    $return The value to return when getDeclaratorId() is called (optional)(default to NULL).
+     * @return  NoptrDeclaratorDoubleBuilder    This instance.
+     */
+    public function buildGetDeclaratorId(DeclaratorId $return = NULL): self
+    {
+        $this->getProphecy()
+            ->getDeclaratorId()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds a prophecy where getParametersAndQualifiers() can be called.
+     * 
+     * @param   ParametersAndQualifiers $return The value to return when getParametersAndQualifiers() is called (optional)(default to NULL).
+     * @return  NoptrDeclaratorDoubleBuilder    This instance.
+     */
+    public function buildGetParametersAndQualifiers(ParametersAndQualifiers $return = NULL): self
+    {
+        $this->getProphecy()
+            ->getParametersAndQualifiers()
+            ->willReturn($return);
+        
+        return $this;
     }
 }
 
