@@ -9,11 +9,8 @@ namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint as DeclSpecSeqConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseConstraint as PrmDeclClauseConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint as PrmDeclConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint as PrmDeclListConst;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseConstraint;
+use PhpCode\Test\Language\Cpp\Parsing\ParameterDeclarationClauseProvider;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -42,7 +39,7 @@ class ParameterDeclarationClauseParserTest extends AbstractParserTest
     public function testParseParameterDeclarationClause(
         int $standard, 
         string $stream, 
-        PrmDeclClauseConst $constraint, 
+        ParameterDeclarationClauseConstraint $constraint, 
         string $lexeme, 
         int $tag
     ): void
@@ -92,64 +89,9 @@ class ParameterDeclarationClauseParserTest extends AbstractParserTest
      */
     public function getValidStreamsProvider(): array
     {
-        $dataSet = [
-            'Empty string' => [
-                [ 1, 2, 4, 8, ],
-                '', 
-                new PrmDeclClauseConst(), 
-                [ '', 0, ], 
-            ], 
-            '...' => [
-                [ 1, 2, 4, 8, ],
-                '...', 
-                (new PrmDeclClauseConst())->addEllipsis(), 
-                [ '', 0, ], 
-            ], 
-            'int' => [
-                [ 1, 2, 4, 8, ],
-                'int', 
-                (new PrmDeclClauseConst())->setParameterDeclarationListConstraint(
-                    new PrmDeclListConst([
-                        PrmDeclConst::create(
-                            DeclSpecSeqConst::create([
-                                DeclSpecConst::createInt(), 
-                            ])
-                        ), 
-                    ])
-                ), 
-                [ '', 0, ], 
-            ], 
-            'int ...' => [
-                [ 1, 2, 4, 8, ],
-                'int ...', 
-                (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                    new PrmDeclListConst([
-                        PrmDeclConst::create(
-                            DeclSpecSeqConst::create([
-                                DeclSpecConst::createInt(), 
-                            ])
-                        ), 
-                    ])
-                ), 
-                [ '', 0, ], 
-            ], 
-            'int, ...' => [
-                [ 1, 2, 4, 8, ],
-                'int, ...', 
-                (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                    new PrmDeclListConst([
-                        PrmDeclConst::create(
-                            DeclSpecSeqConst::create([
-                                DeclSpecConst::createInt(), 
-                            ])
-                        ), 
-                    ])
-                ), 
-                [ '', 0, ], 
-            ], 
-        ];
-        
-        return $this->createValidStreamsProvider($dataSet);
+        return $this->createValidStreamsProvider(
+            ParameterDeclarationClauseProvider::createValidDataSetProvider()
+        );
     }
     
     /**

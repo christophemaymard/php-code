@@ -9,7 +9,8 @@ namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
+use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
+use PhpCode\Test\Language\Cpp\Parsing\DeclarationSpecifierProvider;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -38,7 +39,7 @@ class DeclarationSpecifierParserTest extends AbstractParserTest
     public function testParseDeclarationSpecifier(
         int $standard, 
         string $stream, 
-        DeclSpecConst $constraint, 
+        DeclarationSpecifierConstraint $constraint, 
         string $lexeme, 
         int $tag 
     ): void
@@ -88,28 +89,9 @@ class DeclarationSpecifierParserTest extends AbstractParserTest
      */
     public function getValidStreamsProvider(): array
     {
-        $dataSet = [
-            'int' => [
-                [ 1, 2, 4, 8, ],
-                'int', 
-                DeclSpecConst::createInt(), 
-                [ '', 0, ], 
-            ], 
-            'int int' => [
-                [ 1, 2, 4, 8, ],
-                'int int', 
-                DeclSpecConst::createInt(), 
-                [ 'int', 141000, ], 
-            ], 
-            'int foobarbaz' => [
-                [ 1, 2, 4, 8, ],
-                'int foobarbaz', 
-                DeclSpecConst::createInt(), 
-                [ 'foobarbaz', 2, ], 
-            ], 
-        ];
-        
-        return $this->createValidStreamsProvider($dataSet);
+        return $this->createValidStreamsProvider(
+            DeclarationSpecifierProvider::createValidDataSetProvider()
+        );
     }
     
     /**

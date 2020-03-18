@@ -11,6 +11,7 @@ use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
 use PhpCode\Test\Language\Cpp\Specification;
 use PhpCode\Test\Language\Cpp\Lexical\TokenAssertionTrait;
+use PhpCode\Test\Language\Cpp\Parsing\ValidData;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,14 +45,7 @@ abstract class AbstractParserTest extends TestCase
     /**
      * Creates a set of valid streams.
      * 
-     * The data set used to create a set of valid streams must be an 
-     * indexed array of indexed arrays where:
-     * - [0] is the standards to create the language context for, 
-     * - [1] is the stream to test, 
-     * - [2] is the constraint used to assert the concept, and 
-     * - [3] is the lexeme and the tag of the next token after parsing.
-     * 
-     * @param   array[] $validDataSet   The data set used to create a set of valid streams.
+     * @param   ValidData[] $validDataSet   The data set used to create a set of valid streams.
      * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
      *                  [0] is the standard to create the language context for, 
      *                  [1] is the stream to test, 
@@ -63,15 +57,22 @@ abstract class AbstractParserTest extends TestCase
     {
         $dataSet = [];
         
-        foreach ($validDataSet as list($stds, $stream, $constraint, $token)) {
-            foreach ($stds as $std) {
-                $name = \sprintf('%s: stream "%s"', Specification::STANDARDS[$std], $stream);
-                list($lexeme, $tag) = $token;
+        foreach ($validDataSet as $data) {
+            $stream = $data->getStream();
+            list($lexeme, $tag) = $data->getToken();
+            $nameFmt = "\n%s: STREAM \"%s\"\n";
+            
+            if ($data->hasName()) {
+                $nameFmt .= $data->getName()."\n";
+            }
+            
+            foreach ($data->getStandards() as $std) {
+                $name = \sprintf($nameFmt, Specification::STANDARDS[$std], $stream);
                 
                 $dataSet[$name] = [
                     $std, 
                     $stream, 
-                    $constraint, 
+                    $data->getConstraintFactory()->createConstraint(), 
                     $lexeme, 
                     $tag, 
                 ];

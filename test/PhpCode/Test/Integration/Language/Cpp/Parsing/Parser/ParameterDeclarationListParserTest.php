@@ -9,10 +9,8 @@ namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint as DeclSpecSeqConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint as PrmDeclConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint as PrmDeclListConst;
+use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint;
+use PhpCode\Test\Language\Cpp\Parsing\ParameterDeclarationListProvider;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -41,7 +39,7 @@ class ParameterDeclarationListParserTest extends AbstractParserTest
     public function testParseParameterDeclarationList(
         int $standard, 
         string $stream, 
-        PrmDeclListConst $constraint, 
+        ParameterDeclarationListConstraint $constraint, 
         string $lexeme, 
         int $tag 
     ): void
@@ -91,88 +89,9 @@ class ParameterDeclarationListParserTest extends AbstractParserTest
      */
     public function getValidStreamsProvider(): array
     {
-        $dataSet = [
-            'int' => [
-                [ 1, 2, 4, 8, ],
-                'int', 
-                new PrmDeclListConst([
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                ]), 
-                [ '', 0, ], 
-            ], 
-            'int,int,int' => [
-                [ 1, 2, 4, 8, ],
-                'int,int,int', 
-                new PrmDeclListConst([
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                ]), 
-                [ '', 0, ], 
-            ], 
-            'int,int,int,...' => [
-                [ 1, 2, 4, 8, ],
-                'int,int,int,...', 
-                new PrmDeclListConst([
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                ]), 
-                [ ',', 249000, ], 
-            ], 
-            'int,int,int ...' => [
-                [ 1, 2, 4, 8, ],
-                'int,int,int ...', 
-                new PrmDeclListConst([
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                    PrmDeclConst::create(
-                        DeclSpecSeqConst::create([
-                            DeclSpecConst::createInt(), 
-                        ])
-                    ), 
-                ]), 
-                [ '...', 211000, ], 
-            ], 
-        ];
-        
-        return $this->createValidStreamsProvider($dataSet);
+        return $this->createValidStreamsProvider(
+            ParameterDeclarationListProvider::createValidDataSetProvider()
+        );
     }
     
     /**

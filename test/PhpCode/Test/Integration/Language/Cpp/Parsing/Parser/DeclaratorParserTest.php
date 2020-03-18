@@ -9,19 +9,8 @@ namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint as DeclSpecSeqConst;
-use PhpCode\Test\Language\Cpp\Declarator\DeclaratorConstraint as DcltorConst;
-use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraint as DidConst;
-use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraint as NoptrDcltorConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseConstraint as PrmDeclClauseConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint as PrmDeclConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint as PrmDeclListConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraint as PrmQualConst;
-use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraint as PtrDcltorConst;
-use PhpCode\Test\Language\Cpp\Expression\IdExpressionConstraint as IdExprConst;
-use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdConstraint as UIdConst;
-use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint as IdConst;
+use PhpCode\Test\Language\Cpp\Declarator\DeclaratorConstraint;
+use PhpCode\Test\Language\Cpp\Parsing\DeclaratorProvider;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -49,7 +38,7 @@ class DeclaratorParserTest extends AbstractParserTest
     public function testParseDeclarator(
         int $standard, 
         string  $stream, 
-        DcltorConst $constraint, 
+        DeclaratorConstraint $constraint, 
         string $lexeme, 
         int $tag
     ): void
@@ -99,157 +88,9 @@ class DeclaratorParserTest extends AbstractParserTest
      */
     public function getValidStreamsProvider(): array
     {
-        $dataSet = [
-            'main' => [
-                [ 1, 2, 4, 8, ],
-                'main', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorId(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            'main()' => [
-                [ 1, 2, 4, 8, ],
-                'main()', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorIdParametersAndQualifiers(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            ), 
-                            new PrmQualConst(
-                                new PrmDeclClauseConst()
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            'main(...)' => [
-                [ 1, 2, 4, 8, ],
-                'main(...)', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorIdParametersAndQualifiers(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            ), 
-                            new PrmQualConst(
-                                (new PrmDeclClauseConst())->addEllipsis()
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            'main(int)' => [
-                [ 1, 2, 4, 8, ],
-                'main(int)', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorIdParametersAndQualifiers(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            ), 
-                            new PrmQualConst(
-                                (new PrmDeclClauseConst())->setParameterDeclarationListConstraint(
-                                    new PrmDeclListConst([
-                                        PrmDeclConst::create(
-                                            DeclSpecSeqConst::create([
-                                                DeclSpecConst::createInt(), 
-                                            ])
-                                        ), 
-                                    ])
-                                )
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            'main(int ...)' => [
-                [ 1, 2, 4, 8, ],
-                'main(int ...)', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorIdParametersAndQualifiers(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            ), 
-                            new PrmQualConst(
-                                (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                                    new PrmDeclListConst([
-                                        PrmDeclConst::create(
-                                            DeclSpecSeqConst::create([
-                                                DeclSpecConst::createInt(), 
-                                            ])
-                                        ), 
-                                    ])
-                                )
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            'main(int, ...)' => [
-                [ 1, 2, 4, 8, ],
-                'main(int, ...)', 
-                DcltorConst::createPtrDeclarator(
-                    new PtrDcltorConst(
-                        NoptrDcltorConst::createDeclaratorIdParametersAndQualifiers(
-                            new DidConst(
-                                IdExprConst::createUnqualifiedId(
-                                    UIdConst::createIdentifier(
-                                        new IdConst('main')
-                                    )
-                                )
-                            ), 
-                            new PrmQualConst(
-                                (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                                    new PrmDeclListConst([
-                                        PrmDeclConst::create(
-                                            DeclSpecSeqConst::create([
-                                                DeclSpecConst::createInt(), 
-                                            ])
-                                        ), 
-                                    ])
-                                )
-                            )
-                        )
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-        ];
-        
-        return $this->createValidStreamsProvider($dataSet);
+        return $this->createValidStreamsProvider(
+            DeclaratorProvider::createValidDataSetProvider()
+        );
     }
     
     /**

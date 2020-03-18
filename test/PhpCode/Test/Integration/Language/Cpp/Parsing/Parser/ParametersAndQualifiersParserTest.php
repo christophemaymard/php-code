@@ -9,12 +9,8 @@ namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint as DeclSpecConst;
-use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraint as DeclSpecSeqConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseConstraint as PrmDeclClauseConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint as PrmDeclConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint as PrmDeclListConst;
-use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraint as PrmQualConst;
+use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraint;
+use PhpCode\Test\Language\Cpp\Parsing\ParametersAndQualifiersProvider;
 
 /**
  * Represents the integration tests for the {@see PhpCode\Language\Cpp\Parsing\Parser} 
@@ -43,7 +39,7 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
     public function testParseParametersAndQualifiers(
         int $standard, 
         string $stream, 
-        PrmQualConst $constraint, 
+        ParametersAndQualifiersConstraint $constraint, 
         string $lexeme, 
         int $tag
     ): void
@@ -93,75 +89,10 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
      */
     public function getValidStreamsProvider(): array
     {
-        $dataSet = [
-            '()' => [
-                [ 1, 2, 4, 8, ],
-                '()', 
-                new PrmQualConst(
-                    new PrmDeclClauseConst()
-                ), 
-                [ '', 0, ], 
-            ], 
-            '(...)' => [
-                [ 1, 2, 4, 8, ],
-                '(...)', 
-                new PrmQualConst(
-                    (new PrmDeclClauseConst())->addEllipsis()
-                ), 
-                [ '', 0, ], 
-            ], 
-            '(int)' => [
-                [ 1, 2, 4, 8, ],
-                '(int)', 
-                new PrmQualConst(
-                    (new PrmDeclClauseConst())->setParameterDeclarationListConstraint(
-                        new PrmDeclListConst([
-                            PrmDeclConst::create(
-                                DeclSpecSeqConst::create([
-                                    DeclSpecConst::createInt(), 
-                                ])
-                            ), 
-                        ])
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            '(int ...)' => [
-                [ 1, 2, 4, 8, ],
-                '(int ...)', 
-                new PrmQualConst(
-                    (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                        new PrmDeclListConst([
-                            PrmDeclConst::create(
-                                DeclSpecSeqConst::create([
-                                    DeclSpecConst::createInt(), 
-                                ])
-                            ), 
-                        ])
-                    )
-                ), 
-                [ '', 0, ], 
-            ], 
-            '(int, ...)' => [
-                [ 1, 2, 4, 8, ],
-                '(int, ...)', 
-                new PrmQualConst(
-                    (new PrmDeclClauseConst())->addEllipsis()->setParameterDeclarationListConstraint(
-                        new PrmDeclListConst([
-                            PrmDeclConst::create(
-                                DeclSpecSeqConst::create([
-                                    DeclSpecConst::createInt(), 
-                                ])
-                            ), 
-                        ])
-                    ) 
-                ), 
-                [ '', 0, ], 
-            ], 
-        ];
-        
-        return $this->createValidStreamsProvider($dataSet);
-    }
+        return $this->createValidStreamsProvider(
+            ParametersAndQualifiersProvider::createValidDataSetProvider()
+        );
+   }
     
     /**
      * Returns a set of invalid streams.
