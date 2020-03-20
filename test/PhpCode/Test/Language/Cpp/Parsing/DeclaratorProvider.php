@@ -26,11 +26,18 @@ class DeclaratorProvider
      */
     public static function createValidDataSetProvider(): array
     {
-        $prmQualDataSet = ParametersAndQualifiersProvider::createValidDataSet();
-        
         $dataSet = [];
         
-        foreach (DeclaratorIdProvider::createValidDataSet() as $didData) {
+        $didDataSet = DeclaratorIdProvider::createValidDataSet();
+        
+        foreach ($didDataSet as $didData) {
+            $dataSet[] = self::createNoOpenErrorValidData($didData);
+            $dataSet[] = self::createCloseBeforeOpenErrorValidData($didData);
+        }
+        
+        $prmQualDataSet = ParametersAndQualifiersProvider::createValidDataSet();
+        
+        foreach ($didDataSet as $didData) {
             $dataSet[] = self::createNameValidData($didData);
             
             foreach ($prmQualDataSet as $prmQualData) {
@@ -39,6 +46,74 @@ class DeclaratorProvider
         }
         
         return $dataSet;
+    }
+    
+    /**
+     * Creates a valid data for the case:
+     * No open parenthesis
+     * 
+     * In other context, it should be an error.
+     * 
+     * @param   ValidData   $didData    The declarator identifier data used to create the data.
+     * @return  ValidData   The created instance of ValidData.
+     */
+    private static function createNoOpenErrorValidData(ValidData $didData): ValidData
+    {
+        $stream = \sprintf('%s)', $didData->getStream());
+        $firstTokenLexeme = $didData->getFirstTokenLexeme();
+        
+        $didFactory = $didData->getConstraintFactory();
+        $callable = function () use ($didFactory) {
+            return DeclaratorConstraint::createPtrDeclarator(
+                new PtrDeclaratorConstraint(
+                    NoptrDeclaratorConstraint::createDeclaratorId(
+                        $didFactory->createConstraint()
+                    )
+                )
+            );
+        };
+        $factory = new CallableConceptConstraintFactory($callable);
+        
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
+        
+        $data->setToken(')', 208000);
+        $data->setName('No open parenthesis');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates a valid data for the case:
+     * Close parenthesis before open parenthesis
+     * 
+     * In other context, it should be an error.
+     * 
+     * @param   ValidData   $didData    The declarator identifier data used to create the data.
+     * @return  ValidData   The created instance of ValidData.
+     */
+    private static function createCloseBeforeOpenErrorValidData(ValidData $didData): ValidData
+    {
+        $stream = \sprintf('%s)(', $didData->getStream());
+        $firstTokenLexeme = $didData->getFirstTokenLexeme();
+        
+        $didFactory = $didData->getConstraintFactory();
+        $callable = function () use ($didFactory) {
+            return DeclaratorConstraint::createPtrDeclarator(
+                new PtrDeclaratorConstraint(
+                    NoptrDeclaratorConstraint::createDeclaratorId(
+                        $didFactory->createConstraint()
+                    )
+                )
+            );
+        };
+        $factory = new CallableConceptConstraintFactory($callable);
+        
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
+        
+        $data->setToken(')', 208000);
+        $data->setName('Close parenthesis before open parenthesis');
+        
+        return $data;
     }
     
     /**

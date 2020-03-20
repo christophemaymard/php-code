@@ -24,15 +24,10 @@ class ParameterDeclarationClauseProvider
      */
     public static function createValidDataSetProvider(): array
     {
-        $dataSet = [];
+        $dataSet = self::createValidDataSet();
         
-        $dataSet[] = self::createEmptyStringValidData();
-        $dataSet[] = self::createEllipsisValidData();
-        
-        foreach (ParameterDeclarationListProvider::createValidDataSet() as $data) {
-            $dataSet[] = self::createListValidData($data);
-            $dataSet[] = self::createListEllipsisValidData($data);
-            $dataSet[] = self::createListWSEllipsisValidData($data);
+        foreach (ParameterDeclarationProvider::createValidDataSet() as $prmDeclData) {
+            $dataSet[] = self::createFirstParamMissingErrorValidData($prmDeclData);
         }
         
         return $dataSet;
@@ -45,7 +40,18 @@ class ParameterDeclarationClauseProvider
      */
     public static function createValidDataSet(): array
     {
-        return self::createValidDataSetProvider();
+        $dataSet = [];
+        
+        $dataSet[] = self::createEmptyStringValidData();
+        $dataSet[] = self::createEllipsisValidData();
+        
+        foreach (ParameterDeclarationListProvider::createValidDataSet() as $data) {
+            $dataSet[] = self::createListValidData($data);
+            $dataSet[] = self::createListEllipsisValidData($data);
+            $dataSet[] = self::createListWSEllipsisValidData($data);
+        }
+        
+        return $dataSet;
     }
     
     /**
@@ -180,6 +186,37 @@ class ParameterDeclarationClauseProvider
         $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName(\sprintf('%s ...', $listData->getName()));
+        
+        return $data;
+    }
+    
+    /**
+     * Creates a valid data for the case:
+     * The first parameter is missing
+     * 
+     * In other context, it should be an error.
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data used to create the data.
+     * @return  ValidData   The created instance of ValidData.
+     */
+    private static function createFirstParamMissingErrorValidData(ValidData $prmDeclData): ValidData
+    {
+        $stream = \sprintf(
+            ',%s,%s', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $firstTokenLexeme = ',';
+        
+        $callable = function () {
+            return new ParameterDeclarationClauseConstraint();
+        };
+        $factory = new CallableConceptConstraintFactory($callable);
+        
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
+        
+        $data->setToken(',', 249000);
+        $data->setName('First parameter is missing');
         
         return $data;
     }
