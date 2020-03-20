@@ -140,5 +140,37 @@ class DeclarationSpecifierProvider
         
         return $data;
     }
+    
+    /**
+     * Returns a set of invalid data for the provider.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSetProvider(): array
+    {
+        $dataSet = [];
+        
+        $dataSet[] = self::createEmptyInvalidData();
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * Empty string
+     * 
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createEmptyInvalidData(): InvalidData
+    {
+        $stream = '';
+        $message = 'Unexpected "", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Empty string');
+        
+        return $data;
+    }
 }
 
