@@ -183,5 +183,72 @@ class ParameterDeclarationClauseProvider
         
         return $data;
     }
+    
+    /**
+     * Returns a set of invalid data for the provider.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSetProvider(): array
+    {
+        $dataSet = [];
+        
+        foreach (ParameterDeclarationProvider::createValidDataSet() as $prmDeclData) {
+            $dataSet[] = self::createSecondParamMissingInvalidData($prmDeclData);
+            $dataSet[] = self::createLastParamMissingInvalidData($prmDeclData);
+        }
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * The second parameter is missing
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createSecondParamMissingInvalidData(
+        ValidData $prmDeclData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s,,%s', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $message = 'Unexpected ",", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Second parameter is missing');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * The last parameter is missing
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createLastParamMissingInvalidData(
+        ValidData $prmDeclData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s,%s,', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $message = 'Unexpected "", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Last parameter is missing');
+        
+        return $data;
+    }
 }
 
