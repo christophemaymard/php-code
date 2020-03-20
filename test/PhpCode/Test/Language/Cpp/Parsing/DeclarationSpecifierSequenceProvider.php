@@ -54,6 +54,7 @@ class DeclarationSpecifierSequenceProvider
     private static function createSeq1ValidData(ValidData $declSpecData): ValidData
     {
         $stream = $declSpecData->getStream();
+        $firstTokenLexeme = $declSpecData->getFirstTokenLexeme();
         
         $declSpecFactory = $declSpecData->getConstraintFactory();
         $callable = function() use ($declSpecFactory) {
@@ -63,7 +64,7 @@ class DeclarationSpecifierSequenceProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName('DECL_SPEC_SEQ1');
         

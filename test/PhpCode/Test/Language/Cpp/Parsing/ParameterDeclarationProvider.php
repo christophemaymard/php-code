@@ -55,6 +55,7 @@ class ParameterDeclarationProvider
     private static function createDeclSpecSeqValidData(ValidData $declSpecSeqData): ValidData
     {
         $stream = $declSpecSeqData->getStream();
+        $firstTokenLexeme = $declSpecSeqData->getFirstTokenLexeme();
         
         $declSpecSeqFactory = $declSpecSeqData->getConstraintFactory();
         $callable = function() use ($declSpecSeqFactory) {
@@ -64,7 +65,7 @@ class ParameterDeclarationProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName($declSpecSeqData->getName());
         

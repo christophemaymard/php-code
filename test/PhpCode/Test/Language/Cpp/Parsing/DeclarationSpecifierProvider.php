@@ -26,10 +26,10 @@ class DeclarationSpecifierProvider
     {
         $dataSet = [];
         
-        foreach (self::getSpecifications() as list($text, $callable)) {
-            $dataSet[] = self::createDeclSpecValidData($text, $callable);
-            $dataSet[] = self::createDeclSpecWSPunctuatorValidData($text, $callable);
-            $dataSet[] = self::createDeclSpecWSIdentifierValidData($text, $callable);
+        foreach (self::getSpecifications() as list($text, $callable, $firstTokenLexeme)) {
+            $dataSet[] = self::createDeclSpecValidData($text, $callable, $firstTokenLexeme);
+            $dataSet[] = self::createDeclSpecWSPunctuatorValidData($text, $callable, $firstTokenLexeme);
+            $dataSet[] = self::createDeclSpecWSIdentifierValidData($text, $callable, $firstTokenLexeme);
         }
         
         return $dataSet;
@@ -44,8 +44,8 @@ class DeclarationSpecifierProvider
     {
         $dataSet = [];
         
-        foreach (self::getSpecifications() as list($text, $callable)) {
-            $dataSet[] = self::createDeclSpecValidData($text, $callable);
+        foreach (self::getSpecifications() as list($text, $callable, $firstTokenLexeme)) {
+            $dataSet[] = self::createDeclSpecValidData($text, $callable, $firstTokenLexeme);
         }
         
         return $dataSet;
@@ -55,8 +55,9 @@ class DeclarationSpecifierProvider
      * Returns the declaration specifier specifications.
      * 
      * @return  array[] An indexed array of arrays where:
-     *                  [0] is the text used to create a stream, and 
-     *                  [1] is the callable used to create the constraint.
+     *                  [0] is the text used to create a stream, 
+     *                  [1] is the callable used to create the constraint, and 
+     *                  [2] is the lexeme of the first token.
      */
     private static function getSpecifications(): array
     {
@@ -66,6 +67,7 @@ class DeclarationSpecifierProvider
                 function() {
                     return DeclarationSpecifierConstraint::createInt();
                 }, 
+                'int', 
             ], 
         ];
     }
@@ -74,35 +76,42 @@ class DeclarationSpecifierProvider
      * Creates a valid data for the case:
      * DECL_SPEC
      * 
-     * @param   string      $text       The text used to create a stream.
-     * @param   callable    $callable   The callable used to create a constraint.
+     * @param   string      $text               The text used to create a stream.
+     * @param   callable    $callable           The callable used to create a constraint.
+     * @param   string      $firstTokenLexeme   The lexeme of the first token.
      * @return  ValidData   The created instance of ValidData.
      */
-    private static function createDeclSpecValidData(string $text, callable $callable): ValidData
+    private static function createDeclSpecValidData(
+        string $text, 
+        callable $callable, 
+        string $firstTokenLexeme
+    ): ValidData
     {
         $stream = $text;
         $factory = new CallableConceptConstraintFactory($callable);
         
-        return new ValidData($stream, $factory);
+        return new ValidData($stream, $factory, $firstTokenLexeme);
     }
     
     /**
      * Creates a valid data for the case:
      * DECL_SPEC WS PUNCTUATOR
      * 
-     * @param   string      $text       The text used to create a stream.
-     * @param   callable    $callable   The callable used to create a constraint.
+     * @param   string      $text               The text used to create a stream.
+     * @param   callable    $callable           The callable used to create a constraint.
+     * @param   string      $firstTokenLexeme   The lexeme of the first token.
      * @return  ValidData   The created instance of ValidData.
      */
     private static function createDeclSpecWSPunctuatorValidData(
         string $text, 
-        callable $callable
+        callable $callable, 
+        string $firstTokenLexeme
     ): ValidData
     {
         $stream = \sprintf('%s #', $text);
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setToken('#', 205000);
 
         return $data;
@@ -112,19 +121,21 @@ class DeclarationSpecifierProvider
      * Creates a valid data for the case:
      * DECL_SPEC WS IDENTIFIER
      * 
-     * @param   string      $text       The text used to create a stream.
-     * @param   callable    $callable   The callable used to create a constraint.
+     * @param   string      $text               The text used to create a stream.
+     * @param   callable    $callable           The callable used to create a constraint.
+     * @param   string      $firstTokenLexeme   The lexeme of the first token.
      * @return  ValidData   The created instance of ValidData.
      */
     private static function createDeclSpecWSIdentifierValidData(
         string $text, 
-        callable $callable
+        callable $callable, 
+        string $firstTokenLexeme
     ): ValidData
     {
         $stream = \sprintf('%s foobarbaz', $text);
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setToken('foobarbaz', 2);
         
         return $data;

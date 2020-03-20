@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Parsing;
 
+use PhpCode\Exception\ArgumentException;
 use PhpCode\Test\Language\Cpp\ConceptConstraintFactoryInterface;
 use PhpCode\Test\Language\Cpp\Parsing\ValidData;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,19 @@ use PHPUnit\Framework\TestCase;
 class ValidDataTest extends TestCase
 {
     /**
+     * Tests that _construct() throws an exception when the stream does not 
+     * start with the first token lexeme.
+     */
+    public function test__constructThrowsExceptionWhenStreamDoesNotStartWithFirstTokenLexeme(): void
+    {
+        $this->expectException(ArgumentException::class);
+        $this->expectExceptionMessage('The stream "foo" must start with the lexeme "bar".');
+        $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
+        
+        $sut = new ValidData('foo', $constraintFactory, 'bar');
+    }
+    
+    /**
      * Tests that _construct() stores the stream and the factory of 
      * constraints.
      */
@@ -30,9 +44,10 @@ class ValidDataTest extends TestCase
     {
         $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
         
-        $sut = new ValidData('foo', $constraintFactory);
+        $sut = new ValidData('foo', $constraintFactory, 'foo');
         self::assertSame('foo', $sut->getStream());
         self::assertSame($constraintFactory, $sut->getConstraintFactory());
+        self::assertSame('foo', $sut->getFirstTokenLexeme());
     }
     
     /**
@@ -42,7 +57,7 @@ class ValidDataTest extends TestCase
     {
         $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
         
-        $sut = new ValidData('foo', $constraintFactory);
+        $sut = new ValidData('foo', $constraintFactory, 'foo');
         self::assertSame('', $sut->getName());
         
         $sut->setName('bar');
@@ -63,7 +78,7 @@ class ValidDataTest extends TestCase
     {
         $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
         
-        $sut = new ValidData('foo', $constraintFactory);
+        $sut = new ValidData('foo', $constraintFactory, 'foo');
         self::assertFalse($sut->hasName());
         
         $sut->setName('bar');
@@ -83,7 +98,7 @@ class ValidDataTest extends TestCase
     {
         $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
         
-        $sut = new ValidData('foo', $constraintFactory);
+        $sut = new ValidData('foo', $constraintFactory, 'foo');
         self::assertSame([1, 2, 4, 8], $sut->getStandards());
     }
     
@@ -94,7 +109,7 @@ class ValidDataTest extends TestCase
     {
         $constraintFactory = $this->prophesize(ConceptConstraintFactoryInterface::class)->reveal();
         
-        $sut = new ValidData('foo', $constraintFactory);
+        $sut = new ValidData('foo', $constraintFactory, 'foo');
         self::assertSame(['', 0], $sut->getToken());
         
         $sut->setToken('bar', 2);

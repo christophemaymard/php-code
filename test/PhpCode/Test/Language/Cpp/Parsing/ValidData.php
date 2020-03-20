@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Language\Cpp\Parsing;
 
+use PhpCode\Exception\ArgumentException;
 use PhpCode\Test\Language\Cpp\ConceptConstraintFactoryInterface;
 
 /**
@@ -32,18 +33,27 @@ class ValidData extends AbstractData
     private $token = [ '', 0, ];
     
     /**
+     * The lexeme of the first token.
+     * @var string
+     */
+    private $firstTokenLexeme;
+    
+    /**
      * Constructor.
      * 
      * @param   string                              $stream             The stream to set.
      * @param   ConceptConstraintFactoryInterface   $constraintFactory  The constraint factory to set.
+     * @param   string                              $firstTokenLexeme   The lexeme of the first token.
      */
     public function __construct(
         string $stream, 
-        ConceptConstraintFactoryInterface $constraintFactory
+        ConceptConstraintFactoryInterface $constraintFactory, 
+        string $firstTokenLexeme
     )
     {
         $this->setStream($stream);
         $this->constraintFactory = $constraintFactory;
+        $this->setFirstTokenLexeme($firstTokenLexeme);
     }
     
     /**
@@ -54,6 +64,36 @@ class ValidData extends AbstractData
     public function getConstraintFactory(): ConceptConstraintFactoryInterface
     {
         return $this->constraintFactory;
+    }
+    
+    /**
+     * Returns the lexeme of the first token.
+     * 
+     * @return  string
+     */
+    public function getFirstTokenLexeme(): string
+    {
+        return $this->firstTokenLexeme;
+    }
+    
+    /**
+     * Sets the lexeme of the first token.
+     * 
+     * @param   string  $lexeme The lexeme to set.
+     * 
+     * @throws  ArgumentException   When the stream does start with the lexme.
+     */
+    private function setFirstTokenLexeme(string $lexeme): void
+    {
+        $this->firstTokenLexeme = $lexeme;
+        
+        if (\mb_substr($this->getStream(), 0, \mb_strlen($this->firstTokenLexeme)) != $this->firstTokenLexeme) {
+            throw new ArgumentException(\sprintf(
+                'The stream "%s" must start with the lexeme "%s".', 
+                $this->getStream(), 
+                $this->firstTokenLexeme
+            ));
+        }
     }
     
     /**

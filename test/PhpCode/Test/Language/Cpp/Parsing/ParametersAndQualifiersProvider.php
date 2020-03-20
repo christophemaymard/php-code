@@ -53,6 +53,7 @@ class ParametersAndQualifiersProvider
     private static function createPrmDeclClauseValidData(ValidData $clauseData): ValidData
     {
         $stream = \sprintf('(%s)', $clauseData->getStream());
+        $firstTokenLexeme = '(';
         
         $clauseFactory = $clauseData->getConstraintFactory();
         $callable = function () use ($clauseFactory) {
@@ -62,7 +63,7 @@ class ParametersAndQualifiersProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setName(\sprintf(
             '( %s )', 
             $clauseData->getName()

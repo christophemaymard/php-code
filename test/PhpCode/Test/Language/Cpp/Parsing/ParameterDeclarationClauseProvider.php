@@ -57,13 +57,14 @@ class ParameterDeclarationClauseProvider
     private static function createEmptyStringValidData(): ValidData
     {
         $stream = '';
+        $firstTokenLexeme = $stream;
         
         $callable = function () {
             return new ParameterDeclarationClauseConstraint();
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        return new ValidData($stream, $factory);
+        return new ValidData($stream, $factory, $firstTokenLexeme);
     }
     
     /**
@@ -75,6 +76,7 @@ class ParameterDeclarationClauseProvider
     private static function createEllipsisValidData(): ValidData
     {
         $stream = '...';
+        $firstTokenLexeme = $stream;
         
         $callable = function () {
             $const = new ParameterDeclarationClauseConstraint();
@@ -84,7 +86,7 @@ class ParameterDeclarationClauseProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setName('...');
         
         return $data;
@@ -100,6 +102,7 @@ class ParameterDeclarationClauseProvider
     private static function createListValidData(ValidData $listData): ValidData
     {
         $stream = $listData->getStream();
+        $firstTokenLexeme = $listData->getFirstTokenLexeme();
         
         $listFactory = $listData->getConstraintFactory();
         $callable = function () use ($listFactory) {
@@ -112,7 +115,7 @@ class ParameterDeclarationClauseProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName($listData->getName());
         
@@ -129,6 +132,7 @@ class ParameterDeclarationClauseProvider
     private static function createListEllipsisValidData(ValidData $listData): ValidData
     {
         $stream = \sprintf('%s, ...', $listData->getStream());
+        $firstTokenLexeme = $listData->getFirstTokenLexeme();
         
         $listFactory = $listData->getConstraintFactory();
         $callable = function () use ($listFactory) {
@@ -142,7 +146,7 @@ class ParameterDeclarationClauseProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName(\sprintf('%s, ...', $listData->getName()));
         
@@ -159,6 +163,7 @@ class ParameterDeclarationClauseProvider
     private static function createListWSEllipsisValidData(ValidData $listData): ValidData
     {
         $stream = \sprintf('%s ...', $listData->getStream());
+        $firstTokenLexeme = $listData->getFirstTokenLexeme();
         
         $listFactory = $listData->getConstraintFactory();
         $callable = function () use ($listFactory) {
@@ -172,7 +177,7 @@ class ParameterDeclarationClauseProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName(\sprintf('%s ...', $listData->getName()));
         

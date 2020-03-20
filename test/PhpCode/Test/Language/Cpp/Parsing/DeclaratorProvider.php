@@ -51,6 +51,7 @@ class DeclaratorProvider
     private static function createNameValidData(ValidData $didData): ValidData
     {
         $stream = $didData->getStream();
+        $firstTokenLexeme = $didData->getFirstTokenLexeme();
         
         $didFactory = $didData->getConstraintFactory();
         $callable = function () use ($didFactory) {
@@ -64,7 +65,7 @@ class DeclaratorProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setName($didData->getName());
         
         return $data;
@@ -88,6 +89,7 @@ class DeclaratorProvider
             $didData->getStream(), 
             $prmQualData->getStream()
         );
+        $firstTokenLexeme = $didData->getFirstTokenLexeme();
         
         $didFactory = $didData->getConstraintFactory();
         $prmQualFactory = $prmQualData->getConstraintFactory();
@@ -103,7 +105,7 @@ class DeclaratorProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setName(\sprintf(
             '%s %s', 
             $didData->getName(), 

@@ -43,6 +43,7 @@ class DeclaratorIdProvider
     private static function createIdValidData(): ValidData
     {
         $stream = 'main';
+        $firstTokenLexeme = $stream;
         
         $callable = function() use ($stream) {
             return new DeclaratorIdConstraint(
@@ -55,7 +56,7 @@ class DeclaratorIdProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         $data->setName('DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID');
         
         return $data;

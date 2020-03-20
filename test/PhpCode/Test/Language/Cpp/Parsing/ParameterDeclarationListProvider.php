@@ -64,6 +64,7 @@ class ParameterDeclarationListProvider
     private static function createPrmDeclValidData(ValidData $prmDeclData): ValidData
     {
         $stream = $prmDeclData->getStream();
+        $firstTokenLexeme = $prmDeclData->getFirstTokenLexeme();
         
         $prmDeclFactory = $prmDeclData->getConstraintFactory();
         $callable = function () use ($prmDeclFactory) {
@@ -73,7 +74,7 @@ class ParameterDeclarationListProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setName($prmDeclData->getName());
         
@@ -96,6 +97,7 @@ class ParameterDeclarationListProvider
             $prmDeclStream, 
             $prmDeclStream
         );
+        $firstTokenLexeme = $prmDeclData->getFirstTokenLexeme();
         
         $prmDeclFactory = $prmDeclData->getConstraintFactory();
         $callable = function () use ($prmDeclFactory) {
@@ -107,7 +109,7 @@ class ParameterDeclarationListProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $prmDeclName = $prmDeclData->getName();
         $data->setName(\sprintf(
@@ -135,6 +137,7 @@ class ParameterDeclarationListProvider
             $prmDeclStream, 
             $prmDeclStream
         );
+        $firstTokenLexeme = $prmDeclData->getFirstTokenLexeme();
         
         $prmDeclFactory = $prmDeclData->getConstraintFactory();
         $callable = function () use ($prmDeclFactory) {
@@ -146,7 +149,7 @@ class ParameterDeclarationListProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setToken(',', 249000);
         
@@ -168,6 +171,7 @@ class ParameterDeclarationListProvider
             $prmDeclStream, 
             $prmDeclStream
         );
+        $firstTokenLexeme = $prmDeclData->getFirstTokenLexeme();
         
         $prmDeclFactory = $prmDeclData->getConstraintFactory();
         $callable = function () use ($prmDeclFactory) {
@@ -179,7 +183,7 @@ class ParameterDeclarationListProvider
         };
         $factory = new CallableConceptConstraintFactory($callable);
         
-        $data = new ValidData($stream, $factory);
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
         $data->setToken('...', 211000);
         
