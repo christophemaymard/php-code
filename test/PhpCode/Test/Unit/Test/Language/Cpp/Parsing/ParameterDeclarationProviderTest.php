@@ -118,5 +118,15 @@ class ParameterDeclarationProviderTest extends TestCase
             );
         }
     }
+    
+    /**
+     * Tests createInvalidDataSetProvider() returns an array with at least 
+     * one invalid data.
+     */
+    public function testCreateInvalidDataSetProviderReturnsAtLeastOneInvalidData(): void
+    {
+        $dataSet = ParameterDeclarationProvider::createInvalidDataSetProvider();
+        self::assertTrue(\count($dataSet) > 0);
+    }
 }
 
