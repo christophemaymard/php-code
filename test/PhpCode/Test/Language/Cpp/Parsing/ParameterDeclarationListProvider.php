@@ -189,5 +189,139 @@ class ParameterDeclarationListProvider
         
         return $data;
     }
+    
+    /**
+     * Returns a set of invalid data for the provider.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSetProvider(): array
+    {
+        $dataSet = [];
+        
+        $dataSet[] = self::createEmptyInvalidData();
+        
+        foreach (ParameterDeclarationProvider::createValidDataSet() as $prmDeclData) {
+            $dataSet[] = self::createFirstParamMissingInvalidData($prmDeclData);
+            $dataSet[] = self::createSecondParamMissingInvalidData($prmDeclData);
+            $dataSet[] = self::createLastParamMissingInvalidData($prmDeclData);
+        }
+        
+        $dataSet[] = self::createEllipsisInvalidData();
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * Empty string
+     * 
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createEmptyInvalidData(): InvalidData
+    {
+        $stream = '';
+        $message = 'Unexpected "", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Empty string');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * The first parameter is missing
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createFirstParamMissingInvalidData(
+        ValidData $prmDeclData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            ',%s,%s', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $message = 'Unexpected ",", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('First parameter is missing');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * The second parameter is missing
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createSecondParamMissingInvalidData(
+        ValidData $prmDeclData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s,,%s', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $message = 'Unexpected ",", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Second parameter is missing');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * The last parameter is missing
+     * 
+     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createLastParamMissingInvalidData(
+        ValidData $prmDeclData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s,%s,', 
+            $prmDeclData->getStream(), 
+            $prmDeclData->getStream()
+        );
+        $message = 'Unexpected "", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Last parameter is missing');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * Ellipsis, parseParameterDeclarationList() must not be called when 
+     * only ellipsis
+     * 
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createEllipsisInvalidData(): InvalidData
+    {
+        $stream = '...';
+        $message = 'Unexpected "...", expected decl-specifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Ellipsis, parseParameterDeclarationList() must not be called when only ellipsis');
+        
+        return $data;
+    }
 }
 
