@@ -118,5 +118,15 @@ class DeclarationSpecifierSequenceProviderTest extends TestCase
             );
         }
     }
+    
+    /**
+     * Tests createInvalidDataSetProvider() returns an array with at least 
+     * one invalid data.
+     */
+    public function testCreateInvalidDataSetProviderReturnsAtLeastOneInvalidData(): void
+    {
+        $dataSet = DeclarationSpecifierSequenceProvider::createInvalidDataSetProvider();
+        self::assertTrue(\count($dataSet) > 0);
+    }
 }
 
