@@ -7,7 +7,6 @@
  */
 namespace PhpCode\Test\Integration\Language\Cpp\Parsing\Parser;
 
-use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Parsing\Parser;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraint;
 use PhpCode\Test\Language\Cpp\Parsing\ParametersAndQualifiersProvider;
@@ -59,6 +58,7 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
      * 
      * @param   int     $standard   The standard to create the language context for.
      * @param   string  $stream     The stream to test.
+     * @param   string  $exception  The expected name of the exception.
      * @param   string  $message    The expected message of the exception.
      * 
      * @dataProvider    getInvalidStreamsProvider
@@ -66,13 +66,14 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
     public function testParseParametersAndQualifiersThrowsExceptionWhenInvalidStream(
         int $standard,
         string $stream,
+        string $exception, 
         string $message
     ): void
     {
         $lexer = $this->createLexer($standard, $stream);
         $sut = new Parser($lexer);
         
-        $this->expectException(FormatException::class);
+        $this->expectException($exception);
         $this->expectExceptionMessage($message);
         $sut->parseParametersAndQualifiers();
     }
@@ -99,78 +100,15 @@ class ParametersAndQualifiersParserTest extends AbstractParserTest
      * 
      * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
      *                  [0] is the standard to create the language context for, 
-     *                  [1] is the stream to test, and 
-     *                  [2] is the expected message of the exception.
+     *                  [1] is the stream to test,  
+     *                  [2] is the expected name of the exception, and 
+     *                  [3] is the expected message of the exception.
      */
     public function getInvalidStreamsProvider(): array
     {
-        $dataSet = [
-            // General.
-            
-            'Empty string' => [
-                [ 1, 2, 4, 8, ],
-                '', 
-                'Missing "(" before "".', 
-            ], 
-            'No close parenthesis' => [
-                [ 1, 2, 4, 8, ],
-                '(', 
-                'Missing ")" before "".', 
-            ], 
-            'No open parenthesis' => [
-                [ 1, 2, 4, 8, ],
-                ')', 
-                'Missing "(" before ")".', 
-            ], 
-            'Close parenthesis before open parenthesis' => [
-                [ 1, 2, 4, 8, ],
-                ')(', 
-                'Missing "(" before ")".', 
-            ], 
-            
-            // Parameter is missing.
-            
-            '3 parameters "(, int, int)" first is missing' => [
-                [ 1, 2, 4, 8, ], 
-                '(, int, int)', 
-                'Missing ")" before ",".', 
-            ], 
-            '3 parameters "(int, , int)" second is missing' => [
-                [ 1, 2, 4, 8, ], 
-                '(int, , int)', 
-                'Unexpected ",", expected decl-specifier.', 
-            ], 
-            '3 parameters "(int, int,)" third is missing' => [
-                [ 1, 2, 4, 8, ], 
-                '(int, int,)', 
-                'Unexpected ")", expected decl-specifier.', 
-            ], 
-            
-            // Position of the ellipsis.
-            
-            'ELLIPSIS param "(... int)"' => [
-                [ 1, 2, 4, 8, ], 
-                '(... int)', 
-                'Missing ")" before "int".', 
-            ], 
-            'ELLIPSIS COMMA param "(..., int)"' => [
-                [ 1, 2, 4, 8, ], 
-                '(..., int)', 
-                'Missing ")" before ",".', 
-            ], 
-            'Param COMMA ELLIPSIS param "(int, ... int)"' => [
-                [ 1, 2, 4, 8, ], 
-                '(int, ... int)', 
-                'Missing ")" before "int".', 
-            ], 
-            'Param COMMA ELLIPSIS COMMA param "(int, ..., int)"' => [
-                [ 1, 2, 4, 8, ], 
-                '(int, ..., int)', 
-                'Missing ")" before ",".', 
-            ], 
-        ];
-        
-        return $this->createInvalidStreamsProvider($dataSet);
+        return $this->createInvalidStreamsProvider(
+            ParametersAndQualifiersProvider::createInvalidDataSetProvider()
+        );
     }
 }
 
