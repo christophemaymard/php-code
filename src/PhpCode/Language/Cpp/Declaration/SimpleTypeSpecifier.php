@@ -12,11 +12,21 @@ namespace PhpCode\Language\Cpp\Declaration;
  * 
  * simple-type-specifier:
  *     int
+ *     float
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
 class SimpleTypeSpecifier
 {
+    private const ST_INT = 1;
+    private const ST_FLOAT = 2;
+    
+    /**
+     * The type of this simple type specifier.
+     * @var int
+     */
+    private $type;
+    
     /**
      * Creates an instance of a simple type specifier defined as "int".
      * 
@@ -25,6 +35,20 @@ class SimpleTypeSpecifier
     public static function createInt(): self
     {
         $stSpec = new self();
+        $stSpec->type = self::ST_INT;
+        
+        return $stSpec;
+    }
+    
+    /**
+     * Creates an instance of a simple type specifier defined as "float".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createFloat(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_FLOAT;
         
         return $stSpec;
     }
@@ -43,7 +67,17 @@ class SimpleTypeSpecifier
      */
     public function isInt(): bool
     {
-        return TRUE;
+        return $this->type == self::ST_INT;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "float".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "float", otherwise FALSE.
+     */
+    public function isFloat(): bool
+    {
+        return $this->type == self::ST_FLOAT;
     }
 }
 

@@ -42,6 +42,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createFloat() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateFloatReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createFloat();
+        $stSpec2 = SimpleTypeSpecifier::createFloat();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns TRUE when the instance has been created by 
      * createInt().
      */
@@ -49,6 +59,36 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $sut = SimpleTypeSpecifier::createInt();
         self::assertTrue($sut->isInt());
+    }
+    
+    /**
+     * Tests that isInt() returns FALSE when the instance has been created by 
+     * createFloat().
+     */
+    public function testIsIntReturnsFalseWhenCreateFloat(): void
+    {
+        $sut = SimpleTypeSpecifier::createFloat();
+        self::assertFalse($sut->isInt());
+    }
+    
+    /**
+     * Tests that isFloat() returns FALSE when the instance has been created by 
+     * createInt().
+     */
+    public function testIsFloatReturnsFalseWhenCreateInt(): void
+    {
+        $sut = SimpleTypeSpecifier::createInt();
+        self::assertFalse($sut->isFloat());
+    }
+    
+    /**
+     * Tests that isFloat() returns TRUE when the instance has been created by 
+     * createFloat().
+     */
+    public function testIsFloatReturnsTrueWhenCreateFloat(): void
+    {
+        $sut = SimpleTypeSpecifier::createFloat();
+        self::assertTrue($sut->isFloat());
     }
 }
 
