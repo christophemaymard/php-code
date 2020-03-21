@@ -116,7 +116,7 @@ class ParameterDeclarationListProvider
             '%s, %s, %s', 
             $prmDeclName, 
             $prmDeclName, 
-            $prmDeclName, 
+            $prmDeclName
         ));
         
         return $data;
