@@ -9,6 +9,7 @@ namespace PhpCode\Language\Cpp\Mangling;
 
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Declarator\Declarator;
+use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Lexical\Tag;
 use PhpCode\Language\Cpp\Parsing\Parser;
@@ -135,14 +136,36 @@ class ItaniumMangler
         $prmQual = $noptrDcltor->getParametersAndQualifiers();
         $prmDeclClause = $prmQual->getParameterDeclarationClause();
         
-        if ($prmDeclClause->hasEllipsis()) {
+        $mangledName = '';
+        
+        if ($prmDeclClause->hasParameterDeclarationList()) {
+            $prmDeclList = $prmDeclClause->getParameterDeclarationList();
+            
+            foreach ($prmDeclList->getParameterDeclarations() as $prmDecl) {
+                $mangledName .= $this->mangleTypeParameterDeclaration($prmDecl);
+            }
+            
+            if ($prmDeclClause->hasEllipsis()) {
+                $mangledName .= 'z';
+            }
+        } elseif ($prmDeclClause->hasEllipsis()) {
             $mangledName = 'z';
         } else {
             $mangledName = 'v';
         }
         
-        
         return $mangledName;
+    }
+    
+    /**
+     * Mangles a type from the specified parameter declaration.
+     * 
+     * @param   ParameterDeclaration    $prmDecl    The parameter declaration to use.
+     * @return  string
+     */
+    private function mangleTypeParameterDeclaration(ParameterDeclaration $prmDecl): string
+    {
+        return 'i';
     }
     
     /**

@@ -86,7 +86,7 @@ class FunctionItaniumManglerTest extends TestCase
     {
         $dataSet = [
             [
-                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( )', 
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID (  )', 
                 'main()', 
                 [ 1, 2, 4, 8, ], 
                 '_Z4mainv', 
@@ -96,6 +96,42 @@ class FunctionItaniumManglerTest extends TestCase
                 'main(...)', 
                 [ 1, 2, 4, 8, ], 
                 '_Z4mainz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 )', 
+                'main(int)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4maini', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , ... )', 
+                'main(int,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainiz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 ... )', 
+                'main(int ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainiz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'main(int,int,int)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainiii', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'main(int,int,int,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainiiiz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'main(int,int,int ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainiiiz', 
             ], 
         ];
         

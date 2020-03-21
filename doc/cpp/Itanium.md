@@ -102,6 +102,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 | Rule             | Definitions | Comments |
 |:-----------------|:------------|:---------|
 | **builtin-type** | **v**       | void     |
+|                  | **i**       | int      |
 |                  | **z**       | ellipsis |
 
 
