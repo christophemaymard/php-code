@@ -98,7 +98,6 @@ class Parser
      * @return  Declarator
      * 
      * @throws  FormatException When an identifier is expected.
-     * @throws  FormatException When an identifier is unexpected.
      */
     public function parseDeclarator(): Declarator
     {
@@ -111,11 +110,6 @@ class Parser
         $uid = UnqualifiedId::createIdentifier($id);
         $idExpr = IdExpression::createUnqualifiedId($uid);
         $did = new DeclaratorId($idExpr);
-        
-        if ($this->tokenIs(Tag::ID)) {
-            throw new FormatException(\sprintf('Unexpected identifier "%s".', $this->tkn->getLexeme()));
-        }
-        
         $noptrDcltor = NoptrDeclarator::createDeclaratorId($did);
         
         if ($this->tokenIs(Tag::PN_PAREN_L)) {

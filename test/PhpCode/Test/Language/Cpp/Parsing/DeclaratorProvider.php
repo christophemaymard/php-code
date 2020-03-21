@@ -33,6 +33,7 @@ class DeclaratorProvider
         foreach ($didDataSet as $didData) {
             $dataSet[] = self::createNoOpenErrorValidData($didData);
             $dataSet[] = self::createCloseBeforeOpenErrorValidData($didData);
+            $dataSet[] = self::createDeclaratorIdIdErrorValidData($didData);
         }
         
         $prmQualDataSet = ParametersAndQualifiersProvider::createValidDataSet();
@@ -112,6 +113,40 @@ class DeclaratorProvider
         
         $data->setToken(')', 208000);
         $data->setName('Close parenthesis before open parenthesis');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates a valid data for the case:
+     * Identifier after declarator identifier
+     * 
+     * In other context, it should be an error.
+     * 
+     * @param   ValidData   $didData    The declarator identifier data used to create the data.
+     * @return  ValidData   The created instance of ValidData.
+     */
+    private static function createDeclaratorIdIdErrorValidData(ValidData $didData): ValidData
+    {
+        $stream = \sprintf('%s foo', $didData->getStream());
+        $firstTokenLexeme = $didData->getFirstTokenLexeme();
+        
+        $didFactory = $didData->getConstraintFactory();
+        $callable = function () use ($didFactory) {
+            return DeclaratorConstraint::createPtrDeclarator(
+                new PtrDeclaratorConstraint(
+                    NoptrDeclaratorConstraint::createDeclaratorId(
+                        $didFactory->createConstraint()
+                    )
+                )
+            );
+        };
+        $factory = new CallableConceptConstraintFactory($callable);
+        
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
+        
+        $data->setToken('foo', 2);
+        $data->setName('Identifier after declarator identifier');
         
         return $data;
     }
@@ -205,10 +240,6 @@ class DeclaratorProvider
         $didDataSet = DeclaratorIdProvider::createValidDataSet();
         
         foreach ($didDataSet as $didData) {
-            $dataSet[] = self::createDeclaratorIdIdInvalidData($didData);
-        }
-        
-        foreach ($didDataSet as $didData) {
             $dataSet[] = self::createNoCloseInvalidData($didData);
         }
         
@@ -252,25 +283,6 @@ class DeclaratorProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Empty string');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Identifier after declarator identifier
-     * 
-     * @param   ValidData   $didData    The declarator identifier data used to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createDeclaratorIdIdInvalidData(ValidData $didData): InvalidData
-    {
-        $stream = \sprintf('%s foo', $didData->getStream());
-        $message = 'Unexpected identifier "foo".';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Identifier after declarator identifier');
         
         return $data;
     }

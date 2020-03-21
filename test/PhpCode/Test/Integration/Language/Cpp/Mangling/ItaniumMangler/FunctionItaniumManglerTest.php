@@ -136,6 +136,15 @@ class FunctionItaniumManglerTest extends TestCase
                 FormatException::class, 
                 'The name has not been parsed entirely, unexpected ")".', 
             ];
+            
+            // Identifier after declarator identifier.
+            $invalidDataSet[] = [
+                'Name not parsed entirely, identifier after declarator identifier', 
+                \sprintf('%s foo', $didData->getStream()), 
+                $didData->getStandards(), 
+                FormatException::class, 
+                'The name has not been parsed entirely, unexpected "foo".', 
+            ];
         }
         
         // The declarator does not have parameters-and-qualifiers.
