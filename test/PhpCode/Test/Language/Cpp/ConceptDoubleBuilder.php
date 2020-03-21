@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Language\Cpp;
 
+use PhpCode\Test\Language\Cpp\Declaration\DefiningTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\SimpleTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\TypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
@@ -81,6 +82,18 @@ class ConceptDoubleBuilder
     public static function createParametersAndQualifiers(TestCase $testCase): ParametersAndQualifiersDoubleBuilder
     {
         return new ParametersAndQualifiersDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  DefiningTypeSpecifierDoubleBuilder  The created instance of DefiningTypeSpecifierDoubleBuilder.
+     */
+    public static function createDefiningTypeSpecifier(TestCase $testCase): DefiningTypeSpecifierDoubleBuilder
+    {
+        return new DefiningTypeSpecifierDoubleBuilder($testCase);
     }
     
     /**
