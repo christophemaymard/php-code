@@ -11,6 +11,7 @@ use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraintDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraintDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -67,6 +68,18 @@ class ConceptConstraintDoubleBuilder
     public static function createParametersAndQualifiersConstraint(TestCase $testCase): ParametersAndQualifiersConstraintDoubleBuilder
     {
         return new ParametersAndQualifiersConstraintDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  UnqualifiedIdConstraintDoubleBuilder    The created instance of UnqualifiedIdConstraintDoubleBuilder.
+     */
+    public static function createUnqualifiedIdConstraint(TestCase $testCase): UnqualifiedIdConstraintDoubleBuilder
+    {
+        return new UnqualifiedIdConstraintDoubleBuilder($testCase);
     }
     
     /**
