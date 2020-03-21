@@ -8,9 +8,7 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
-use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
-use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
-use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -252,23 +250,17 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     private function createDeclarationSpecifierIntDouble(bool $isInt): ProphecySubjectInterface
     {
-        $stSpecProphecy = $this->prophesize(SimpleTypeSpecifier::class);
-        $stSpecProphecy
-            ->isInt()
-            ->willReturn($isInt);
-        $stSpec = $stSpecProphecy->reveal();
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this)
+            ->buildIsInt($isInt)
+            ->getDouble();
         
-        $typeSpecProphecy = $this->prophesize(TypeSpecifier::class);
-        $typeSpecProphecy
-            ->getSimpleTypeSpecifier()
-            ->willReturn($stSpec);
-        $typeSpec = $typeSpecProphecy->reveal();
+        $typeSpec = ConceptDoubleBuilder::createTypeSpecifier($this)
+            ->buildGetSimpleTypeSpecifier($stSpec)
+            ->getDouble();
         
-        $defTypeSpecProphecy = $this->prophesize(DefiningTypeSpecifier::class);
-        $defTypeSpecProphecy
-            ->getTypeSpecifier()
-            ->willReturn($typeSpec);
-        $defTypeSpec = $defTypeSpecProphecy->reveal();
+        $defTypeSpec = ConceptDoubleBuilder::createDefiningTypeSpecifier($this)
+            ->buildGetTypeSpecifier($typeSpec)
+            ->getDouble();
         
         return $this->declSpecFactory->createGetDefiningTypeSpecifier($defTypeSpec);
     }

@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
-use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +38,7 @@ class DeclarationSpecifierTest extends TestCase
      */
     public function testCreateDefiningTypeSpecifierReturnsNewInstanceDeclarationSpecifier(): void
     {
-        $defTypeSpec = $this->prophesize(DefiningTypeSpecifier::class)->reveal();
+        $defTypeSpec = ConceptDoubleBuilder::createDefiningTypeSpecifier($this)->getDouble();
         
         $declSpec1 = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
         $declSpec2 = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
@@ -52,7 +52,7 @@ class DeclarationSpecifierTest extends TestCase
      */
     public function testGetDefiningTypeSpecifierReturnsDefiningTypeSpecifierWhenCreateDefiningTypeSpecifier(): void
     {
-        $defTypeSpec = $this->prophesize(DefiningTypeSpecifier::class)->reveal();
+        $defTypeSpec = ConceptDoubleBuilder::createDefiningTypeSpecifier($this)->getDouble();
         
         $sut = DeclarationSpecifier::createDefiningTypeSpecifier($defTypeSpec);
         self::assertSame($defTypeSpec, $sut->getDefiningTypeSpecifier());

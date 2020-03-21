@@ -7,8 +7,8 @@
  */
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
-use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +38,7 @@ class TypeSpecifierTest extends TestCase
      */
     public function testCreateSimpleTypeSpecifierReturnsNewInstanceTypeSpecifier(): void
     {
-        $stSpec = $this->prophesize(SimpleTypeSpecifier::class)->reveal();
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this)->getDouble();
         
         $typeSpec1 = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
         $typeSpec2 = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
@@ -52,7 +52,7 @@ class TypeSpecifierTest extends TestCase
      */
     public function testGetSimpleTypeSpecifierReturnsSimpleTypeSpecifierWhenCreateSimpleTypeSpecifier(): void
     {
-        $stSpec = $this->prophesize(SimpleTypeSpecifier::class)->reveal();
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this)->getDouble();
         
         $sut = TypeSpecifier::createSimpleTypeSpecifier($stSpec);
         self::assertSame($stSpec, $sut->getSimpleTypeSpecifier());
