@@ -7,8 +7,8 @@
  */
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Lexical;
 
-use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Test\Language\Cpp\Lexical\IsTokenEqualConstraint;
+use PhpCode\Test\Language\Cpp\Lexical\TokenInterfaceDoubleBuilder;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -49,11 +49,9 @@ class IsTokenEqualConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenLexemeIsNotSame(): void
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy
-            ->getLexeme()
-            ->willReturn('bar');
-        $token = $tokenProphecy->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()
+            ->buildGetLexeme('bar')
+            ->getDouble();
         
         $sut = new IsTokenEqualConstraint('foo', 2);
         self::assertFalse($sut->evaluate($token, '', TRUE));
@@ -64,14 +62,10 @@ class IsTokenEqualConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenTagIsNotSame(): void
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy
-            ->getLexeme()
-            ->willReturn('foo');
-        $tokenProphecy
-            ->getTag()
-            ->willReturn(9);
-        $token = $tokenProphecy->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()
+            ->buildGetLexeme('foo')
+            ->buildGetTag(9)
+            ->getDouble();
         
         $sut = new IsTokenEqualConstraint('foo', 2);
         self::assertFalse($sut->evaluate($token, '', TRUE));
@@ -82,14 +76,10 @@ class IsTokenEqualConstraintTest extends TestCase
      */
     public function testMatchesReturnsTrueWhenTokenIsEqual(): void
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy
-            ->getLexeme()
-            ->willReturn('foo');
-        $tokenProphecy
-            ->getTag()
-            ->willReturn(2);
-        $token = $tokenProphecy->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()
+            ->buildGetLexeme('foo')
+            ->buildGetTag(2)
+            ->getDouble();
         
         $sut = new IsTokenEqualConstraint('foo', 2);
         self::assertTrue($sut->evaluate($token, '', TRUE));
@@ -116,14 +106,10 @@ class IsTokenEqualConstraintTest extends TestCase
      */
     public function testFailureDescriptionIsCalledWhenLexemeIsNotSame(): void
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy
-            ->getLexeme()
-            ->willReturn('bar');
-        $tokenProphecy
-            ->getTag()
-            ->willReturn(9);
-        $token = $tokenProphecy->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()
+            ->buildGetLexeme('bar')
+            ->buildGetTag(9)
+            ->getDouble();
         
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches(
@@ -139,14 +125,10 @@ class IsTokenEqualConstraintTest extends TestCase
      */
     public function testFailureDescriptionIsCalledWhenTagIsNotSame(): void
     {
-        $tokenProphecy = $this->prophesize(TokenInterface::class);
-        $tokenProphecy
-            ->getLexeme()
-            ->willReturn('foo');
-        $tokenProphecy
-            ->getTag()
-            ->willReturn(9);
-        $token = $tokenProphecy->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()
+            ->buildGetLexeme('foo')
+            ->buildGetTag(9)
+            ->getDouble();
         
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches(
@@ -155,6 +137,16 @@ class IsTokenEqualConstraintTest extends TestCase
         
         $sut = new IsTokenEqualConstraint('foo', 2);
         self::assertFalse($sut->evaluate($token, '', FALSE));
+    }
+    
+    /**
+     * Creates a builder of TokenInterface double.
+     * 
+     * @return  TokenInterfaceDoubleBuilder
+     */
+    private function createTokenInterfaceDoubleBuilder(): TokenInterfaceDoubleBuilder
+    {
+        return new TokenInterfaceDoubleBuilder($this);
     }
 }
 

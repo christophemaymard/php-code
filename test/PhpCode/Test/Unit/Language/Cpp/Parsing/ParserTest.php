@@ -8,8 +8,8 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Parsing;
 
 use PhpCode\Language\Cpp\Lexical\LexerInterface;
-use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Language\Cpp\Parsing\Parser;
+use PhpCode\Test\Language\Cpp\Lexical\TokenInterfaceDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
@@ -29,16 +29,26 @@ class ParserTest extends TestCase
      */
     public function test__constructCallsLookAhead(): void
     {
-        $tokenDummy = $this->prophesize(TokenInterface::class)->reveal();
+        $token = $this->createTokenInterfaceDoubleBuilder()->getDouble();
         
         $lexerProphecy = $this->prophesize(LexerInterface::class);
         $lexerProphecy
             ->lookAhead(Argument::is(1))
-            ->willReturn($tokenDummy)
+            ->willReturn($token)
             ->shouldBeCalled();
         $lexer = $lexerProphecy->reveal();
         
         $sut = new Parser($lexer);
+    }
+    
+    /**
+     * Creates a builder of TokenInterface double.
+     * 
+     * @return  TokenInterfaceDoubleBuilder
+     */
+    private function createTokenInterfaceDoubleBuilder(): TokenInterfaceDoubleBuilder
+    {
+        return new TokenInterfaceDoubleBuilder($this);
     }
 }
 
