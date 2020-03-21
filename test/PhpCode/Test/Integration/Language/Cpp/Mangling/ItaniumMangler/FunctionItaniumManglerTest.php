@@ -11,6 +11,8 @@ use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Mangling\ItaniumMangler;
 use PhpCode\Language\Cpp\Specification\LanguageContextFactory;
 use PhpCode\Test\Language\Cpp\Specification;
+use PhpCode\Test\Language\Cpp\Parsing\DeclaratorIdProvider;
+use PhpCode\Test\Language\Cpp\Parsing\DeclaratorProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,13 +51,15 @@ class FunctionItaniumManglerTest extends TestCase
      * 
      * @param   int     $standard   The standard to create the language context for.
      * @param   string  $name       The name to test.
+     * @param   string  $exception  The expected name of the exception.
      * @param   string  $message    The expected message of the exception.
      * 
      * @dataProvider    getInvalidNamesProvider
      */
-    public function testMangleFunctionThrowsExceptionWhenInvalidStream(
+    public function testMangleFunctionThrowsExceptionWhenNameIsInvalid(
         int $standard,
         string $name,
+        string $exception, 
         string $message
     ): void
     {
@@ -64,23 +68,10 @@ class FunctionItaniumManglerTest extends TestCase
         
         $sut = new ItaniumMangler($ctx);
         
-        $this->expectException(FormatException::class);
+        $this->expectException($exception);
         $this->expectExceptionMessage($message);
         
         $sut->mangleFunction($name);
-    }
-    
-    /**
-     * Returns a set of invalid names.
-     * 
-     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where 
-     *                  [0] is the standard to create the language context for, 
-     *                  [1] is the name to test, and 
-     *                  [2] is the expected message of the exception.
-     */
-    public function getInvalidNamesProvider(): array
-    {
-        return $this->getDatasetFromCsvFile('function_names_invalid.csv');
     }
     
     /**
@@ -93,49 +84,152 @@ class FunctionItaniumManglerTest extends TestCase
      */
     public function getValidNamesProvider(): array
     {
-        return $this->getDatasetFromCsvFile('function_names_valid.csv');
+        $dataSet = [
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( )', 
+                'main()', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainv', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( ... )', 
+                'main(...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainz', 
+            ], 
+        ];
+        
+        return $this->createValidNamesProvider($dataSet);
     }
     
     /**
-     * Returns the dataset from the specified CSV file.
+     * Returns a set of invalid names.
      * 
-     * @param   string  $fileName   The name of the CSV file to parse.
      * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where 
      *                  [0] is the standard to create the language context for, 
-     *                  [1] is the name to test, and 
-     *                  [2] is the expected mangled name (valid names) or the expected message of the exception (invalid names).
+     *                  [1] is the name to test, 
+     *                  [2] is the expected name of the exception, and 
+     *                  [3] is the expected message of the exception.
      */
-    private function getDatasetFromCsvFile(string $fileName): array
+    public function getInvalidNamesProvider(): array
     {
-        $contents =  \file_get_contents(
-            __DIR__.'/../../../../../../../../res/cpp/test/mangling/'.$fileName
-        );
+        $invalidDataSet = [];
         
-        $fieldCount = 4;
-        $dataset = [];
+        $didDataSet = DeclaratorIdProvider::createValidDataSet();
         
-        foreach (\explode("\n", $contents) as $line) {
-            $fields = \explode("\t", $line, $fieldCount);
+        // Name not parsed entirely.
+        foreach ($didDataSet as $didData) {
+            // No open parenthesis.
+            $invalidDataSet[] = [
+                'Name not parsed entirely, no open parenthesis', 
+                \sprintf('%s)', $didData->getStream()), 
+                $didData->getStandards(), 
+                FormatException::class, 
+                'The name has not been parsed entirely, unexpected ")".', 
+            ];
             
-            if (\count($fields) != $fieldCount) {
-                continue;
+            // Close parenthesis before open parenthesis.
+            $invalidDataSet[] = [
+                'Name not parsed entirely, close parenthesis before open parenthesis', 
+                \sprintf('%s)(', $didData->getStream()), 
+                $didData->getStandards(), 
+                FormatException::class, 
+                'The name has not been parsed entirely, unexpected ")".', 
+            ];
+        }
+        
+        // The declarator does not have parameters-and-qualifiers.
+        foreach ($didDataSet as $didData) {
+            $invalidDataSet[] = [
+                \sprintf('No parameters-and-qualifiers %s', $didData->getName()), 
+                $didData->getStream(), 
+                $didData->getStandards(), 
+                FormatException::class, 
+                'The declarator does not have parameters-and-qualifiers.', 
+            ];
+        }
+        
+        foreach (DeclaratorProvider::createInvalidDataSetProvider() as $invalidData) {
+            $invalidDataSet[] = [
+                $invalidData->getName(), 
+                $invalidData->getStream(), 
+                $invalidData->getStandards(), 
+                $invalidData->getExceptionName(), 
+                $invalidData->getExceptionMessage(), 
+            ];
+        }
+        
+        return $this->createInvalidNamesProvider($invalidDataSet);
+    }
+    
+    /**
+     * Creates a set of valid names.
+     * 
+     * @param   array[] $validDataSet   The data set used to create a set of valid names.
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the name to test, and 
+     *                  [2] is the expected mangled name.
+     */
+    private function createValidNamesProvider(array $validDataSet): array
+    {
+        $dataSet = [];
+        
+        foreach ($validDataSet as list($vdsName, $name, $stds, $mangledName)) {
+            $dsNameFmt = "\n%s: NAME \"%s\"\n";
+            
+            if ($vdsName !== '') {
+                $dsNameFmt .= $vdsName."\n";
             }
             
-            list($dsName, $stds, $messageOrMangledName, $name) = $fields;
-            
-            foreach (\explode(' ', $stds) as $standardString) {
-                $standard = (int)$standardString;
+            foreach ($stds as $std) {
+                $dsName = \sprintf($dsNameFmt, Specification::STANDARDS[$std], $name);
                 
-                $datasetName = \sprintf('%s: %s', Specification::STANDARDS[$standard], $dsName);
-                $dataset[$datasetName] = [
-                    $standard, 
+                $dataSet[$dsName] = [
+                    $std, 
                     $name, 
-                    $messageOrMangledName, 
+                    $mangledName, 
                 ];
             }
         }
         
-        return $dataset;
+        return $dataSet;
+    }
+    
+    /**
+     * Creates a set of invalid names.
+     * 
+     * @param   array[] $invalidDataSet The data set used to create a set of invalid names.
+     * @return  array[] An associative array where the key is the name of the data set and the value is an indexed array where:
+     *                  [0] is the standard to create the language context for, 
+     *                  [1] is the name to test,  
+     *                  [2] is the expected name of the exception, and 
+     *                  [3] is the expected message of the exception.
+     */
+    private function createInvalidNamesProvider(array $invalidDataSet): array
+    {
+        $dataSet = [];
+        
+        foreach ($invalidDataSet as list($idsName, $name, $stds, $exceptionName, $exceptionMessage)) {
+            $dsNameFmt = "\n%s: NAME \"%s\"\n";
+            
+            if ($idsName !== '') {
+                $dsNameFmt .= $idsName."\n";
+            }
+            
+            foreach ($stds as $std) {
+                $dsName = \sprintf($dsNameFmt, Specification::STANDARDS[$std], $name);
+                
+                $dataSet[$dsName] = [
+                    $std, 
+                    $name, 
+                    $exceptionName, 
+                    $exceptionMessage, 
+                ];
+            }
+        }
+        
+        return $dataSet;
     }
 }
 

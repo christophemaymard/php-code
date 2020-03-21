@@ -1,2 +1,0 @@
-No parameters-and-qualifiers	1 2 4 8	The declarator does not have parameters-and-qualifiers.	main
-Name not parsed entirely	1 2 4 8	The name has not been parsed entirely, unexpected "#".	main() #
