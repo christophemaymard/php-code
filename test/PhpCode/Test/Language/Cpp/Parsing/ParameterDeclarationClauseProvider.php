@@ -137,7 +137,7 @@ class ParameterDeclarationClauseProvider
      */
     private static function createListEllipsisValidData(ValidData $listData): ValidData
     {
-        $stream = \sprintf('%s, ...', $listData->getStream());
+        $stream = \sprintf('%s,...', $listData->getStream());
         $firstTokenLexeme = $listData->getFirstTokenLexeme();
         
         $listFactory = $listData->getConstraintFactory();
@@ -154,7 +154,7 @@ class ParameterDeclarationClauseProvider
         
         $data = new ValidData($stream, $factory, $firstTokenLexeme);
         
-        $data->setName(\sprintf('%s, ...', $listData->getName()));
+        $data->setName(\sprintf('%s , ...', $listData->getName()));
         
         return $data;
     }

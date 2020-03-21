@@ -113,7 +113,7 @@ class ParameterDeclarationListProvider
         
         $prmDeclName = $prmDeclData->getName();
         $data->setName(\sprintf(
-            '%s, %s, %s', 
+            '%s , %s , %s', 
             $prmDeclName, 
             $prmDeclName, 
             $prmDeclName
