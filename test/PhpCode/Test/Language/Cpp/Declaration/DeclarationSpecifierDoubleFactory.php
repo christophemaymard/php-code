@@ -47,6 +47,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
         
         $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
             ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -71,6 +72,32 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
         
         $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
             ->buildIsInt(TRUE)
+            ->buildIsFloat(FALSE)
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * -> getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as "float".
+     * 
+     * @return  ProphecySubjectInterface
+     */
+    public function createFloatSimpleTypeSpecifier(): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(TRUE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
