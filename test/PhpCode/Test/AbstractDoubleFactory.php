@@ -8,7 +8,6 @@
 namespace PhpCode\Test;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
@@ -18,20 +17,8 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-abstract class AbstractDoubleFactory
+abstract class AbstractDoubleFactory extends AbstractDoubleCreator
 {
-    /**
-     * The factory of prophecies.
-     * @var ProphecyFactory
-     */
-    private $prophecyFactory;
-    
-    /**
-     * The class name of the constraint to prophesize.
-     * @var string
-     */
-    private $className;
-    
     /**
      * Constructor.
      * 
@@ -39,16 +26,8 @@ abstract class AbstractDoubleFactory
      */
     public function __construct(TestCase $testCase)
     {
-        $this->prophecyFactory = new ProphecyFactory($testCase);
-        $this->className = $this->getClassName();
+        $this->initCreator($testCase);
     }
-    
-    /**
-     * Returns the name of the class to prophesize.
-     * 
-     * @return  string
-     */
-    abstract protected function getClassName(): string;
     
     /**
      * Creates a dummy.
@@ -57,17 +36,7 @@ abstract class AbstractDoubleFactory
      */
     public function createDummy(): ProphecySubjectInterface
     {
-        return $this->prophesize()->reveal();
-    }
-    
-    /**
-     * Creates a prophecy.
-     * 
-     * @return  ObjectProphecy
-     */
-    protected function prophesize(): ObjectProphecy
-    {
-        return $this->prophecyFactory->createProphecy($this->className);
+        return $this->prophesizeSubject()->reveal();
     }
 }
 

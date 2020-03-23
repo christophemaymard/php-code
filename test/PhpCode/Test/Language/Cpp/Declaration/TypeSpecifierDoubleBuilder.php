@@ -22,7 +22,7 @@ class TypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return TypeSpecifier::class;
     }
@@ -35,7 +35,7 @@ class TypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetSimpleTypeSpecifier(SimpleTypeSpecifier $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getSimpleTypeSpecifier()
             ->willReturn($return);
         

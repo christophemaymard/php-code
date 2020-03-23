@@ -20,7 +20,7 @@ class ParametersAndQualifiersConstraintDoubleBuilder extends AbstractConceptCons
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return ParametersAndQualifiersConstraint::class;
     }

@@ -21,7 +21,7 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return SimpleTypeSpecifier::class;
     }
@@ -34,7 +34,7 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildIsInt(bool $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->isInt()
             ->willReturn($return);
         
@@ -49,7 +49,7 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildIsFloat(bool $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->isFloat()
             ->willReturn($return);
         

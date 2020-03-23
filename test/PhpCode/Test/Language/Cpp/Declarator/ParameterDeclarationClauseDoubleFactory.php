@@ -23,7 +23,7 @@ class ParameterDeclarationClauseDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return ParameterDeclarationClause::class;
     }
@@ -38,7 +38,7 @@ class ParameterDeclarationClauseDoubleFactory extends AbstractDoubleFactory
         ParameterDeclarationList $return
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $prophecy
             ->getParameterDeclarationList()
             ->willReturn($return);
@@ -59,7 +59,7 @@ class ParameterDeclarationClauseDoubleFactory extends AbstractDoubleFactory
         ParameterDeclarationList $getPrmDeclList = NULL
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $prophecy
             ->getParameterDeclarationList()
             ->willReturn($getPrmDeclList);

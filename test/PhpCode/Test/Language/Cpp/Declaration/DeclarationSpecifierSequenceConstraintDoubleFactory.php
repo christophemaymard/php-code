@@ -22,7 +22,7 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return DeclarationSpecifierSequenceConstraint::class;
     }
@@ -39,7 +39,7 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
         bool $return
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         
         $this->buildMatches($prophecy, $declSpecSeq, $return);
         
@@ -60,7 +60,7 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
         string $failureReason
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $declSpecSeq, $matches);
         $this->buildFailureReason($prophecy, $declSpecSeq, $failureReason);
         
@@ -82,7 +82,7 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
         string $constDesc
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $declSpecSeq, $matches);
         $this->buildConstraintDescription($prophecy, $constDesc);
         
@@ -106,7 +106,7 @@ class DeclarationSpecifierSequenceConstraintDoubleFactory extends AbstractConcep
         string $constDesc
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $declSpecSeq, $matches);
         $this->buildFailureReason($prophecy, $declSpecSeq, $failureReason);
         $this->buildConstraintDescription($prophecy, $constDesc);

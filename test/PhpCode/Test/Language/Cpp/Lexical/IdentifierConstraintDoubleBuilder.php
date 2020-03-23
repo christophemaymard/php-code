@@ -20,7 +20,7 @@ class IdentifierConstraintDoubleBuilder extends AbstractConceptConstraintDoubleB
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return IdentifierConstraint::class;
     }

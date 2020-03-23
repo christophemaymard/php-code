@@ -24,7 +24,7 @@ class ParameterDeclarationListDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return ParameterDeclarationList::class;
     }
@@ -37,7 +37,7 @@ class ParameterDeclarationListDoubleFactory extends AbstractDoubleFactory
      */
     public function createCount(int $count): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildCount($prophecy, $count);
         
         return $prophecy->reveal();
@@ -56,7 +56,7 @@ class ParameterDeclarationListDoubleFactory extends AbstractDoubleFactory
         array $prmDecls
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildCount($prophecy, $count);
         
         $prophecy

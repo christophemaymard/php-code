@@ -21,7 +21,7 @@ class TokenInterfaceDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return TokenInterface::class;
     }
@@ -34,7 +34,7 @@ class TokenInterfaceDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetLexeme(string $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getLexeme()
             ->willReturn($return);
         
@@ -49,7 +49,7 @@ class TokenInterfaceDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetTag(int $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getTag()
             ->willReturn($return);
         

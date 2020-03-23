@@ -16,16 +16,10 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-abstract class AbstractDoubleBuilder
+abstract class AbstractDoubleBuilder extends AbstractDoubleCreator
 {
     /**
-     * The factory of prophecies.
-     * @var ProphecyFactory
-     */
-    private $prophecyFactory;
-    
-    /**
-     * The prophecy of the class or interface that is being built.
+     * The prophecy of the subject class or interface that is being built.
      * @var ObjectProphecy
      */
     private $prophecy;
@@ -37,16 +31,9 @@ abstract class AbstractDoubleBuilder
      */
     public function __construct(TestCase $testCase)
     {
-        $this->prophecyFactory = new ProphecyFactory($testCase);
-        $this->prophecy = $this->prophesize($this->getClassInterfaceName());
+        $this->initCreator($testCase);
+        $this->prophecy = $this->prophesizeSubject();
     }
-    
-    /**
-     * Returns the name of the class or interface to prophesize.
-     * 
-     * @return  string
-     */
-    abstract protected function getClassInterfaceName(): string;
     
     /**
      * Returns the double.
@@ -59,24 +46,14 @@ abstract class AbstractDoubleBuilder
     }
     
     /**
-     * Returns the prophecy of the class or interface that is being built.
+     * Returns the prophecy of the subject class or interface that is being 
+     * built.
      * 
      * @return  ObjectProphecy
      */
-    protected function getProphecy(): ObjectProphecy
+    protected function getSubjectProphecy(): ObjectProphecy
     {
         return $this->prophecy;
-    }
-    
-    /**
-     * Creates a prophecy of the specified class or interface.
-     * 
-     * @param   string  $classOrInterface   The name of the class or interface to prophesize.
-     * @return  ObjectProphecy
-     */
-    protected function prophesize(string $classOrInterface): ObjectProphecy
-    {
-        return $this->prophecyFactory->createProphecy($classOrInterface);
     }
 }
 

@@ -22,7 +22,7 @@ class ParametersAndQualifiersDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return ParametersAndQualifiers::class;
     }
@@ -38,7 +38,7 @@ class ParametersAndQualifiersDoubleBuilder extends AbstractDoubleBuilder
         ParameterDeclarationClause $return
     ): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getParameterDeclarationClause()
             ->willReturn($return);
         

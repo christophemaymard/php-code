@@ -26,7 +26,7 @@ abstract class AbstractConceptConstraintDoubleFactory extends AbstractDoubleFact
      */
     public function createConstraintDescription(string $return): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildConstraintDescription($prophecy, $return);
         
         return $prophecy->reveal();

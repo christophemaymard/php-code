@@ -22,7 +22,7 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return ParameterDeclarationConstraint::class;
     }
@@ -36,7 +36,7 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
      */
     public function createMatches(ParameterDeclaration $prmDecl, bool $return): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         
         $this->buildMatches($prophecy, $prmDecl, $return);
         
@@ -57,7 +57,7 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
         string $failureReason
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $prmDecl, $matches);
         $this->buildFailureReason($prophecy, $prmDecl, $failureReason);
         
@@ -79,7 +79,7 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
         string $constDesc
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $prmDecl, $matches);
         $this->buildConstraintDescription($prophecy, $constDesc);
         
@@ -103,7 +103,7 @@ class ParameterDeclarationConstraintDoubleFactory extends AbstractConceptConstra
         string $constDesc
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildMatches($prophecy, $prmDecl, $matches);
         $this->buildFailureReason($prophecy, $prmDecl, $failureReason);
         $this->buildConstraintDescription($prophecy, $constDesc);

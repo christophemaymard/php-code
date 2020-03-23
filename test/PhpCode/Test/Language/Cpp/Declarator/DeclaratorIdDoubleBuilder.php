@@ -22,7 +22,7 @@ class DeclaratorIdDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return DeclaratorId::class;
     }
@@ -35,7 +35,7 @@ class DeclaratorIdDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetIdExpression(IdExpression $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getIdExpression()
             ->willReturn($return);
         

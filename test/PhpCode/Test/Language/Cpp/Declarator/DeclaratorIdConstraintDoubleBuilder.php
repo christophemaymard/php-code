@@ -20,7 +20,7 @@ class DeclaratorIdConstraintDoubleBuilder extends AbstractConceptConstraintDoubl
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return DeclaratorIdConstraint::class;
     }

@@ -22,7 +22,7 @@ class IdentifierDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return Identifier::class;
     }
@@ -35,7 +35,7 @@ class IdentifierDoubleFactory extends AbstractDoubleFactory
      */
     public function createGetIdentifier(string $return): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $prophecy
             ->getIdentifier()
             ->willReturn($return);

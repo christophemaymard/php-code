@@ -20,7 +20,7 @@ class UnqualifiedIdConstraintDoubleBuilder extends AbstractConceptConstraintDoub
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return UnqualifiedIdConstraint::class;
     }

@@ -22,7 +22,7 @@ class DeclaratorDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return Declarator::class;
     }
@@ -35,7 +35,7 @@ class DeclaratorDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetPtrDeclarator(PtrDeclarator $return = NULL): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getPtrDeclarator()
             ->willReturn($return);
         

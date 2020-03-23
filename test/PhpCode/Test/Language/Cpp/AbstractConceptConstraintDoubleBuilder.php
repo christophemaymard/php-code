@@ -24,7 +24,7 @@ abstract class AbstractConceptConstraintDoubleBuilder extends AbstractDoubleBuil
      */
     public function buildToString(string $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->toString()
             ->willReturn($return);
         
@@ -39,7 +39,7 @@ abstract class AbstractConceptConstraintDoubleBuilder extends AbstractDoubleBuil
      */
     public function buildConstraintDescription(string $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->constraintDescription()
             ->willReturn($return);
         
@@ -55,7 +55,7 @@ abstract class AbstractConceptConstraintDoubleBuilder extends AbstractDoubleBuil
      */
     public function buildMatches($other, bool $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->matches($other)
             ->willReturn($return);
         
@@ -71,7 +71,7 @@ abstract class AbstractConceptConstraintDoubleBuilder extends AbstractDoubleBuil
      */
     public function buildFailureReason($other, string $return): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->failureReason($other)
             ->willReturn($return);
         

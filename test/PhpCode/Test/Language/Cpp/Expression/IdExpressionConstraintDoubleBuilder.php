@@ -20,7 +20,7 @@ class IdExpressionConstraintDoubleBuilder extends AbstractConceptConstraintDoubl
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return IdExpressionConstraint::class;
     }

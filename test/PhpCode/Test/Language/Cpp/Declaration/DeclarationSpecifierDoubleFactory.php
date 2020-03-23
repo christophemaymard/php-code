@@ -23,7 +23,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return DeclarationSpecifier::class;
     }
@@ -38,7 +38,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
         DefiningTypeSpecifier $defTypeSpec
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $prophecy
             ->getDefiningTypeSpecifier()
             ->willReturn($defTypeSpec);

@@ -23,7 +23,7 @@ class NoptrDeclaratorDoubleBuilder extends AbstractDoubleBuilder
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return NoptrDeclarator::class;
     }
@@ -36,7 +36,7 @@ class NoptrDeclaratorDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetDeclaratorId(DeclaratorId $return = NULL): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getDeclaratorId()
             ->willReturn($return);
         
@@ -51,7 +51,7 @@ class NoptrDeclaratorDoubleBuilder extends AbstractDoubleBuilder
      */
     public function buildGetParametersAndQualifiers(ParametersAndQualifiers $return = NULL): self
     {
-        $this->getProphecy()
+        $this->getSubjectProphecy()
             ->getParametersAndQualifiers()
             ->willReturn($return);
         

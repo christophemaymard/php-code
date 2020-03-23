@@ -24,7 +24,7 @@ class DeclarationSpecifierSequenceDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return DeclarationSpecifierSequence::class;
     }
@@ -37,7 +37,7 @@ class DeclarationSpecifierSequenceDoubleFactory extends AbstractDoubleFactory
      */
     public function createCount(int $count): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildCount($prophecy, $count);
         
         return $prophecy->reveal();
@@ -56,7 +56,7 @@ class DeclarationSpecifierSequenceDoubleFactory extends AbstractDoubleFactory
         array $declSpecs
     ): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $this->buildCount($prophecy, $count);
         
         $prophecy

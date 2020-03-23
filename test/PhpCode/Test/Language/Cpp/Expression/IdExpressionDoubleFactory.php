@@ -23,7 +23,7 @@ class IdExpressionDoubleFactory extends AbstractDoubleFactory
     /**
      * {@inheritDoc}
      */
-    protected function getClassName(): string
+    protected function getSubjectName(): string
     {
         return IdExpression::class;
     }
@@ -36,7 +36,7 @@ class IdExpressionDoubleFactory extends AbstractDoubleFactory
      */
     public function createGetUnqualifiedId(UnqualifiedId $return = NULL): ProphecySubjectInterface
     {
-        $prophecy = $this->prophesize();
+        $prophecy = $this->prophesizeSubject();
         $prophecy
             ->getUnqualifiedId()
             ->willReturn($return);

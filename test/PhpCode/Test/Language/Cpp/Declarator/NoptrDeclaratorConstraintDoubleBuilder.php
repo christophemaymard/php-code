@@ -20,7 +20,7 @@ class NoptrDeclaratorConstraintDoubleBuilder extends AbstractConceptConstraintDo
     /**
      * {@inheritDoc}
      */
-    protected function getClassInterfaceName(): string
+    protected function getSubjectName(): string
     {
         return NoptrDeclaratorConstraint::class;
     }
