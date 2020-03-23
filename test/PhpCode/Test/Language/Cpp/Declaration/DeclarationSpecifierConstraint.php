@@ -17,6 +17,15 @@ use PhpCode\Test\Language\Cpp\AbstractConceptConstraint;
  */
 class DeclarationSpecifierConstraint extends AbstractConceptConstraint
 {
+    private const ST_INT = 1;
+    private const ST_FLOAT = 2;
+    
+    /**
+     * The type of simple type specifier (one of ST_XXX constant values).
+     * @var int
+     */
+    private $stSpecType;
+    
     /**
      * Creates a constraint for a simple type specifier that is "int".
      * 
@@ -25,6 +34,20 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     public static function createInt(): self
     {
         $const = new self();
+        $const->stSpecType = self::ST_INT;
+        
+        return $const;
+    }
+    
+    /**
+     * Creates a constraint for a simple type specifier that is "float".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createFloat(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_FLOAT;
         
         return $const;
     }
@@ -69,7 +92,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             ->getTypeSpecifier()
             ->getSimpleTypeSpecifier();
         
-        return $stSpec->isInt();
+        return $this->stSpecType == self::ST_INT ? 
+            $stSpec->isInt() : 
+            $stSpec->isFloat();
     }
     
     /**
@@ -85,8 +110,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             ->getTypeSpecifier()
             ->getSimpleTypeSpecifier();
         
-        if (!$stSpec->isInt()) {
+        if ($this->stSpecType == self::ST_INT && !$stSpec->isInt()) {
             return $this->isReason(TRUE, 'simple type specifier "int"');
+        } elseif ($this->stSpecType == self::ST_FLOAT && !$stSpec->isFloat()) {
+            return $this->isReason(TRUE, 'simple type specifier "float"');
         }
         
         return $this->failureDefaultReason($other);
@@ -111,7 +138,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
      */
     private function getType(): string
     {
-        return 'Simple type specifier "int"';
+        return \sprintf(
+            'Simple type specifier "%s"', 
+            $this->stSpecType == self::ST_INT ? 'int' : 'float'
+        );
     }
 }
 

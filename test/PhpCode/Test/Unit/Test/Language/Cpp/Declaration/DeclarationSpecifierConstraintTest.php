@@ -25,19 +25,6 @@ use PHPUnit\Framework\TestCase;
 class DeclarationSpecifierConstraintTest extends TestCase
 {
     /**
-     * @var DeclarationSpecifierDoubleFactory
-     */
-    private $declSpecFactory;
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp(): void
-    {
-        $this->declSpecFactory = new DeclarationSpecifierDoubleFactory($this);
-    }
-    
-    /**
      * Tests that __construct() throws an exception.
      */
     public function test__constructThrowsException(): void
@@ -46,34 +33,50 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $this->expectExceptionMessageMatches('`private `');
         $sut = new DeclarationSpecifierConstraint();
     }
+    
     /**
-     * Tests that toString() returns a string when the instance is created 
-     * by createInt().
+     * Tests that toString() returns a string.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
      */
-    public function testToStringReturnsStringWhenCreateInt(): void
+    public function testToStringReturnsString(
+        DeclarationSpecifierConstraint $sut
+    ): void
     {
-        $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame('declaration specifier', $sut->toString());
     }
     
     /**
-     * Tests that getConceptName() returns a string when the instance is 
-     * created by createInt().
+     * Tests that getConceptName() returns a string.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
      */
-    public function testGetConceptNameReturnsStringWhenCreateInt(): void
+    public function testGetConceptNameReturnsString(
+        DeclarationSpecifierConstraint $sut
+    ): void
     {
-        $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame('Declaration specifier', $sut->getConceptName());
     }
     
     /**
-     * Tests that failureDefaultReason() returns a string when the instance 
-     * is created by createInt().
+     * Tests that failureDefaultReason() returns a string.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
      */
-    public function testFailureDefaultReasonReturnsStringWhenCreateInt(): void
+    public function testFailureDefaultReasonReturnsString(
+        DeclarationSpecifierConstraint $sut
+    ): void
     {
-        $sut = DeclarationSpecifierConstraint::createInt();
-        self::assertSame('Declaration specifier: Unknown reason.', $sut->failureDefaultReason(NULL));
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureDefaultReason(NULL)
+        );
     }
     
     /**
@@ -84,30 +87,70 @@ class DeclarationSpecifierConstraintTest extends TestCase
     {
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
-            "Declaration specifier\n  Simple type specifier \"int\"", 
+            "Declaration specifier\n".
+            "  Simple type specifier \"int\"", 
             $sut->constraintDescription()
         );
     }
     
     /**
-     * Tests that matches() returns FALSE when the instance is created by 
-     * createInt() and not instance of DeclarationSpecifier.
+     * Tests that constraintDescription() returns a string when the instance 
+     * is created by createFloat().
      */
-    public function testMatchesReturnsFalseWhenCreateIntAndNotInstanceDeclarationSpecifier(): void
+    public function testConstraintDescriptionReturnsStringWhenCreateFloat(): void
     {
-        $sut = DeclarationSpecifierConstraint::createInt();
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        self::assertSame(
+            "Declaration specifier\n".
+            "  Simple type specifier \"float\"", 
+            $sut->constraintDescription()
+        );
+    }
+    
+    /**
+     * Tests that matches() returns FALSE when not instance of 
+     * DeclarationSpecifier.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
+     */
+    public function testMatchesReturnsFalseWhenNotInstanceDeclarationSpecifier(
+        DeclarationSpecifierConstraint $sut
+    ): void
+    {
         self::assertFalse($sut->matches(NULL));
     }
     
     /**
      * Tests that matches() returns FALSE when the instance is created by 
      * createInt() and not simple type specifier "int".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIntProvider
      */
-    public function testMatchesReturnsFalseWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
+    public function testMatchesReturnsFalseWhenCreateIntAndNotSimpleTypeSpecifierInt(
+        DeclarationSpecifier $declSpec
+    ): void
     {
-        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
-        
         $sut = DeclarationSpecifierConstraint::createInt();
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createFloat() and not simple type specifier "float".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierFloatProvider
+     */
+    public function testMatchesReturnsFalseWhenCreateFloatAndNotSimpleTypeSpecifierFloat(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createFloat();
         self::assertFalse($sut->matches($declSpec));
     }
     
@@ -117,19 +160,38 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testMatchesReturnsTrueWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertTrue($sut->matches($declSpec));
     }
     
     /**
-     * Tests that failureReason() returns a string when the instance is 
-     * created by createInt() and not instance of DeclarationSpecifier.
+     * Tests that matches() returns TRUE when the instance is created by 
+     * createFloat() and simple type specifier "float".
      */
-    public function testFailureReasonReturnsStringWhenCreateIntAndNotInstanceDeclarationSpecifier(): void
+    public function testMatchesReturnsTrueWhenCreateFloatAndSimpleTypeSpecifierFloat(): void
     {
-        $sut = DeclarationSpecifierConstraint::createInt();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createFloatSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        self::assertTrue($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when not instance of 
+     * DeclarationSpecifier.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
+     */
+    public function testFailureReasonReturnsStringWhenNotInstanceDeclarationSpecifier(
+        DeclarationSpecifierConstraint $sut
+    ): void
+    {
         self::assertRegExp(
             \sprintf(
                 '`^Declaration specifier: .+ is not an instance of %s\\.$`', 
@@ -142,14 +204,37 @@ class DeclarationSpecifierConstraintTest extends TestCase
     /**
      * Tests that failureReason() returns a string when the instance is 
      * created by createInt() and is not a simple type specifier "int".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIntProvider
      */
-    public function testFailureReasonReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
+    public function testFailureReasonReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(
+        DeclarationSpecifier $declSpec
+    ): void
     {
-        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
-        
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
             'Declaration specifier: It should be simple type specifier "int".', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createFloat() and is not a simple type specifier "float".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierFloatProvider
+     */
+    public function testFailureReasonReturnsStringWhenCreateFloatAndNotSimpleTypeSpecifierFloat(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        self::assertSame(
+            'Declaration specifier: It should be simple type specifier "float".', 
             $sut->failureReason($declSpec)
         );
     }
@@ -160,9 +245,26 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createFloat() and is a simple type specifier "float".
+     */
+    public function testFailureReasonReturnsStringWhenCreateFloatAndSimpleTypeSpecifierFloat(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createFloatSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createFloat();
         self::assertSame(
             'Declaration specifier: Unknown reason.', 
             $sut->failureReason($declSpec)
@@ -181,7 +283,28 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $pattern = \sprintf(
             "`^\n".
             "Declaration specifier\n".
-            "  Simple type specifier \"int\"\n\n".
+            "  Simple type specifier \"int\"\n".
+            "\n".
+            "Declaration specifier: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', DeclarationSpecifier::class)
+        );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createFloat() and not instance of 
+     * DeclarationSpecifier.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndNotInstanceDeclarationSpecifier(): void
+    {
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        
+        $pattern = \sprintf(
+            "`^\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"float\"\n".
+            "\n".
             "Declaration specifier: .+ is not an instance of %s\\.$`", 
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
         );
@@ -192,17 +315,46 @@ class DeclarationSpecifierConstraintTest extends TestCase
      * Tests that additionalFailureDescription() returns a string when the 
      * instance is created by createInt() and is not a simple type specifier 
      * "int".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIntProvider
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(
+        DeclarationSpecifier $declSpec
+    ): void
     {
-        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
-        
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
             "\n".
             "Declaration specifier\n".
-            "  Simple type specifier \"int\"\n\n".
-            'Declaration specifier: It should be simple type specifier "int".', 
+            "  Simple type specifier \"int\"\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier \"int\".", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createFloat() and is not a simple type specifier 
+     * "float".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierFloatProvider
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndNotSimpleTypeSpecifierFloat(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"float\"\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier \"float\".", 
             $sut->additionalFailureDescription($declSpec)
         );
     }
@@ -214,29 +366,127 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
             "\n".
             "Declaration specifier\n".
-            "  Simple type specifier \"int\"\n\n".
-            'Declaration specifier: Unknown reason.', 
+            "  Simple type specifier \"int\"\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
             $sut->additionalFailureDescription($declSpec)
         );
     }
     
     /**
-     * Tests that failureDescription() is called when the instance is created 
-     * by createInt() and a value is invalid.
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createFloat() and is a simple type specifier 
+     * "float".
      */
-    public function testFailureDescriptionWhenCreateIntAndInvalid(): void
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndSimpleTypeSpecifierFloat(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createFloatSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createFloat();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"float\"\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureDescription() is called when the value is invalid.
+     * 
+     * @param   DeclarationSpecifierConstraint  $sut    The system under test.
+     * 
+     * @dataProvider    getSutProvider
+     */
+    public function testFailureDescriptionWhenInvalid(
+        DeclarationSpecifierConstraint $sut
+    ): void
     {
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches('` is a declaration specifier`');
         
-        $sut = DeclarationSpecifierConstraint::createInt();
         $sut->evaluate(NULL, '', FALSE);
+    }
+    
+    /**
+     * Returns the set of systems under test.
+     * 
+     * @return  array[]
+     */
+    public function getSutProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                DeclarationSpecifierConstraint::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                DeclarationSpecifierConstraint::createFloat(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier "int".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierIntProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "float"' => [
+                $declSpecFactory->createFloatSimpleTypeSpecifier(), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier "float".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierFloatProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "int"' => [
+                $declSpecFactory->createIntSimpleTypeSpecifier(), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Creates a factory of declaration specifier doubles.
+     * 
+     * @return  DeclarationSpecifierDoubleFactory   The created instance of DeclarationSpecifierDoubleFactory.
+     */
+    private function createDeclarationSpecifierDoubleFactory(): DeclarationSpecifierDoubleFactory
+    {
+        return new DeclarationSpecifierDoubleFactory($this);
     }
 }
 
