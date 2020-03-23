@@ -8,12 +8,10 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
-use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Prophecy\ProphecySubjectInterface;
 
 /**
  * Represents the unit tests for the {@see PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint} 
@@ -107,7 +105,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(FALSE);
+        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertFalse($sut->matches($declSpec));
@@ -119,7 +117,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testMatchesReturnsTrueWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(TRUE);
+        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertTrue($sut->matches($declSpec));
@@ -147,7 +145,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(FALSE);
+        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
@@ -162,7 +160,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(TRUE);
+        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
@@ -197,7 +195,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(FALSE);
+        $declSpec = $this->declSpecFactory->createNoneSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
@@ -216,7 +214,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
     {
-        $declSpec = $this->createDeclarationSpecifierIntDouble(TRUE);
+        $declSpec = $this->declSpecFactory->createIntSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createInt();
         self::assertSame(
@@ -239,30 +237,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         
         $sut = DeclarationSpecifierConstraint::createInt();
         $sut->evaluate(NULL, '', FALSE);
-    }
-    
-    /**
-     * Creates a double of the {@see PhpCode\Language\Cpp\Declaration\DeclarationSpecifier} 
-     * class, that is a simple type specifier.
-     * 
-     * @param   bool    $isInt  The value returned by isInt().
-     * @return ProphecySubjectInterface
-     */
-    private function createDeclarationSpecifierIntDouble(bool $isInt): ProphecySubjectInterface
-    {
-        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this)
-            ->buildIsInt($isInt)
-            ->getDouble();
-        
-        $typeSpec = ConceptDoubleBuilder::createTypeSpecifier($this)
-            ->buildGetSimpleTypeSpecifier($stSpec)
-            ->getDouble();
-        
-        $defTypeSpec = ConceptDoubleBuilder::createDefiningTypeSpecifier($this)
-            ->buildGetTypeSpecifier($typeSpec)
-            ->getDouble();
-        
-        return $this->declSpecFactory->createGetDefiningTypeSpecifier($defTypeSpec);
     }
 }
 
