@@ -8,9 +8,9 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
+use PhpCode\Test\Language\Cpp\ConceptConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraint;
-use PhpCode\Test\Language\Cpp\Expression\IdExpressionConstraintDoubleFactory;
 use PhpCode\Test\Language\Cpp\Expression\IdExpressionDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -32,17 +32,11 @@ class DeclaratorIdConstraintTest extends TestCase
     private $idExprFactory;
     
     /**
-     * @var IdExpressionConstraintDoubleFactory
-     */
-    private $idExprConstFactory;
-    
-    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->idExprFactory = new IdExpressionDoubleFactory($this);
-        $this->idExprConstFactory = new IdExpressionConstraintDoubleFactory($this);
     }
     
     /**
@@ -50,7 +44,7 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testToStringReturnsStringWhenInstantiated(): void
     {
-        $idExprConst = $this->idExprConstFactory->createDummy();
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame('declarator identifier', $sut->toString());
@@ -61,7 +55,7 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testGetConceptNameReturnsStringWhenInstantiated(): void
     {
-        $idExprConst = $this->idExprConstFactory->createDummy();
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame('Declarator identifier', $sut->getConceptName());
@@ -72,7 +66,7 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testFailureDefaultReasonReturnsStringWhenInstantiated(): void
     {
-        $idExprConst = $this->idExprConstFactory->createDummy();
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -86,10 +80,12 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testConstraintDescriptionReturnsStringWhenInstantiated(): void
     {
-        $idExprConst = $this->idExprConstFactory->createConstraintDescription(
-            "foo IdExpression\n".
-            "  bar UnqualifiedId"
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildConstraintDescription(
+                "foo IdExpression\n".
+                "  bar UnqualifiedId"
+            )
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -106,7 +102,7 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenInstantiatedAndNotInstanceDeclaratorId(): void
     {
-        $idExprConst = $this->idExprConstFactory->createDummy();
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertFalse($sut->matches(NULL));
@@ -123,7 +119,9 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatches($idExpr, FALSE);
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, FALSE)
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertFalse($sut->matches($did));
@@ -140,7 +138,9 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatches($idExpr, TRUE);
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, TRUE)
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertTrue($sut->matches($did));
@@ -152,7 +152,7 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenInstantiatedAndNotInstanceDeclaratorId(): void
     {
-        $idExprConst = $this->idExprConstFactory->createDummy();
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertRegExp(
@@ -175,12 +175,14 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatchesFailureReason(
-            $idExpr, 
-            FALSE,
-            "foo IdExpression\n".
-            "  bar UnqualifiedId"
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, FALSE)
+            ->buildFailureReason(
+                $idExpr, 
+                "foo IdExpression\n".
+                "  bar UnqualifiedId"
+            )
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -202,7 +204,9 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatches($idExpr, TRUE);
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, TRUE)
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -217,10 +221,12 @@ class DeclaratorIdConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndNotInstanceDeclaratorId(): void
     {
-        $idExprConst = $this->idExprConstFactory->createConstraintDescription(
-            "foo IdExpression\n".
-            "  bar UnqualifiedId"
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildConstraintDescription(
+                "foo IdExpression\n".
+                "  bar UnqualifiedId"
+            )
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         $pattern = \sprintf(
@@ -246,14 +252,18 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatchesFailureReasonConstraintDescription(
-            $idExpr, 
-            FALSE,
-            "foo\n".
-            "  bar reason", 
-            "foo description\n".
-            "  bar description"
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, FALSE)
+            ->buildFailureReason(
+                $idExpr, 
+                "foo\n".
+                "  bar reason"
+            )
+            ->buildConstraintDescription(
+                "foo description\n".
+                "  bar description"
+            )
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -280,12 +290,13 @@ class DeclaratorIdConstraintTest extends TestCase
             ->buildGetIdExpression($idExpr)
             ->getDouble();
         
-        $idExprConst = $this->idExprConstFactory->createMatchesConstraintDescription(
-            $idExpr, 
-            TRUE, 
-            "foo description\n".
-            "  bar description"
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildMatches($idExpr, TRUE)
+            ->buildConstraintDescription(
+                "foo description\n".
+                "  bar description"
+            )
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         self::assertSame(
@@ -308,9 +319,9 @@ class DeclaratorIdConstraintTest extends TestCase
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches('` is a declarator identifier`');
         
-        $idExprConst = $this->idExprConstFactory->createConstraintDescription(
-            'foo description'
-        );
+        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
         
         $sut = new DeclaratorIdConstraint($idExprConst);
         $sut->evaluate(NULL, '', FALSE);

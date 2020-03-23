@@ -8,9 +8,9 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Expression;
 
 use PhpCode\Language\Cpp\Expression\UnqualifiedId;
+use PhpCode\Test\Language\Cpp\ConceptConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdConstraint;
 use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdDoubleFactory;
-use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraintDoubleFactory;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -37,18 +37,12 @@ class UnqualifiedIdConstraintTest extends TestCase
     private $idFactory;
     
     /**
-     * @var IdentifierConstraintDoubleFactory
-     */
-    private $idConstFactory;
-    
-    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->uidFactory = new UnqualifiedIdDoubleFactory($this);
         $this->idFactory = new IdentifierDoubleFactory($this);
-        $this->idConstFactory = new IdentifierConstraintDoubleFactory($this);
     }
     
     /**
@@ -68,7 +62,7 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testToStringReturnsStringWhenCreateIdentifier(): void
     {
-        $idConst = $this->idConstFactory->createDummy();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame('unqualified identifier', $sut->toString());
@@ -80,7 +74,7 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testGetConceptNameReturnsStringWhenCreateIdentifier(): void
     {
-        $idConst = $this->idConstFactory->createDummy();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame('Unqualified identifier', $sut->getConceptName());
@@ -92,7 +86,7 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testFailureDefaultReasonReturnsStringWhenCreateIdentifier(): void
     {
-        $idConst = $this->idConstFactory->createDummy();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -107,10 +101,12 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testConstraintDescriptionReturnsStringWhenCreateIdentifier(): void
     {
-        $idConst = $this->idConstFactory->createConstraintDescription(
-            "foo Identifier\n".
-            "  bar string"
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription(
+                "foo Identifier\n".
+                "  bar string"
+            )
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -127,7 +123,7 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testMatchesReturnsFalseWhenCreateIdentifierAndNotInstanceUnqualifiedId(): void
     {
-        $idConst = $this->idConstFactory->createDummy();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertFalse($sut->matches(NULL));
@@ -141,7 +137,9 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatches($id, FALSE);
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertFalse($sut->matches($uid));
@@ -155,7 +153,9 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatches($id, TRUE);
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertTrue($sut->matches($uid));
@@ -167,7 +167,7 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testFailureReasonReturnsStringWhenCreateIdentifierAndNotInstanceUnqualifiedId(): void
     {
-        $idConst = $this->idConstFactory->createDummy();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertRegExp(
@@ -187,12 +187,14 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatchesFailureReason(
-            $id, 
-            FALSE,
-            "foo Identifier\n".
-            "  bar string"
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildFailureReason(
+                $id, 
+                "foo Identifier\n".
+                "  bar string"
+            )
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -211,7 +213,9 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatches($id, TRUE);
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -227,10 +231,12 @@ class UnqualifiedIdConstraintTest extends TestCase
      */
     public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotInstanceUnqualifiedId(): void
     {
-        $idConst = $this->idConstFactory->createConstraintDescription(
-            "foo Identifier\n".
-            "  bar string"
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription(
+                "foo Identifier\n".
+                "  bar string"
+            )
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         $pattern = \sprintf(
@@ -254,14 +260,18 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatchesFailureReasonConstraintDescription(
-            $id, 
-            FALSE,
-            "foo\n".
-            "  bar reason", 
-            "foo description\n".
-            "  bar description"
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildFailureReason(
+                $id, 
+                "foo\n".
+                "  bar reason"
+            )
+            ->buildConstraintDescription(
+                "foo description\n".
+                "  bar description"
+            )
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -286,12 +296,13 @@ class UnqualifiedIdConstraintTest extends TestCase
     {
         $id = $this->idFactory->createDummy();
         $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = $this->idConstFactory->createMatchesConstraintDescription(
-            $id, 
-            TRUE, 
-            "foo description\n".
-            "  bar description"
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->buildConstraintDescription(
+                "foo description\n".
+                "  bar description"
+            )
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         self::assertSame(
@@ -314,9 +325,9 @@ class UnqualifiedIdConstraintTest extends TestCase
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches('` is an unqualified identifier`');
         
-        $idConst = $this->idConstFactory->createConstraintDescription(
-            'foo description'
-        );
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
         
         $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
         $sut->evaluate(NULL, '', FALSE);
