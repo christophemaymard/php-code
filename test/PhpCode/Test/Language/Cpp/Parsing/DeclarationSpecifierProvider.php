@@ -69,6 +69,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'int', 
             ], 
+            [ 
+                'float', 
+                function() {
+                    return DeclarationSpecifierConstraint::createFloat();
+                }, 
+                'float', 
+            ], 
         ];
     }
     
