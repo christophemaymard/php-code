@@ -165,7 +165,19 @@ class ItaniumMangler
      */
     private function mangleTypeParameterDeclaration(ParameterDeclaration $prmDecl): string
     {
-        return 'i';
+        // For instance, the parser only supports declaration specifier 
+        // sequence of one declaration specifier.
+        $declSpec = $prmDecl->getDeclarationSpecifierSequence()->getDeclarationSpecifiers()[0];
+        
+        // For instance, the parser only supports declaration specifier that 
+        // is defined as a simple type specifier.
+        $stSpec = $declSpec->getDefiningTypeSpecifier()->getTypeSpecifier()->getSimpleTypeSpecifier();
+        
+        if ($stSpec->isInt()) {
+            return 'i';
+        }
+        
+        return 'f';
     }
     
     /**

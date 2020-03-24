@@ -103,6 +103,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 |:-----------------|:------------|:---------|
 | **builtin-type** | **v**       | void     |
 |                  | **i**       | int      |
+|                  | **f**       | float    |
 |                  | **z**       | ellipsis |
 
 

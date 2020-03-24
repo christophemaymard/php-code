@@ -133,6 +133,42 @@ class FunctionItaniumManglerTest extends TestCase
                 [ 1, 2, 4, 8, ], 
                 '_Z4mainiiiz', 
             ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 )', 
+                'main(float)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainf', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , ... )', 
+                'main(float,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainfz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 ... )', 
+                'main(float ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainfz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'main(float,float,float)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainfff', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'main(float,float,float,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainfffz', 
+            ], 
+            [
+                'DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'main(float,float,float ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainfffz', 
+            ], 
         ];
         
         return $this->createValidNamesProvider($dataSet);
