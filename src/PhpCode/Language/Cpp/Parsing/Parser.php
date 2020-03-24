@@ -164,7 +164,7 @@ class Parser
     {
         $prmDeclClause = new ParameterDeclarationClause();
         
-        if (!$this->tokenIsOneOf([Tag::KW_INT, Tag::PN_ELLIPSIS])) {
+        if (!$this->tokenIsOneOf([Tag::KW_INT, Tag::KW_FLOAT, Tag::PN_ELLIPSIS])) {
             return $prmDeclClause;
         }
         
@@ -267,6 +267,7 @@ class Parser
      * 
      * simple-type-specifier:
      *     int
+     *     float
      * 
      * @return  DeclarationSpecifier
      * 
@@ -274,14 +275,18 @@ class Parser
      */
     public function parseDeclarationSpecifier(): DeclarationSpecifier
     {
-        if ($this->tokenIs(Tag::KW_INT)) {
+        if ($this->tokenIsOneOf([Tag::KW_INT, Tag::KW_FLOAT])) {
+            if ($this->tokenIs(Tag::KW_INT)) {
+                $stSpec = SimpleTypeSpecifier::createInt();
+            } else {
+                $stSpec = SimpleTypeSpecifier::createFloat();
+            }
+            
             $this->move();
             
             return DeclarationSpecifier::createDefiningTypeSpecifier(
                 DefiningTypeSpecifier::createTypeSpecifier(
-                    TypeSpecifier::createSimpleTypeSpecifier(
-                        SimpleTypeSpecifier::createInt()
-                    )
+                    TypeSpecifier::createSimpleTypeSpecifier($stSpec)
                 )
             );
         }

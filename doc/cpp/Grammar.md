@@ -343,6 +343,7 @@ Table of contents
 | Definitions | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
 |:------------|:------------------:|:------------------:|:------------------:|:------------------:|
 | **int**     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| **float**   | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 
