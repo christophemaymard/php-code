@@ -57,7 +57,7 @@ class DeclaratorIdProvider
         $factory = new CallableConceptConstraintFactory($callable);
         
         $data = new ValidData($stream, $factory, $firstTokenLexeme);
-        $data->setName('DCLTOR_ID->ID_EXPR->UNQUAL_ID->ID');
+        $data->setName('ID');
         
         return $data;
     }
