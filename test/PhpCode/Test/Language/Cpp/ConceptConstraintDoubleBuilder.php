@@ -12,6 +12,7 @@ use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\IdExpressionConstraintDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\UnqualifiedIdConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraintDoubleBuilder;
 use PHPUnit\Framework\TestCase;
@@ -93,6 +94,18 @@ class ConceptConstraintDoubleBuilder
     public static function createUnqualifiedIdConstraint(TestCase $testCase): UnqualifiedIdConstraintDoubleBuilder
     {
         return new UnqualifiedIdConstraintDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  NestedNameSpecifierConstraintDoubleBuilder  The created instance of NestedNameSpecifierConstraintDoubleBuilder.
+     */
+    public static function createNestedNameSpecifierConstraint(TestCase $testCase): NestedNameSpecifierConstraintDoubleBuilder
+    {
+        return new NestedNameSpecifierConstraintDoubleBuilder($testCase);
     }
     
     /**
