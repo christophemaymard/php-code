@@ -19,23 +19,46 @@ class IdExpressionConstraint extends AbstractConceptConstraint
 {
     /**
      * The unqualified identifier constraint.
-     * @var UnqualifiedIdConstraint
+     * @var UnqualifiedIdConstraint|NULL
      */
-    private $unqualifiedIdConst;
+    private $uidConst;
+    
+    /**
+     * The qualified identifier constraint.
+     * @var QualifiedIdConstraint|NULL
+     */
+    private $qidConst;
     
     /**
      * Creates a constraint for an identifier expression that is an 
      * unqualified identifier.
      * 
-     * @param   UnqualifiedIdConstraint $unqualifiedIdConst The unqualified identifier constraint.
+     * @param   UnqualifiedIdConstraint $uidConst   The unqualified identifier constraint.
      * @return  IdExpressionConstraint  The created instance of IdExpressionConstraint.
      */
     public static function createUnqualifiedId(
-        UnqualifiedIdConstraint $unqualifiedIdConst
+        UnqualifiedIdConstraint $uidConst
     ): self
     {
         $const = new self();
-        $const->unqualifiedIdConst = $unqualifiedIdConst;
+        $const->uidConst = $uidConst;
+        
+        return $const;
+    }
+    
+    /**
+     * Creates a constraint for an identifier expression that is a qualified 
+     * identifier.
+     * 
+     * @param   QualifiedIdConstraint   $qidConst   The qualified identifier constraint.
+     * @return  IdExpressionConstraint  The created instance of IdExpressionConstraint.
+     */
+    public static function createQualifiedId(
+        QualifiedIdConstraint $qidConst
+    ): self
+    {
+        $const = new self();
+        $const->qidConst = $qidConst;
         
         return $const;
     }
@@ -62,7 +85,12 @@ class IdExpressionConstraint extends AbstractConceptConstraint
     {
         $lines = [];
         $lines[] = $this->getConceptName();
-        $lines[] = $this->indent($this->unqualifiedIdConst->constraintDescription());
+        
+        $desc = $this->uidConst !== NULL ? 
+            $this->uidConst->constraintDescription() : 
+            $this->qidConst->constraintDescription();
+        
+        $lines[] = $this->indent($desc);
         
         return \implode("\n", $lines);
     }
@@ -76,7 +104,17 @@ class IdExpressionConstraint extends AbstractConceptConstraint
             return FALSE;
         }
         
-        return $this->unqualifiedIdConst->matches($other->getUnqualifiedId());
+        if ($this->uidConst) {
+            if (!$this->uidConst->matches($other->getUnqualifiedId())) {
+                return FALSE;
+            }
+        } else {
+            if (!$this->qidConst->matches($other->getQualifiedId())) {
+                return FALSE;
+            }
+        }
+        
+        return TRUE;
     }
     
     /**
@@ -88,10 +126,18 @@ class IdExpressionConstraint extends AbstractConceptConstraint
             return $this->instanceReason(IdExpression::class, $other);
         }
         
-        if (!$this->unqualifiedIdConst->matches($other->getUnqualifiedId())) {
-            return $this->conceptIndent(
-                $this->unqualifiedIdConst->failureReason($other->getUnqualifiedId())
-            );
+        if ($this->uidConst) {
+            if (!$this->uidConst->matches($other->getUnqualifiedId())) {
+                return $this->conceptIndent(
+                     $this->uidConst->failureReason($other->getUnqualifiedId())
+                 );
+            }
+        } else {
+            if (!$this->qidConst->matches($other->getQualifiedId())) {
+                return $this->conceptIndent(
+                     $this->qidConst->failureReason($other->getQualifiedId())
+                 );
+            }
         }
         
         return $this->failureDefaultReason($other);
