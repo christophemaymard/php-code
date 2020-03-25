@@ -19,6 +19,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
 {
     private const ST_INT = 1;
     private const ST_FLOAT = 2;
+    private const ST_BOOL = 3;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -48,6 +49,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     {
         $const = new self();
         $const->stSpecType = self::ST_FLOAT;
+        
+        return $const;
+    }
+    
+    /**
+     * Creates a constraint for a simple type specifier that is "bool".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createBool(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_BOOL;
         
         return $const;
     }
@@ -92,9 +106,14 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             ->getTypeSpecifier()
             ->getSimpleTypeSpecifier();
         
-        return $this->stSpecType == self::ST_INT ? 
-            $stSpec->isInt() : 
-            $stSpec->isFloat();
+        switch ($this->stSpecType) {
+            case self::ST_INT:
+                return $stSpec->isInt();
+            case self::ST_FLOAT:
+                return $stSpec->isFloat();
+            case self::ST_BOOL:
+                return $stSpec->isBool();
+        }
     }
     
     /**
@@ -114,6 +133,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "int"');
         } elseif ($this->stSpecType == self::ST_FLOAT && !$stSpec->isFloat()) {
             return $this->isReason(TRUE, 'simple type specifier "float"');
+        } elseif ($this->stSpecType == self::ST_BOOL && !$stSpec->isBool()) {
+            return $this->isReason(TRUE, 'simple type specifier "bool"');
         }
         
         return $this->failureDefaultReason($other);
@@ -138,10 +159,21 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
      */
     private function getType(): string
     {
-        return \sprintf(
-            'Simple type specifier "%s"', 
-            $this->stSpecType == self::ST_INT ? 'int' : 'float'
-        );
+        $type = '';
+        
+        switch ($this->stSpecType) {
+            case self::ST_INT:
+                $type = 'int';
+                break;
+            case self::ST_FLOAT:
+                $type = 'float';
+                break;
+            case self::ST_BOOL:
+                $type = 'bool';
+                break;
+        }
+        
+        return \sprintf('Simple type specifier "%s"', $type);
     }
 }
 
