@@ -21,6 +21,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_FLOAT = 2;
     private const ST_BOOL = 3;
     private const ST_CHAR = 4;
+    private const ST_WCHART = 5;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -81,6 +82,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "wchar_t".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createWCharT(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_WCHART;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -129,6 +143,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isBool();
             case self::ST_CHAR:
                 return $stSpec->isChar();
+            case self::ST_WCHART:
+                return $stSpec->isWCharT();
         }
     }
     
@@ -153,6 +169,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "bool"');
         } elseif ($this->stSpecType == self::ST_CHAR && !$stSpec->isChar()) {
             return $this->isReason(TRUE, 'simple type specifier "char"');
+        } elseif ($this->stSpecType == self::ST_WCHART && !$stSpec->isWCharT()) {
+            return $this->isReason(TRUE, 'simple type specifier "wchar_t"');
         }
         
         return $this->failureDefaultReason($other);
@@ -191,6 +209,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_CHAR:
                 $type = 'char';
+                break;
+            case self::ST_WCHART:
+                $type = 'wchar_t';
                 break;
         }
         
