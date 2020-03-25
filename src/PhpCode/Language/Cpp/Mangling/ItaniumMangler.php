@@ -217,7 +217,12 @@ class ItaniumMangler
             return 'i';
         }
         
-        return 'f';
+        if ($stSpec->isFloat()) {
+            return 'f';
+        }
+        
+        // It is "bool".
+        return 'b';
     }
     
     /**

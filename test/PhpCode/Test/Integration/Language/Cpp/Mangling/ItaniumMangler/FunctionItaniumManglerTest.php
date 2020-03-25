@@ -170,6 +170,42 @@ class FunctionItaniumManglerTest extends TestCase
                 '_Z4mainfffz', 
             ], 
             [
+                'ID ( DECL_SPEC_SEQ1 )', 
+                'main(bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainb', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , ... )', 
+                'main(bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainbz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 ... )', 
+                'main(bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainbz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'main(bool,bool,bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainbbb', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'main(bool,bool,bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainbbbz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'main(bool,bool,bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainbbbz', 
+            ], 
+            [
                 'ID :: ID (  )', 
                 'nns_id1::uid_id1()', 
                 [ 1, 2, 4, 8, ], 
@@ -254,6 +290,42 @@ class FunctionItaniumManglerTest extends TestCase
                 '_ZN7nns_id17uid_id1Efffz', 
             ], 
             [
+                'ID :: ID ( DECL_SPEC_SEQ1 )', 
+                'nns_id1::uid_id1(bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Eb', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::uid_id1(bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ebz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::uid_id1(bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ebz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'nns_id1::uid_id1(bool,bool,bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ebbb', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::uid_id1(bool,bool,bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ebbbz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::uid_id1(bool,bool,bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ebbbz', 
+            ], 
+            [
                 'ID :: ID :: ID (  )', 
                 'nns_id1::nns_id2::uid_id1()', 
                 [ 1, 2, 4, 8, ], 
@@ -336,6 +408,42 @@ class FunctionItaniumManglerTest extends TestCase
                 'nns_id1::nns_id2::uid_id1(float,float,float ...)', 
                 [ 1, 2, 4, 8, ], 
                 '_ZN7nns_id17nns_id27uid_id1Efffz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 )', 
+                'nns_id1::nns_id2::uid_id1(bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Eb', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::nns_id2::uid_id1(bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ebz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::nns_id2::uid_id1(bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ebz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'nns_id1::nns_id2::uid_id1(bool,bool,bool)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ebbb', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::nns_id2::uid_id1(bool,bool,bool,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ebbbz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::nns_id2::uid_id1(bool,bool,bool ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ebbbz', 
             ], 
         ];
         
