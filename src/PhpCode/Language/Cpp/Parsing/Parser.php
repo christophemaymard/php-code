@@ -295,6 +295,7 @@ class Parser
      * 
      * simple-type-specifier:
      *     char
+     *     wchar_t
      *     bool
      *     int
      *     float
@@ -312,8 +313,10 @@ class Parser
                 $stSpec = SimpleTypeSpecifier::createFloat();
             } elseif ($this->tokenIs(Tag::KW_BOOL)) {
                 $stSpec = SimpleTypeSpecifier::createBool();
-            } else {
+            } elseif ($this->tokenIs(Tag::KW_CHAR)) {
                 $stSpec = SimpleTypeSpecifier::createChar();
+            } else {
+                $stSpec = SimpleTypeSpecifier::createWCharT();
             }
             
             $this->move();
@@ -370,10 +373,11 @@ class Parser
     private function tokenIsSimpleTypeSpecifier(): bool
     {
         return $this->tokenIsOneOf([
+            Tag::KW_CHAR, 
+            Tag::KW_WCHAR_T, 
+            Tag::KW_BOOL, 
             Tag::KW_INT, 
             Tag::KW_FLOAT, 
-            Tag::KW_BOOL, 
-            Tag::KW_CHAR, 
         ]);
     }
     

@@ -90,6 +90,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'char', 
             ], 
+            [
+                'wchar_t', 
+                function() {
+                    return DeclarationSpecifierConstraint::createWCharT();
+                }, 
+                'wchar_t', 
+            ], 
         ];
     }
     
