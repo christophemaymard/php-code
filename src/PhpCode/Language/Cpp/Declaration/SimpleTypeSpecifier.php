@@ -11,6 +11,8 @@ namespace PhpCode\Language\Cpp\Declaration;
  * Represents a simple type specifier.
  * 
  * simple-type-specifier:
+ *     char
+ *     bool
  *     int
  *     float
  * 
@@ -21,6 +23,7 @@ class SimpleTypeSpecifier
     private const ST_INT = 1;
     private const ST_FLOAT = 2;
     private const ST_BOOL = 3;
+    private const ST_CHAR = 4;
     
     /**
      * The type of this simple type specifier.
@@ -68,6 +71,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "char".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createChar(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_CHAR;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -102,6 +118,16 @@ class SimpleTypeSpecifier
     public function isBool(): bool
     {
         return $this->type == self::ST_BOOL;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "char".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "char", otherwise FALSE.
+     */
+    public function isChar(): bool
+    {
+        return $this->type == self::ST_CHAR;
     }
 }
 

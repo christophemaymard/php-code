@@ -62,6 +62,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createChar() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateCharReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createChar();
+        $stSpec2 = SimpleTypeSpecifier::createChar();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns TRUE when the instance has been created by 
      * createInt().
      */
@@ -88,6 +98,16 @@ class SimpleTypeSpecifierTest extends TestCase
     public function testIsIntReturnsFalseWhenCreateBool(): void
     {
         $sut = SimpleTypeSpecifier::createBool();
+        self::assertFalse($sut->isInt());
+    }
+    
+    /**
+     * Tests that isInt() returns FALSE when the instance has been created by 
+     * createChar().
+     */
+    public function testIsIntReturnsFalseWhenCreateChar(): void
+    {
+        $sut = SimpleTypeSpecifier::createChar();
         self::assertFalse($sut->isInt());
     }
     
@@ -122,6 +142,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isFloat() returns FALSE when the instance has been created by 
+     * createChar().
+     */
+    public function testIsFloatReturnsFalseWhenCreateChar(): void
+    {
+        $sut = SimpleTypeSpecifier::createChar();
+        self::assertFalse($sut->isFloat());
+    }
+    
+    /**
      * Tests that isBool() returns FALSE when the instance has been created 
      * by createInt().
      */
@@ -149,6 +179,56 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $sut = SimpleTypeSpecifier::createBool();
         self::assertTrue($sut->isBool());
+    }
+    
+    /**
+     * Tests that isBool() returns FALSE when the instance has been created 
+     * by createChar().
+     */
+    public function testIsBoolReturnsFalseWhenCreateChar(): void
+    {
+        $sut = SimpleTypeSpecifier::createChar();
+        self::assertFalse($sut->isBool());
+    }
+    
+    /**
+     * Tests that isChar() returns FALSE when the instance has been created 
+     * by createInt().
+     */
+    public function testIsCharReturnsFalseWhenCreateInt(): void
+    {
+        $sut = SimpleTypeSpecifier::createInt();
+        self::assertFalse($sut->isChar());
+    }
+    
+    /**
+     * Tests that isChar() returns FALSE when the instance has been created 
+     * by createFloat().
+     */
+    public function testIsCharReturnsFalseWhenCreateFloat(): void
+    {
+        $sut = SimpleTypeSpecifier::createFloat();
+        self::assertFalse($sut->isChar());
+    }
+    
+    /**
+     * Tests that isChar() returns FALSE when the instance has been created 
+     * by createBool().
+     */
+    public function testIsCharReturnsFalseWhenCreateBool(): void
+    {
+        $sut = SimpleTypeSpecifier::createBool();
+        self::assertFalse($sut->isChar());
+    }
+    
+    /**
+     * Tests that isChar() returns TRUE when the instance has been created 
+     * by createChar().
+     */
+    public function testIsCharReturnsTrueWhenCreateChar(): void
+    {
+        $sut = SimpleTypeSpecifier::createChar();
+        self::assertTrue($sut->isChar());
     }
 }
 
