@@ -49,6 +49,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsInt(FALSE)
             ->buildIsFloat(FALSE)
             ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -75,6 +76,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsInt(TRUE)
             ->buildIsFloat(FALSE)
             ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -101,6 +103,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsInt(FALSE)
             ->buildIsFloat(TRUE)
             ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -127,6 +130,34 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsInt(FALSE)
             ->buildIsFloat(FALSE)
             ->buildIsBool(TRUE)
+            ->buildIsChar(FALSE)
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * ->getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as "char".
+     * 
+     * @return  ProphecySubjectInterface
+     */
+    public function createCharSimpleTypeSpecifier(): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
+            ->buildIsBool(FALSE)
+            ->buildIsChar(TRUE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
