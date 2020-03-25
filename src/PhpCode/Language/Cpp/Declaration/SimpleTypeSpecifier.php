@@ -20,6 +20,7 @@ class SimpleTypeSpecifier
 {
     private const ST_INT = 1;
     private const ST_FLOAT = 2;
+    private const ST_BOOL = 3;
     
     /**
      * The type of this simple type specifier.
@@ -54,6 +55,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "bool".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createBool(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_BOOL;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -78,6 +92,16 @@ class SimpleTypeSpecifier
     public function isFloat(): bool
     {
         return $this->type == self::ST_FLOAT;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "bool".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "bool", otherwise FALSE.
+     */
+    public function isBool(): bool
+    {
+        return $this->type == self::ST_BOOL;
     }
 }
 

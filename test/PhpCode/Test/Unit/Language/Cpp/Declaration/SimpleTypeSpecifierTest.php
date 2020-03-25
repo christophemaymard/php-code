@@ -52,6 +52,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createBool() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateBoolReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createBool();
+        $stSpec2 = SimpleTypeSpecifier::createBool();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns TRUE when the instance has been created by 
      * createInt().
      */
@@ -68,6 +78,16 @@ class SimpleTypeSpecifierTest extends TestCase
     public function testIsIntReturnsFalseWhenCreateFloat(): void
     {
         $sut = SimpleTypeSpecifier::createFloat();
+        self::assertFalse($sut->isInt());
+    }
+    
+    /**
+     * Tests that isInt() returns FALSE when the instance has been created by 
+     * createBool().
+     */
+    public function testIsIntReturnsFalseWhenCreateBool(): void
+    {
+        $sut = SimpleTypeSpecifier::createBool();
         self::assertFalse($sut->isInt());
     }
     
@@ -89,6 +109,46 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $sut = SimpleTypeSpecifier::createFloat();
         self::assertTrue($sut->isFloat());
+    }
+    
+    /**
+     * Tests that isFloat() returns FALSE when the instance has been created by 
+     * createBool().
+     */
+    public function testIsFloatReturnsFalseWhenCreateBool(): void
+    {
+        $sut = SimpleTypeSpecifier::createBool();
+        self::assertFalse($sut->isFloat());
+    }
+    
+    /**
+     * Tests that isBool() returns FALSE when the instance has been created 
+     * by createInt().
+     */
+    public function testIsBoolReturnsFalseWhenCreateInt(): void
+    {
+        $sut = SimpleTypeSpecifier::createInt();
+        self::assertFalse($sut->isBool());
+    }
+    
+    /**
+     * Tests that isBool() returns FALSE when the instance has been created 
+     * by createFloat().
+     */
+    public function testIsBoolReturnsFalseWhenCreateFloat(): void
+    {
+        $sut = SimpleTypeSpecifier::createFloat();
+        self::assertFalse($sut->isBool());
+    }
+    
+    /**
+     * Tests that isBool() returns TRUE when the instance has been created 
+     * by createBool().
+     */
+    public function testIsBoolReturnsTrueWhenCreateBool(): void
+    {
+        $sut = SimpleTypeSpecifier::createBool();
+        self::assertTrue($sut->isBool());
     }
 }
 
