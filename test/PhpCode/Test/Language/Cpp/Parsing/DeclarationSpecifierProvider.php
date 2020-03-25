@@ -76,6 +76,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'float', 
             ], 
+            [
+                'bool', 
+                function() {
+                    return DeclarationSpecifierConstraint::createBool();
+                }, 
+                'bool', 
+            ], 
         ];
     }
     

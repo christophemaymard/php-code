@@ -191,7 +191,8 @@ class Parser
     {
         $prmDeclClause = new ParameterDeclarationClause();
         
-        if (!$this->tokenIsOneOf([Tag::KW_INT, Tag::KW_FLOAT, Tag::PN_ELLIPSIS])) {
+        if (!$this->tokenIsSimpleTypeSpecifier() && 
+            !$this->tokenIs(Tag::PN_ELLIPSIS)) {
             return $prmDeclClause;
         }
         
@@ -293,6 +294,7 @@ class Parser
      *     simple-type-specifier
      * 
      * simple-type-specifier:
+     *     bool
      *     int
      *     float
      * 
@@ -302,11 +304,13 @@ class Parser
      */
     public function parseDeclarationSpecifier(): DeclarationSpecifier
     {
-        if ($this->tokenIsOneOf([Tag::KW_INT, Tag::KW_FLOAT])) {
+        if ($this->tokenIsSimpleTypeSpecifier()) {
             if ($this->tokenIs(Tag::KW_INT)) {
                 $stSpec = SimpleTypeSpecifier::createInt();
-            } else {
+            } elseif ($this->tokenIs(Tag::KW_FLOAT)) {
                 $stSpec = SimpleTypeSpecifier::createFloat();
+            } else {
+                $stSpec = SimpleTypeSpecifier::createBool();
             }
             
             $this->move();
@@ -352,6 +356,21 @@ class Parser
         $this->lexer->getToken();
         
         $this->initTokenToProcess();
+    }
+    
+    /**
+     * Indicates whether the token to process matches one of the tags of a 
+     * simple type specifier.
+     * 
+     * @return  bool    TRUE if the token to process matches one of the tags of a simple type specifier, otherwise FALSE.
+     */
+    private function tokenIsSimpleTypeSpecifier(): bool
+    {
+        return $this->tokenIsOneOf([
+            Tag::KW_INT, 
+            Tag::KW_FLOAT, 
+            Tag::KW_BOOL, 
+        ]);
     }
     
     /**
