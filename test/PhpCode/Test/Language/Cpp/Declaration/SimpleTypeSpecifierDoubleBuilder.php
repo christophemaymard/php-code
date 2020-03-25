@@ -85,5 +85,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isWCharT() can be called.
+     * 
+     * @param   bool    $return The value to return when isWCharT() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsWCharT(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isWCharT()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
