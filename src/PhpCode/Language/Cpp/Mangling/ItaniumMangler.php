@@ -225,8 +225,12 @@ class ItaniumMangler
             return 'b';
         }
         
-        // It is "char".
-        return 'c';
+        if ($stSpec->isChar()) {
+            return 'c';
+        }
+        
+        // It is "wchar_t".
+        return 'w';
     }
     
     /**
