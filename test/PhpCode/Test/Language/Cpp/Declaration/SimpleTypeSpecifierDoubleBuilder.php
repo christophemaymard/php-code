@@ -55,5 +55,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isBool() can be called.
+     * 
+     * @param   bool    $return The value to return when isBool() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsBool(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isBool()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
