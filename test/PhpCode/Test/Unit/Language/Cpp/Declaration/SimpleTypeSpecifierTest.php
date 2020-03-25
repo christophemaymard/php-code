@@ -72,6 +72,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createWCharT() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateWCharTReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createWCharT();
+        $stSpec2 = SimpleTypeSpecifier::createWCharT();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns TRUE when the instance has been created by 
      * createInt().
      */
@@ -108,6 +118,16 @@ class SimpleTypeSpecifierTest extends TestCase
     public function testIsIntReturnsFalseWhenCreateChar(): void
     {
         $sut = SimpleTypeSpecifier::createChar();
+        self::assertFalse($sut->isInt());
+    }
+    
+    /**
+     * Tests that isInt() returns FALSE when the instance has been created by 
+     * createWCharT().
+     */
+    public function testIsIntReturnsFalseWhenCreateWCharT(): void
+    {
+        $sut = SimpleTypeSpecifier::createWCharT();
         self::assertFalse($sut->isInt());
     }
     
@@ -152,6 +172,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isFloat() returns FALSE when the instance has been created by 
+     * createWCharT().
+     */
+    public function testIsFloatReturnsFalseWhenCreateWCharT(): void
+    {
+        $sut = SimpleTypeSpecifier::createWCharT();
+        self::assertFalse($sut->isFloat());
+    }
+    
+    /**
      * Tests that isBool() returns FALSE when the instance has been created 
      * by createInt().
      */
@@ -188,6 +218,16 @@ class SimpleTypeSpecifierTest extends TestCase
     public function testIsBoolReturnsFalseWhenCreateChar(): void
     {
         $sut = SimpleTypeSpecifier::createChar();
+        self::assertFalse($sut->isBool());
+    }
+    
+    /**
+     * Tests that isBool() returns FALSE when the instance has been created 
+     * by createWCharT().
+     */
+    public function testIsBoolReturnsFalseWhenCreateWCharT(): void
+    {
+        $sut = SimpleTypeSpecifier::createWCharT();
         self::assertFalse($sut->isBool());
     }
     
@@ -229,6 +269,66 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $sut = SimpleTypeSpecifier::createChar();
         self::assertTrue($sut->isChar());
+    }
+    
+    /**
+     * Tests that isChar() returns FALSE when the instance has been created 
+     * by createBool().
+     */
+    public function testIsCharReturnsFalseWhenCreateWCharT(): void
+    {
+        $sut = SimpleTypeSpecifier::createWCharT();
+        self::assertFalse($sut->isChar());
+    }
+    
+    /**
+     * Tests that isWCharT() returns FALSE when the instance has been created 
+     * by createInt().
+     */
+    public function testIsWCharTReturnsFalseWhenCreateInt(): void
+    {
+        $sut = SimpleTypeSpecifier::createInt();
+        self::assertFalse($sut->isWCharT());
+    }
+    
+    /**
+     * Tests that isWCharT() returns FALSE when the instance has been created 
+     * by createFloat().
+     */
+    public function testIsWCharTReturnsFalseWhenCreateFloat(): void
+    {
+        $sut = SimpleTypeSpecifier::createFloat();
+        self::assertFalse($sut->isWCharT());
+    }
+    
+    /**
+     * Tests that isWCharT() returns FALSE when the instance has been created 
+     * by createBool().
+     */
+    public function testIsWCharTReturnsFalseWhenCreateBool(): void
+    {
+        $sut = SimpleTypeSpecifier::createBool();
+        self::assertFalse($sut->isWCharT());
+    }
+    
+    /**
+     * Tests that isWCharT() returns FALSE when the instance has been created 
+     * by createChar().
+     */
+    public function testIsWCharTReturnsFalseWhenCreateChar(): void
+    {
+        $sut = SimpleTypeSpecifier::createChar();
+        self::assertFalse($sut->isWCharT());
+    }
+    
+    /**
+     * Tests that isWCharT() returns TRUE when the instance has been created 
+     * by createWCharT().
+     */
+    public function testIsWCharTReturnsTrueWhenCreateWCharT(): void
+    {
+        $sut = SimpleTypeSpecifier::createWCharT();
+        self::assertTrue($sut->isWCharT());
     }
 }
 

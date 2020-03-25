@@ -12,6 +12,7 @@ namespace PhpCode\Language\Cpp\Declaration;
  * 
  * simple-type-specifier:
  *     char
+ *     wchar_t
  *     bool
  *     int
  *     float
@@ -24,6 +25,7 @@ class SimpleTypeSpecifier
     private const ST_FLOAT = 2;
     private const ST_BOOL = 3;
     private const ST_CHAR = 4;
+    private const ST_WCHART = 5;
     
     /**
      * The type of this simple type specifier.
@@ -84,6 +86,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "wchar_t".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createWCharT(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_WCHART;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -128,6 +143,16 @@ class SimpleTypeSpecifier
     public function isChar(): bool
     {
         return $this->type == self::ST_CHAR;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "wchar_t".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "wchar_t", otherwise FALSE.
+     */
+    public function isWCharT(): bool
+    {
+        return $this->type == self::ST_WCHART;
     }
 }
 
