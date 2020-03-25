@@ -83,6 +83,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'bool', 
             ], 
+            [
+                'char', 
+                function() {
+                    return DeclarationSpecifierConstraint::createChar();
+                }, 
+                'char', 
+            ], 
         ];
     }
     
