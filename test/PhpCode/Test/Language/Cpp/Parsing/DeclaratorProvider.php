@@ -237,6 +237,10 @@ class DeclaratorProvider
         
         $dataSet[] = self::createEmptyInvalidData();
         
+        foreach (NestedNameSpecifierProvider::createValidDataSet() as $nnSpecData) {
+            $dataSet[] = self::createNestedNameSpecifierInvalidData($nnSpecData);
+        }
+        
         $didDataSet = DeclaratorIdProvider::createValidDataSet();
         
         foreach ($didDataSet as $didData) {
@@ -283,6 +287,25 @@ class DeclaratorProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Empty string');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * NESTED_NAME_SPECIFIER
+     * 
+     * @param   ValidData   $nnSpecData The nested name specifier data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createNestedNameSpecifierInvalidData(ValidData $nnSpecData): InvalidData
+    {
+        $stream = $nnSpecData->getStream();
+        $message = 'Unexpected "", expected identifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName($nnSpecData->getName());
         
         return $data;
     }

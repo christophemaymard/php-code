@@ -22,6 +22,8 @@ use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
 use PhpCode\Language\Cpp\Expression\IdExpression;
+use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
+use PhpCode\Language\Cpp\Expression\QualifiedId;
 use PhpCode\Language\Cpp\Expression\UnqualifiedId;
 use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Language\Cpp\Lexical\LexerInterface;
@@ -91,9 +93,17 @@ class Parser
      * 
      * id-expression:
      *     unqualified-id
+     *     qualified-id
      * 
      * unqualified-id:
      *     identifier
+     * 
+     * qualified-id:
+     *     nested-name-specifier unqualified-id
+     * 
+     * nested-name-specifier:
+     *     identifier ::
+     *     nested-name-specifier identifier ::
      * 
      * @return  Declarator
      * 
@@ -101,14 +111,31 @@ class Parser
      */
     public function parseDeclarator(): Declarator
     {
+        $nnSpec = new NestedNameSpecifier();
+        
+        while ($this->tokenIs(Tag::ID) && $this->lookAhead(1)->getTag() == TAG::PN_COLON_COLON) {
+            $nnSpec->addIdentifier(new Identifier($this->tkn->getLexeme()));
+            
+            // Consume the identifier and the scope.
+            $this->move();
+            $this->move();
+        }
+        
         if (!$this->tokenIs(Tag::ID)) {
             throw new FormatException(\sprintf('Unexpected "%s", expected identifier.', $this->tkn->getLexeme()));
         }
         
         $id = new Identifier($this->tkn->getLexeme());
         $this->move();
+        
         $uid = UnqualifiedId::createIdentifier($id);
-        $idExpr = IdExpression::createUnqualifiedId($uid);
+        
+        if (\count($nnSpec) > 0) {
+            $idExpr = IdExpression::createQualifiedId(new QualifiedId($nnSpec, $uid));
+        } else {
+            $idExpr = IdExpression::createUnqualifiedId($uid);
+        }
+        
         $did = new DeclaratorId($idExpr);
         $noptrDcltor = NoptrDeclarator::createDeclaratorId($did);
         

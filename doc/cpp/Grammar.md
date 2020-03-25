@@ -287,6 +287,7 @@ Table of contents
 | Definitions                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
 |:----------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
 | [unqualified-id](#unqualified-id) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| [qualified-id](#qualified-id)     | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 
@@ -295,6 +296,23 @@ Table of contents
 | Definitions               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
 |:--------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
 | [identifier](#identifier) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### qualified-id
+
+| Definitions                                                                       | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:----------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [nested-name-specifier](#nested-name-specifier) [unqualified-id](#unqualified-id) | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### nested-name-specifier
+
+| Definitions                                                                      | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:---------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [identifier](#identifier) **::**                                                 | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| [nested-name-specifier](#nested-name-specifier) [identifier](#identifier) **::** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 
@@ -458,6 +476,7 @@ Table of contents
 - **K**
   - [keyword](#keyword)
 - **N**
+  - [nested-name-specifier](#nested-name-specifier)
   - [nondigit](#nondigit)
   - [noptr-declarator](#noptr-declarator)
 - **P**
@@ -467,6 +486,8 @@ Table of contents
   - [parameters-and-qualifiers](#parameters-and-qualifiers)
   - [ptr-declarator](#ptr-declarator)
   - [punctuator](#punctuator)
+- **Q**
+  - [qualified-id](#qualified-id)
 - **S**
   - [simple-type-specifier](#simple-type-specifier)
 - **T**
