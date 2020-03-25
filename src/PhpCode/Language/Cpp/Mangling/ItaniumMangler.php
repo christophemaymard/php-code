@@ -221,8 +221,12 @@ class ItaniumMangler
             return 'f';
         }
         
-        // It is "bool".
-        return 'b';
+        if ($stSpec->isBool()) {
+            return 'b';
+        }
+        
+        // It is "char".
+        return 'c';
     }
     
     /**

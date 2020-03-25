@@ -206,6 +206,42 @@ class FunctionItaniumManglerTest extends TestCase
                 '_Z4mainbbbz', 
             ], 
             [
+                'ID ( DECL_SPEC_SEQ1 )', 
+                'main(char)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainc', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , ... )', 
+                'main(char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4maincz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 ... )', 
+                'main(char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4maincz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'main(char,char,char)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4mainccc', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'main(char,char,char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4maincccz', 
+            ], 
+            [
+                'ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'main(char,char,char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_Z4maincccz', 
+            ], 
+            [
                 'ID :: ID (  )', 
                 'nns_id1::uid_id1()', 
                 [ 1, 2, 4, 8, ], 
@@ -326,6 +362,42 @@ class FunctionItaniumManglerTest extends TestCase
                 '_ZN7nns_id17uid_id1Ebbbz', 
             ], 
             [
+                'ID :: ID ( DECL_SPEC_SEQ1 )', 
+                'nns_id1::uid_id1(char)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ec', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::uid_id1(char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ecz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::uid_id1(char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ecz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'nns_id1::uid_id1(char,char,char)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Eccc', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::uid_id1(char,char,char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ecccz', 
+            ], 
+            [
+                'ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::uid_id1(char,char,char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17uid_id1Ecccz', 
+            ], 
+            [
                 'ID :: ID :: ID (  )', 
                 'nns_id1::nns_id2::uid_id1()', 
                 [ 1, 2, 4, 8, ], 
@@ -444,6 +516,42 @@ class FunctionItaniumManglerTest extends TestCase
                 'nns_id1::nns_id2::uid_id1(bool,bool,bool ...)', 
                 [ 1, 2, 4, 8, ], 
                 '_ZN7nns_id17nns_id27uid_id1Ebbbz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 )', 
+                'nns_id1::nns_id2::uid_id1(char)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ec', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::nns_id2::uid_id1(char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ecz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::nns_id2::uid_id1(char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ecz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 )', 
+                'nns_id1::nns_id2::uid_id1(char,char,char)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Eccc', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , ... )', 
+                'nns_id1::nns_id2::uid_id1(char,char,char,...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ecccz', 
+            ], 
+            [
+                'ID :: ID :: ID ( DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 , DECL_SPEC_SEQ1 ... )', 
+                'nns_id1::nns_id2::uid_id1(char,char,char ...)', 
+                [ 1, 2, 4, 8, ], 
+                '_ZN7nns_id17nns_id27uid_id1Ecccz', 
             ], 
         ];
         
