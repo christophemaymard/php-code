@@ -97,9 +97,26 @@ class ItaniumMangler
     }
     
     /**
-     * Mangles a function name with the specified declarator.
+     * Mangles a function name from the specified declarator.
      * 
-     * @param   Declarator  $dcltor The declarator.
+     * <name>
+     *     <nested-name>
+     *     <unscoped-name>
+     * 
+     * <unscoped-name>
+     *     <unqualified-name>
+     * 
+     * <unqualified-name>
+     *     <source-name>
+     * 
+     * <nested-name>
+     *     N <prefix> <unqualified-name> E
+     * 
+     * <prefix>
+     *     <unqualified-name>
+     *     <prefix> <unqualified-name>
+     * 
+     * @param   Declarator  $dcltor The declarator used to mangle.
      * @return  string
      */
     private function mangleFunctionNameDeclarator(Declarator $dcltor): string
@@ -108,10 +125,33 @@ class ItaniumMangler
         $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
         $did = $noptrDcltor->getDeclaratorId();
         $idExpr = $did->getIdExpression();
-        $uid = $idExpr->getUnqualifiedId();
-        $id = $uid->getIdentifier();
         
-        $mangledName = $this->mangleSourceName($id->getIdentifier());
+        // <unscoped-name>
+        if ($idExpr->isUnqualifiedId()) {
+            // For instance, the parser supports unqualified identifier that 
+            // is defined as identifier.
+            $id = $idExpr->getUnqualifiedId()->getIdentifier();
+            
+            return $this->mangleSourceName($id->getIdentifier());
+        }
+        
+        // <nested-name>
+        $mangledName = 'N';
+        
+        $qid = $idExpr->getQualifiedId();
+        
+        // For instance, the parser supports nested name specifier with 
+        // identifier as name specifier.
+        foreach ($qid->getNestedNameSpecifier()->getNameSpecifiers() as $id) {
+            $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        }
+        
+        // For instance, the parser supports unqualified identifier that is 
+        // defined as identifier.
+        $id = $qid->getUnqualifiedId()->getIdentifier();
+        
+        $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        $mangledName .= 'E';
         
         return $mangledName;
     }

@@ -41,7 +41,8 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 
 | Rule     | Definitions                     |
 |:---------|:--------------------------------|
-| **name** | [unscoped-name](#unscoped-name) |
+| **name** | [nested-name](#nested-name) |
+|          | [unscoped-name](#unscoped-name) |
 
 
 
@@ -50,6 +51,23 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 | Rule              | Definitions                           |
 |:------------------|:--------------------------------------|
 | **unscoped-name** | [unqualified-name](#unqualified-name) |
+
+
+
+### nested-name
+
+| Rule            | Definitions                                                         |
+|:----------------|:--------------------------------------------------------------------|
+| **nested-name** | **N** [prefix](#prefix) [unqualified-name](#unqualified-name) **E** |
+
+
+
+### prefix
+
+| Rule       | Definitions                                             |
+|:-----------|:--------------------------------------------------------|
+| **prefix** | [unqualified-name](#unqualified-name)                   |
+|            | [prefix](#prefix) [unqualified-name](#unqualified-name) |
 
 
 
@@ -147,6 +165,9 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
   - [mangled-name](#mangled-name)
 - **N**
   - [name](#name)
+  - [nested-name](#nested-name)
+- **P**
+  - [prefix](#prefix)
 - **S**
   - [source-name](#source-name)
 - **T**
