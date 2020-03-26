@@ -55,6 +55,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -87,6 +88,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -119,6 +121,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -151,6 +154,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -183,6 +187,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -215,6 +220,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -247,6 +253,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -279,6 +286,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(TRUE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -311,6 +319,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(TRUE)
             ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -343,6 +352,40 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsLong(FALSE)
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(TRUE)
+            ->buildIsDouble(FALSE)
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * ->getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as "double".
+     * 
+     * @return  ProphecySubjectInterface
+     */
+    public function createDoubleSimpleTypeSpecifier(): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
+            ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
+            ->buildIsWCharT(FALSE)
+            ->buildIsShort(FALSE)
+            ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
+            ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(TRUE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
