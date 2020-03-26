@@ -239,8 +239,12 @@ class ItaniumMangler
             return 's';
         }
         
-        // It is "long".
-        return 'l';
+        if ($stSpec->isLong()) {
+            return 'l';
+        }
+        
+        // It is "unsigned".
+        return 'j';
     }
     
     /**

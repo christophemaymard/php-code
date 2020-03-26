@@ -117,17 +117,18 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 
 ### builtin-type
 
-| Rule             | Definitions | Comments |
-|:-----------------|:------------|:---------|
-| **builtin-type** | **v**       | void     |
-|                  | **w**       | wchar_t  |
-|                  | **b**       | bool     |
-|                  | **c**       | char     |
-|                  | **s**       | short    |
-|                  | **i**       | int      |
-|                  | **l**       | long     |
-|                  | **f**       | float    |
-|                  | **z**       | ellipsis |
+| Rule             | Definitions | Comments     |
+|:-----------------|:------------|:-------------|
+| **builtin-type** | **v**       | void         |
+|                  | **w**       | wchar_t      |
+|                  | **b**       | bool         |
+|                  | **c**       | char         |
+|                  | **s**       | short        |
+|                  | **i**       | int          |
+|                  | **j**       | unsigned int |
+|                  | **l**       | long         |
+|                  | **f**       | float        |
+|                  | **z**       | ellipsis     |
 
 
 
