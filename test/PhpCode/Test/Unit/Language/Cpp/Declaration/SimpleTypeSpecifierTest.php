@@ -625,6 +625,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
             ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
