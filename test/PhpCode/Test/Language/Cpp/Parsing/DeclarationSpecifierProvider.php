@@ -97,6 +97,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'wchar_t', 
             ], 
+            [
+                'short', 
+                function() {
+                    return DeclarationSpecifierConstraint::createShort();
+                }, 
+                'short', 
+            ], 
         ];
     }
     
