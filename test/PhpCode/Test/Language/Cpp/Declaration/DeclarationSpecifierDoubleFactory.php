@@ -53,6 +53,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -83,6 +84,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -113,6 +115,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -143,6 +146,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -173,6 +177,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -203,6 +208,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(TRUE)
             ->buildIsShort(FALSE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -233,6 +239,7 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(TRUE)
             ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -263,6 +270,38 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsWCharT(FALSE)
             ->buildIsShort(FALSE)
             ->buildIsLong(TRUE)
+            ->buildIsSigned(FALSE)
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * ->getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as "signed".
+     * 
+     * @return  ProphecySubjectInterface
+     */
+    public function createSignedSimpleTypeSpecifier(): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
+            ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
+            ->buildIsWCharT(FALSE)
+            ->buildIsShort(FALSE)
+            ->buildIsLong(FALSE)
+            ->buildIsSigned(TRUE)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
