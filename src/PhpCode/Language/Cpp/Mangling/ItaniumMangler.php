@@ -229,8 +229,12 @@ class ItaniumMangler
             return 'c';
         }
         
-        // It is "wchar_t".
-        return 'w';
+        if ($stSpec->isWCharT()) {
+            return 'w';
+        }
+        
+        // It is "short".
+        return 's';
     }
     
     /**

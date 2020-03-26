@@ -123,6 +123,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 |                  | **w**       | wchar_t  |
 |                  | **b**       | bool     |
 |                  | **c**       | char     |
+|                  | **s**       | short    |
 |                  | **i**       | int      |
 |                  | **f**       | float    |
 |                  | **z**       | ellipsis |
