@@ -130,5 +130,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isSigned() can be called.
+     * 
+     * @param   bool    $return The value to return when isSigned() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsSigned(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isSigned()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
