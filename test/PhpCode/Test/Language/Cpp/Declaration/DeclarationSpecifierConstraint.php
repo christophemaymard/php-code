@@ -26,6 +26,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_LONG = 7;
     private const ST_SIGNED = 8;
     private const ST_UNSIGNED = 9;
+    private const ST_DOUBLE = 10;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -151,6 +152,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "double".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createDouble(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_DOUBLE;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -209,6 +223,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isSigned();
             case self::ST_UNSIGNED:
                 return $stSpec->isUnsigned();
+            case self::ST_DOUBLE:
+                return $stSpec->isDouble();
         }
     }
     
@@ -243,6 +259,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "signed"');
         } elseif ($this->stSpecType == self::ST_UNSIGNED && !$stSpec->isUnsigned()) {
             return $this->isReason(TRUE, 'simple type specifier "unsigned"');
+        } elseif ($this->stSpecType == self::ST_DOUBLE && !$stSpec->isDouble()) {
+            return $this->isReason(TRUE, 'simple type specifier "double"');
         }
         
         return $this->failureDefaultReason($other);
@@ -296,6 +314,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_UNSIGNED:
                 $type = 'unsigned';
+                break;
+            case self::ST_DOUBLE:
+                $type = 'double';
                 break;
         }
         
