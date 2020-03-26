@@ -122,6 +122,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createDouble() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateDoubleReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createDouble();
+        $stSpec2 = SimpleTypeSpecifier::createDouble();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns FALSE when the instance is not created by 
      * createInt().
      * 
@@ -347,6 +357,31 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isDouble() returns FALSE when the instance is not created 
+     * by createDouble().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierDoubleProvider
+     */
+    public function testIsDoubleReturnsFalseWhenNotCreateDouble(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isDouble());
+    }
+    
+    /**
+     * Tests that isDouble() returns TRUE when the instance has been created 
+     * by createDouble().
+     */
+    public function testIsDoubleReturnsTrueWhenCreateDouble(): void
+    {
+        $sut = SimpleTypeSpecifier::createDouble();
+        self::assertTrue($sut->isDouble());
+    }
+    
+    /**
      * Returns a set of systems under test that are not simple type 
      * specifier "int".
      * 
@@ -378,6 +413,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
             ], 
         ];
     }
@@ -415,6 +453,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
         ];
     }
     
@@ -450,6 +491,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
             ], 
         ];
     }
@@ -487,6 +531,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
         ];
     }
     
@@ -522,6 +569,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
             ], 
         ];
     }
@@ -559,6 +609,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
         ];
     }
     
@@ -594,6 +647,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
             ], 
         ];
     }
@@ -631,6 +687,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
         ];
     }
     
@@ -666,6 +725,48 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "signed"' => [
                 SimpleTypeSpecifier::createSigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "double".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierDoubleProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                SimpleTypeSpecifier::createUnsigned(), 
             ], 
         ];
     }

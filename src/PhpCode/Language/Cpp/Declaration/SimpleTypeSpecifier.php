@@ -20,6 +20,7 @@ namespace PhpCode\Language\Cpp\Declaration;
  *     signed
  *     unsigned
  *     float
+ *     double
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
@@ -34,6 +35,7 @@ class SimpleTypeSpecifier
     private const ST_LONG = 7;
     private const ST_SIGNED = 8;
     private const ST_UNSIGNED = 9;
+    private const ST_DOUBLE = 10;
     
     /**
      * The type of this simple type specifier.
@@ -159,6 +161,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "double".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createDouble(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_DOUBLE;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -253,6 +268,16 @@ class SimpleTypeSpecifier
     public function isUnsigned(): bool
     {
         return $this->type == self::ST_UNSIGNED;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "double".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "double", otherwise FALSE.
+     */
+    public function isDouble(): bool
+    {
+        return $this->type == self::ST_DOUBLE;
     }
 }
 
