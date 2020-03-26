@@ -213,7 +213,9 @@ class ItaniumMangler
         // is defined as a simple type specifier.
         $stSpec = $declSpec->getDefiningTypeSpecifier()->getTypeSpecifier()->getSimpleTypeSpecifier();
         
-        if ($stSpec->isInt()) {
+        // It is "int" or "signed".
+        // According to C++ specifications, "signed" is "int".
+        if ($stSpec->isInt() || $stSpec->isSigned()) {
             return 'i';
         }
         
