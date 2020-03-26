@@ -7,13 +7,14 @@
  */
 namespace PhpCode\Language\Cpp\Declaration;
 
+use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
 use PhpCode\Language\Cpp\Lexical\Identifier;
 
 /**
  * Represents a simple type specifier.
  * 
  * simple-type-specifier:
- *     identifier
+ *     nested-name-specifier[opt] identifier
  *     char
  *     wchar_t
  *     bool
@@ -40,6 +41,7 @@ class SimpleTypeSpecifier
     private const ST_UNSIGNED = 9;
     private const ST_DOUBLE = 10;
     private const ST_ID = 11;
+    private const ST_QUALIFIED_ID = 12;
     
     /**
      * The type of this simple type specifier.
@@ -49,10 +51,17 @@ class SimpleTypeSpecifier
     
     /**
      * The identifier of this simple type specifier if it has been defined 
-     * as "identifier".
+     * as "identifier" or a qualified identifier.
      * @var Identifier|NULL
      */
     private $id;
+    
+    /**
+     * The nested name specifier of this simple type specifier if it has been 
+     * defined as a qualified identifier.
+     * @var NestedNameSpecifier|NULL
+     */
+    private $nnSpec;
     
     /**
      * Creates an instance of a simple type specifier defined as "int".
@@ -200,6 +209,27 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as a qualified 
+     * identifier.
+     * 
+     * @param   NestedNameSpecifier $nnSpec The nested name specifier.
+     * @param   Identifier          $id     The identifier.
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createQualifiedIdentifier(
+        NestedNameSpecifier $nnSpec, 
+        Identifier $id
+    ): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_QUALIFIED_ID;
+        $stSpec->nnSpec = $nnSpec;
+        $stSpec->id = $id;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -317,13 +347,34 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Indicates whether this simple type specifier is defined as a qualified 
+     * identifier.
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as a qualified identifier, otherwise FALSE.
+     */
+    public function isQualifiedIdentifier(): bool
+    {
+        return $this->type == self::ST_QUALIFIED_ID;
+    }
+    
+    /**
      * Returns the identifier.
      * 
-     * @return  Identifier|NULL The instance of Identifier if this simple type specifier is defined as "identifier", otherwise NULL.
+     * @return  Identifier|NULL The instance of Identifier if this simple type specifier is defined as "identifier" or a qualified identifier, otherwise NULL.
      */
     public function getIdentifier(): ?Identifier
     {
         return $this->id;
+    }
+    
+    /**
+     * Returns the nested name specifier.
+     * 
+     * @return  NestedNameSpecifier|NULL    The instance of NestedNameSpecifier if this simple type specifier is defined as a qualified identifier, otherwise NULL.
+     */
+    public function getNestedNameSpecifier(): ?NestedNameSpecifier
+    {
+        return $this->nnSpec;
     }
 }
 

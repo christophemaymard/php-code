@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierDoubleFactory;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -141,6 +142,20 @@ class SimpleTypeSpecifierTest extends TestCase
         
         $stSpec1 = SimpleTypeSpecifier::createIdentifier($id);
         $stSpec2 = SimpleTypeSpecifier::createIdentifier($id);
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
+     * Tests that createQualifiedIdentifier() returns new instances of 
+     * SimpleTypeSpecifier.
+     */
+    public function testCreateQualifiedIdentifierReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $stSpec1 = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
+        $stSpec2 = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
         self::assertNotSame($stSpec1, $stSpec2);
     }
     
@@ -410,6 +425,19 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isIdentifier() returns FALSE when the instance has been 
+     * created by createQualifiedIdentifier().
+     */
+    public function testIsIdentifierReturnsFalseWhenCreateQualifiedIdentifier(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
+        self::assertFalse($sut->isIdentifier());
+    }
+    
+    /**
      * Tests that isIdentifier() returns TRUE when the instance has been created 
      * by createIdentifier().
      */
@@ -419,6 +447,34 @@ class SimpleTypeSpecifierTest extends TestCase
         
         $sut = SimpleTypeSpecifier::createIdentifier($id);
         self::assertTrue($sut->isIdentifier());
+    }
+    
+    /**
+     * Tests that isQualifiedIdentifier() returns FALSE when the instance is 
+     * not created by createQualifiedIdentifier().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
+     */
+    public function testIsQualifiedIdentifierReturnsFalseWhenNotCreateQualifiedIdentifier(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isQualifiedIdentifier());
+    }
+    
+    /**
+     * Tests that isQualifiedIdentifier() returns TRUE when the instance has 
+     * been created by createQualifiedIdentifier().
+     */
+    public function testIsQualifiedIdentifierReturnsTrueWhenCreateQualifiedIdentifier(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
+        self::assertTrue($sut->isQualifiedIdentifier());
     }
     
     /**
@@ -446,6 +502,48 @@ class SimpleTypeSpecifierTest extends TestCase
         
         $sut = SimpleTypeSpecifier::createIdentifier($id);
         self::assertSame($id, $sut->getIdentifier());
+    }
+    
+    /**
+     * Tests that getIdentifier() returns instance of Identifier when the 
+     * instance has been created by createQualifiedIdentifier().
+     */
+    public function testGetIdentifierReturnsInstanceIdentifierWhenCreateQualifiedIdentifier(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
+        self::assertSame($id, $sut->getIdentifier());
+    }
+    
+    /**
+     * Tests that getNestedNameSpecifier() returns NULL when the instance is 
+     * not created by createQualifiedIdentifier().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
+     */
+    public function testGetNestedNameSpecifierReturnsNullWhenNotCreateQualifiedIdentifier(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertNull($sut->getNestedNameSpecifier());
+    }
+    
+    /**
+     * Tests that getNestedNameSpecifier() returns the instance of 
+     * NestedNameSpecifier when the instance is created by 
+     * createQualifiedIdentifier().
+     */
+    public function testGetNestedNameSpecifierReturnsInstanceNestedNameSpecifierWhenCreateQualifiedIdentifier(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id);
+        self::assertSame($nnSpec, $sut->getNestedNameSpecifier());
     }
     
     /**
@@ -486,6 +584,12 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -533,6 +637,12 @@ class SimpleTypeSpecifierTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -574,6 +684,12 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -621,6 +737,12 @@ class SimpleTypeSpecifierTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -662,6 +784,12 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -709,6 +837,12 @@ class SimpleTypeSpecifierTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -750,6 +884,12 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -797,6 +937,12 @@ class SimpleTypeSpecifierTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -838,6 +984,12 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -885,12 +1037,18 @@ class SimpleTypeSpecifierTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                SimpleTypeSpecifier::createQualifiedIdentifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
     /**
      * Returns a set of systems under test that are not simple type 
-     * specifier "identifier".
+     * specifier "identifier" (qualified identifier is excluded).
      * 
      * @return  array[]
      */
@@ -931,6 +1089,53 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier qualified identifier.
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierQualifiedIdentifierProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+        ];
+    }
+    
+    /**
      * Creates a factory of identifier doubles.
      * 
      * @return  IdentifierDoubleFactory The created instance of IdentifierDoubleFactory.
@@ -938,6 +1143,16 @@ class SimpleTypeSpecifierTest extends TestCase
     private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
     {
         return new IdentifierDoubleFactory($this);
+    }
+    
+    /**
+     * Creates a factory of nested name specifier doubles.
+     * 
+     * @return  NestedNameSpecifierDoubleFactory    The created instance of NestedNameSpecifierDoubleFactory.
+     */
+    private function createNestedNameSpecifierDoubleFactory(): NestedNameSpecifierDoubleFactory
+    {
+        return new NestedNameSpecifierDoubleFactory($this);
     }
 }
 
