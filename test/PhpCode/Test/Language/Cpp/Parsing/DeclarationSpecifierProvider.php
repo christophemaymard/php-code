@@ -104,6 +104,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'short', 
             ], 
+            [
+                'long', 
+                function() {
+                    return DeclarationSpecifierConstraint::createLong();
+                }, 
+                'long', 
+            ], 
         ];
     }
     
