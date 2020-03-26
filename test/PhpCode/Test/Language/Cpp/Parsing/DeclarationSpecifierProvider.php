@@ -111,6 +111,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'long', 
             ], 
+            [
+                'signed', 
+                function() {
+                    return DeclarationSpecifierConstraint::createSigned();
+                }, 
+                'signed', 
+            ], 
         ];
     }
     
