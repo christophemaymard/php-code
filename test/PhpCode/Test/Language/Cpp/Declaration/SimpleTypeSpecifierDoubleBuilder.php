@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
@@ -171,6 +172,36 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
     {
         $this->getSubjectProphecy()
             ->isDouble()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds a prophecy where isIdentifier() can be called.
+     * 
+     * @param   bool    $return The value to return when isIdentifier() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsIdentifier(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isIdentifier()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds a prophecy where getIdentifier() can be called.
+     * 
+     * @param   Identifier  $return The value to return when getIdentifier() is called (optional)(default to NULL).
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildGetIdentifier(Identifier $return = NULL): self
+    {
+        $this->getSubjectProphecy()
+            ->getIdentifier()
             ->willReturn($return);
         
         return $this;
