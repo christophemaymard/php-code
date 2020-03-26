@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -128,6 +129,18 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $stSpec1 = SimpleTypeSpecifier::createDouble();
         $stSpec2 = SimpleTypeSpecifier::createDouble();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
+     * Tests that createIdentifier() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateIdentifierReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $stSpec1 = SimpleTypeSpecifier::createIdentifier($id);
+        $stSpec2 = SimpleTypeSpecifier::createIdentifier($id);
         self::assertNotSame($stSpec1, $stSpec2);
     }
     
@@ -382,6 +395,60 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isIdentifier() returns FALSE when the instance is not created 
+     * by createIdentifier().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
+     */
+    public function testIsIdentifierReturnsFalseWhenNotCreateIdentifier(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isIdentifier());
+    }
+    
+    /**
+     * Tests that isIdentifier() returns TRUE when the instance has been created 
+     * by createIdentifier().
+     */
+    public function testIsIdentifierReturnsTrueWhenCreateIdentifier(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createIdentifier($id);
+        self::assertTrue($sut->isIdentifier());
+    }
+    
+    /**
+     * Tests that getIdentifier() returns NULL when the instance is not 
+     * created by createIdentifier().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
+     */
+    public function testGetIdentifierReturnsNullWhenNotCreateIdentifier(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertNull($sut->getIdentifier());
+    }
+    
+    /**
+     * Tests that getIdentifier() returns instance of Identifier when the 
+     * instance has been created by createIdentifier().
+     */
+    public function testGetIdentifierReturnsInstanceIdentifierWhenCreateIdentifier(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        
+        $sut = SimpleTypeSpecifier::createIdentifier($id);
+        self::assertSame($id, $sut->getIdentifier());
+    }
+    
+    /**
      * Returns a set of systems under test that are not simple type 
      * specifier "int".
      * 
@@ -416,6 +483,11 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
     }
@@ -456,6 +528,11 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -494,6 +571,11 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
     }
@@ -534,6 +616,11 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -572,6 +659,11 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
     }
@@ -612,6 +704,11 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -650,6 +747,11 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
     }
@@ -690,6 +792,11 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
     }
     
@@ -728,6 +835,11 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 SimpleTypeSpecifier::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
     }
@@ -768,7 +880,64 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 SimpleTypeSpecifier::createUnsigned(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                SimpleTypeSpecifier::createIdentifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "identifier".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierIdentifierProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                SimpleTypeSpecifier::createUnsigned(), 
+            ], 
+            'Simple type specifier "double"' => [
+                SimpleTypeSpecifier::createDouble(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Creates a factory of identifier doubles.
+     * 
+     * @return  IdentifierDoubleFactory The created instance of IdentifierDoubleFactory.
+     */
+    private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
+    {
+        return new IdentifierDoubleFactory($this);
     }
 }
 

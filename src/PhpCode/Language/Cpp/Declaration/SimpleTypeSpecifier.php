@@ -7,10 +7,13 @@
  */
 namespace PhpCode\Language\Cpp\Declaration;
 
+use PhpCode\Language\Cpp\Lexical\Identifier;
+
 /**
  * Represents a simple type specifier.
  * 
  * simple-type-specifier:
+ *     identifier
  *     char
  *     wchar_t
  *     bool
@@ -36,12 +39,20 @@ class SimpleTypeSpecifier
     private const ST_SIGNED = 8;
     private const ST_UNSIGNED = 9;
     private const ST_DOUBLE = 10;
+    private const ST_ID = 11;
     
     /**
      * The type of this simple type specifier.
      * @var int
      */
     private $type;
+    
+    /**
+     * The identifier of this simple type specifier if it has been defined 
+     * as "identifier".
+     * @var Identifier|NULL
+     */
+    private $id;
     
     /**
      * Creates an instance of a simple type specifier defined as "int".
@@ -174,6 +185,21 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "identifier".
+     * 
+     * @param   Identifier  $id The identifier.
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createIdentifier(Identifier $id): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_ID;
+        $stSpec->id = $id;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -278,6 +304,26 @@ class SimpleTypeSpecifier
     public function isDouble(): bool
     {
         return $this->type == self::ST_DOUBLE;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "identifier".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "identifier", otherwise FALSE.
+     */
+    public function isIdentifier(): bool
+    {
+        return $this->type == self::ST_ID;
+    }
+    
+    /**
+     * Returns the identifier.
+     * 
+     * @return  Identifier|NULL The instance of Identifier if this simple type specifier is defined as "identifier", otherwise NULL.
+     */
+    public function getIdentifier(): ?Identifier
+    {
+        return $this->id;
     }
 }
 
