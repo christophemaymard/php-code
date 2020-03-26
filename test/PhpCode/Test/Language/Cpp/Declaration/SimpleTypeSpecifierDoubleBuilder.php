@@ -145,5 +145,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isUnsigned() can be called.
+     * 
+     * @param   bool    $return The value to return when isUnsigned() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsUnsigned(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isUnsigned()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
