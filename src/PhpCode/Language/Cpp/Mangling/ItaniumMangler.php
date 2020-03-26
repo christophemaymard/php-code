@@ -233,8 +233,12 @@ class ItaniumMangler
             return 'w';
         }
         
-        // It is "short".
-        return 's';
+        if ($stSpec->isShort()) {
+            return 's';
+        }
+        
+        // It is "long".
+        return 'l';
     }
     
     /**

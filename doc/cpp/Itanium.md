@@ -125,6 +125,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 |                  | **c**       | char     |
 |                  | **s**       | short    |
 |                  | **i**       | int      |
+|                  | **l**       | long     |
 |                  | **f**       | float    |
 |                  | **z**       | ellipsis |
 
