@@ -9,6 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraint;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint;
 
 /**
  * Represents the constraint for a declaration specifier.
@@ -27,12 +28,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_SIGNED = 8;
     private const ST_UNSIGNED = 9;
     private const ST_DOUBLE = 10;
+    private const ST_ID = 11;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
      * @var int
      */
     private $stSpecType;
+    
+    /**
+     * The identifier constraint if it has been defined as "identifier".
+     * @var IdentifierConstraint|NULL
+     */
+    private $idConst;
     
     /**
      * Creates a constraint for a simple type specifier that is "int".
@@ -165,6 +173,21 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "identifier".
+     * 
+     * @param   IdentifierConstraint    $idConst    The identifier constraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createIdentifier(IdentifierConstraint $idConst): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_ID;
+        $const->idConst = $idConst;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -187,6 +210,14 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
         $lines = [];
         $lines[] = $this->getConceptName();
         $lines[] = $this->indent($this->getType());
+        
+        if ($this->stSpecType == self::ST_ID) {
+            $lines[] = $this->indent(
+                $this->indent(
+                    $this->idConst->constraintDescription()
+                )
+            );
+        }
         
         return \implode("\n", $lines);
     }
@@ -225,7 +256,14 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isUnsigned();
             case self::ST_DOUBLE:
                 return $stSpec->isDouble();
+            case self::ST_ID:
+                if (!$stSpec->isIdentifier()) {
+                    return FALSE;
+                }
+                
+                return $this->idConst->matches($stSpec->getIdentifier());
         }
+        
     }
     
     /**
@@ -261,6 +299,16 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "unsigned"');
         } elseif ($this->stSpecType == self::ST_DOUBLE && !$stSpec->isDouble()) {
             return $this->isReason(TRUE, 'simple type specifier "double"');
+        } elseif ($this->stSpecType == self::ST_ID) {
+            if (!$stSpec->isIdentifier()) {
+                return $this->isReason(TRUE, 'simple type specifier "identifier"');
+            }
+            
+            if (!$this->idConst->matches($stSpec->getIdentifier())) {
+                return $this->conceptIndent(
+                    $this->idConst->failureReason($stSpec->getIdentifier())
+                );
+            }
         }
         
         return $this->failureDefaultReason($other);
@@ -317,6 +365,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_DOUBLE:
                 $type = 'double';
+                break;
+            case self::ST_ID:
+                $type = 'identifier';
                 break;
         }
         

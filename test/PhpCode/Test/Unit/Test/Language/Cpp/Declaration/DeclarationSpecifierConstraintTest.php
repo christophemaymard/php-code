@@ -8,8 +8,10 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
+use PhpCode\Test\Language\Cpp\ConceptConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -220,6 +222,25 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that constraintDescription() returns a string when the instance 
+     * is created by createIdentifier().
+     */
+    public function testConstraintDescriptionReturnsStringWhenCreateIdentifier(): void
+    {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('foo Identifier')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            "Declaration specifier\n".
+            "  Simple type specifier \"identifier\"\n".
+            "    foo Identifier", 
+            $sut->constraintDescription()
+        );
+    }
+    
+    /**
      * Tests that matches() returns FALSE when not instance of 
      * DeclarationSpecifier.
      * 
@@ -395,6 +416,43 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createIdentifier() and not simple type specifier "identifier".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
+     */
+    public function testMatchesReturnsFalseWhenCreateIdentifierAndNotSimpleTypeSpecifierIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createIdentifier() and identifier does not match.
+     */
+    public function testMatchesReturnsFalseWhenCreateIdentifierAndIdentifierDoesNotMatch(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
      * Tests that matches() returns TRUE when the instance is created by 
      * createInt() and simple type specifier "int".
      */
@@ -521,6 +579,24 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createDoubleSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createDouble();
+        self::assertTrue($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns TRUE when the instance is created by 
+     * createIdentifier() and identifier matches.
+     */
+    public function testMatchesReturnsTrueWhenCreateIdentifierAndIdentifierMatches(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
         self::assertTrue($sut->matches($declSpec));
     }
     
@@ -737,6 +813,52 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that failureReason() returns a string when the instance is 
+     * created by createIdentifier() and is not a simple type specifier 
+     * "identifier".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
+     */
+    public function testFailureReasonReturnsStringWhenCreateIdentifierAndNotSimpleTypeSpecifierIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            'Declaration specifier: It should be simple type specifier "identifier".', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createIdentifier() and identifier does not match.
+     */
+    public function testFailureReasonReturnsStringWhenCreateIdentifierAndIdentifierDoesNotMatch(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildFailureReason($id, 'foo reason')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            "Declaration specifier\n".
+            "  foo reason", 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
      * created by createInt() and is a simple type specifier "int".
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
@@ -889,6 +1011,27 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createDoubleSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createDouble();
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createIdentifier() and identifier matches.
+     */
+    public function testFailureReasonReturnsStringWhenCreateIdentifierAndIdentifierMatches(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
         self::assertSame(
             'Declaration specifier: Unknown reason.', 
             $sut->failureReason($declSpec)
@@ -1088,6 +1231,31 @@ class DeclarationSpecifierConstraintTest extends TestCase
             "`^\n".
             "Declaration specifier\n".
             "  Simple type specifier \"double\"\n".
+            "\n".
+            "Declaration specifier: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', DeclarationSpecifier::class)
+        );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createIdentifier() and not instance of 
+     * DeclarationSpecifier.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotInstanceDeclarationSpecifier(): void
+    {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        
+        $pattern = \sprintf(
+            "`^\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"identifier\"\n".
+            "    foo description\n".
             "\n".
             "Declaration specifier: .+ is not an instance of %s\\.$`", 
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
@@ -1337,6 +1505,65 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createIdentifier() and is not a simple type 
+     * specifier "identifier".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotSimpleTypeSpecifierIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"identifier\"\n".
+            "    foo description\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier \"identifier\".", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createIdentifier() and identifier does not 
+     * match.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndIdentifierDoesNotMatch(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildConstraintDescription('foo description')
+            ->buildFailureReason($id, 'bar reason')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"identifier\"\n".
+            "    foo description\n".
+            "\n".
+            "Declaration specifier\n".
+            "  bar reason", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
      * instance is created by createInt() and is a simple type specifier 
      * "int".
      */
@@ -1546,6 +1773,33 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createIdentifier() and identifier matches.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateDoubleAndIdentifierMatches(): void
+    {
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createIdentifierSimpleTypeSpecifier($id);
+        
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"identifier\"\n".
+            "    foo description\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
      * Tests that failureDescription() is called when the value is invalid.
      * 
      * @param   DeclarationSpecifierConstraint  $sut    The system under test.
@@ -1569,6 +1823,10 @@ class DeclarationSpecifierConstraintTest extends TestCase
      */
     public function getSutProvider(): array
     {
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('foo Identifier')
+            ->getDouble();
+        
         return [
             'Simple type specifier "int"' => [
                 DeclarationSpecifierConstraint::createInt(), 
@@ -1599,6 +1857,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 DeclarationSpecifierConstraint::createDouble(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                DeclarationSpecifierConstraint::createIdentifier($idConst), 
             ], 
         ];
     }
@@ -1643,6 +1904,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
         
@@ -1690,6 +1956,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -1735,6 +2006,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
         
@@ -1782,6 +2058,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -1827,6 +2108,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
         
@@ -1874,6 +2160,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -1919,6 +2210,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
         
@@ -1966,6 +2262,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2011,6 +2312,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
             ], 
         ];
         
@@ -2058,6 +2364,60 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "unsigned"' => [
                 $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier "identifier".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierIdentifierProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "int"' => [
+                $declSpecFactory->createIntSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "float"' => [
+                $declSpecFactory->createFloatSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                $declSpecFactory->createBoolSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "char"' => [
+                $declSpecFactory->createCharSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                $declSpecFactory->createWCharTSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "short"' => [
+                $declSpecFactory->createShortSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                $declSpecFactory->createSignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "double"' => [
+                $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -2071,6 +2431,16 @@ class DeclarationSpecifierConstraintTest extends TestCase
     private function createDeclarationSpecifierDoubleFactory(): DeclarationSpecifierDoubleFactory
     {
         return new DeclarationSpecifierDoubleFactory($this);
+    }
+    
+    /**
+     * Creates a factory of identifier doubles.
+     * 
+     * @return  IdentifierDoubleFactory The created instance of IdentifierDoubleFactory.
+     */
+    private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
+    {
+        return new IdentifierDoubleFactory($this);
     }
 }
 
