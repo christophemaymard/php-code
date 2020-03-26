@@ -16,6 +16,7 @@ namespace PhpCode\Language\Cpp\Declaration;
  *     bool
  *     short
  *     int
+ *     long
  *     float
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
@@ -28,6 +29,7 @@ class SimpleTypeSpecifier
     private const ST_CHAR = 4;
     private const ST_WCHART = 5;
     private const ST_SHORT = 6;
+    private const ST_LONG = 7;
     
     /**
      * The type of this simple type specifier.
@@ -114,6 +116,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "long".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createLong(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_LONG;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -178,6 +193,16 @@ class SimpleTypeSpecifier
     public function isShort(): bool
     {
         return $this->type == self::ST_SHORT;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "long".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "long", otherwise FALSE.
+     */
+    public function isLong(): bool
+    {
+        return $this->type == self::ST_LONG;
     }
 }
 

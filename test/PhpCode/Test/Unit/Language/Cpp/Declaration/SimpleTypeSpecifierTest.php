@@ -92,6 +92,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createLong() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateLongReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createLong();
+        $stSpec2 = SimpleTypeSpecifier::createLong();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns FALSE when the instance is not created by 
      * createInt().
      * 
@@ -242,6 +252,31 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isLong() returns FALSE when the instance is not created by 
+     * createLong().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierLongProvider
+     */
+    public function testIsLongReturnsFalseWhenNotCreateLong(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isLong());
+    }
+    
+    /**
+     * Tests that isLong() returns TRUE when the instance has been created 
+     * by createLong().
+     */
+    public function testIsLongReturnsTrueWhenCreateLong(): void
+    {
+        $sut = SimpleTypeSpecifier::createLong();
+        self::assertTrue($sut->isLong());
+    }
+    
+    /**
      * Returns a set of systems under test that are not simple type 
      * specifier "int".
      * 
@@ -264,6 +299,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
             ], 
         ];
     }
@@ -292,6 +330,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
             ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
         ];
     }
     
@@ -318,6 +359,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
             ], 
         ];
     }
@@ -346,6 +390,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
             ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
         ];
     }
     
@@ -373,6 +420,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "short"' => [
                 SimpleTypeSpecifier::createShort(), 
             ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
         ];
     }
     
@@ -399,6 +449,39 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "wchar_t"' => [
                 SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "long"' => [
+                SimpleTypeSpecifier::createLong(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "long".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierLongProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
             ], 
         ];
     }
