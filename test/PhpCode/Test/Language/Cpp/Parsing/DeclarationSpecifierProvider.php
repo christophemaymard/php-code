@@ -118,6 +118,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'signed', 
             ], 
+            [
+                'unsigned', 
+                function() {
+                    return DeclarationSpecifierConstraint::createUnsigned();
+                }, 
+                'unsigned', 
+            ], 
         ];
     }
     
