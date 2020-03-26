@@ -115,5 +115,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isLong() can be called.
+     * 
+     * @param   bool    $return The value to return when isLong() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsLong(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isLong()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
