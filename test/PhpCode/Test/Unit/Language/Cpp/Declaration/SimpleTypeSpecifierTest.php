@@ -102,6 +102,16 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createSigned() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateSignedReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createSigned();
+        $stSpec2 = SimpleTypeSpecifier::createSigned();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
      * Tests that isInt() returns FALSE when the instance is not created by 
      * createInt().
      * 
@@ -277,6 +287,31 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that isSigned() returns FALSE when the instance is not created 
+     * by createSigned().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierSignedProvider
+     */
+    public function testIsSignedReturnsFalseWhenNotCreateSigned(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isSigned());
+    }
+    
+    /**
+     * Tests that isSigned() returns TRUE when the instance has been created 
+     * by createSigned().
+     */
+    public function testIsSignedReturnsTrueWhenCreateSigned(): void
+    {
+        $sut = SimpleTypeSpecifier::createSigned();
+        self::assertTrue($sut->isSigned());
+    }
+    
+    /**
      * Returns a set of systems under test that are not simple type 
      * specifier "int".
      * 
@@ -302,6 +337,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
             ], 
         ];
     }
@@ -333,6 +371,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
             ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
         ];
     }
     
@@ -362,6 +403,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
             ], 
         ];
     }
@@ -393,6 +437,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
             ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
         ];
     }
     
@@ -422,6 +469,9 @@ class SimpleTypeSpecifierTest extends TestCase
             ], 
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
             ], 
         ];
     }
@@ -453,6 +503,9 @@ class SimpleTypeSpecifierTest extends TestCase
             'Simple type specifier "long"' => [
                 SimpleTypeSpecifier::createLong(), 
             ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
         ];
     }
     
@@ -463,6 +516,39 @@ class SimpleTypeSpecifierTest extends TestCase
      * @return  array[]
      */
     public function getNotSimpleTypeSpecifierLongProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                SimpleTypeSpecifier::createSigned(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "signed".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierSignedProvider(): array
     {
         return [
             'Simple type specifier "int"' => [

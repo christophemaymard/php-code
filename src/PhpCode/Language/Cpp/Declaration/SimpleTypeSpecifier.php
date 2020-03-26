@@ -17,6 +17,7 @@ namespace PhpCode\Language\Cpp\Declaration;
  *     short
  *     int
  *     long
+ *     signed
  *     float
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
@@ -30,6 +31,7 @@ class SimpleTypeSpecifier
     private const ST_WCHART = 5;
     private const ST_SHORT = 6;
     private const ST_LONG = 7;
+    private const ST_SIGNED = 8;
     
     /**
      * The type of this simple type specifier.
@@ -129,6 +131,19 @@ class SimpleTypeSpecifier
     }
     
     /**
+     * Creates an instance of a simple type specifier defined as "signed".
+     * 
+     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     */
+    public static function createSigned(): self
+    {
+        $stSpec = new self();
+        $stSpec->type = self::ST_SIGNED;
+        
+        return $stSpec;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -203,6 +218,16 @@ class SimpleTypeSpecifier
     public function isLong(): bool
     {
         return $this->type == self::ST_LONG;
+    }
+    
+    /**
+     * Indicates whether this simple type specifier is defined as "signed".
+     * 
+     * @return  bool    TRUE if this simple type specifier is defined as "signed", otherwise FALSE.
+     */
+    public function isSigned(): bool
+    {
+        return $this->type == self::ST_SIGNED;
     }
 }
 
