@@ -160,5 +160,20 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where isDouble() can be called.
+     * 
+     * @param   bool    $return The value to return when isDouble() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsDouble(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isDouble()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
