@@ -24,6 +24,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_WCHART = 5;
     private const ST_SHORT = 6;
     private const ST_LONG = 7;
+    private const ST_SIGNED = 8;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -123,6 +124,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "signed".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createSigned(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_SIGNED;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -177,6 +191,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isShort();
             case self::ST_LONG:
                 return $stSpec->isLong();
+            case self::ST_SIGNED:
+                return $stSpec->isSigned();
         }
     }
     
@@ -207,6 +223,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "short"');
         } elseif ($this->stSpecType == self::ST_LONG && !$stSpec->isLong()) {
             return $this->isReason(TRUE, 'simple type specifier "long"');
+        } elseif ($this->stSpecType == self::ST_SIGNED && !$stSpec->isSigned()) {
+            return $this->isReason(TRUE, 'simple type specifier "signed"');
         }
         
         return $this->failureDefaultReason($other);
@@ -254,6 +272,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_LONG:
                 $type = 'long';
+                break;
+            case self::ST_SIGNED:
+                $type = 'signed';
                 break;
         }
         
