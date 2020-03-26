@@ -243,8 +243,12 @@ class ItaniumMangler
             return 'l';
         }
         
-        // It is "unsigned".
-        return 'j';
+        if ($stSpec->isUnsigned()) {
+            return 'j';
+        }
+        
+        // It is "double".
+        return 'd';
     }
     
     /**

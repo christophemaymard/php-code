@@ -128,6 +128,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 |                  | **j**       | unsigned int |
 |                  | **l**       | long         |
 |                  | **f**       | float        |
+|                  | **d**       | double       |
 |                  | **z**       | ellipsis     |
 
 
