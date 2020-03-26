@@ -192,6 +192,20 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that constraintDescription() returns a string when the instance 
+     * is created by createUnsigned().
+     */
+    public function testConstraintDescriptionReturnsStringWhenCreateUnsigned(): void
+    {
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        self::assertSame(
+            "Declaration specifier\n".
+            "  Simple type specifier \"unsigned\"", 
+            $sut->constraintDescription()
+        );
+    }
+    
+    /**
      * Tests that matches() returns FALSE when not instance of 
      * DeclarationSpecifier.
      * 
@@ -335,6 +349,22 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createUnsigned() and not simple type specifier "unsigned".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierUnsignedProvider
+     */
+    public function testMatchesReturnsFalseWhenCreateUnsignedAndNotSimpleTypeSpecifierUnsigned(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
      * Tests that matches() returns TRUE when the instance is created by 
      * createInt() and simple type specifier "int".
      */
@@ -435,6 +465,19 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createSignedSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createSigned();
+        self::assertTrue($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns TRUE when the instance is created by 
+     * createUnsigned() and simple type specifier "unsigned".
+     */
+    public function testMatchesReturnsTrueWhenCreateUnsignedAndSimpleTypeSpecifierUnsigned(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createUnsignedSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
         self::assertTrue($sut->matches($declSpec));
     }
     
@@ -613,6 +656,25 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that failureReason() returns a string when the instance is 
+     * created by createUnsigned() and is not a simple type specifier "unsigned".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierUnsignedProvider
+     */
+    public function testFailureReasonReturnsStringWhenCreateUnsignedAndNotSimpleTypeSpecifierUnsigned(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        self::assertSame(
+            'Declaration specifier: It should be simple type specifier "unsigned".', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
      * created by createInt() and is a simple type specifier "int".
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
@@ -733,6 +795,22 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createSignedSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createSigned();
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createUnsigned() and is a simple type specifier "unsigned".
+     */
+    public function testFailureReasonReturnsStringWhenCreateUnsignedAndSimpleTypeSpecifierUnsigned(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createUnsignedSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
         self::assertSame(
             'Declaration specifier: Unknown reason.', 
             $sut->failureReason($declSpec)
@@ -892,6 +970,26 @@ class DeclarationSpecifierConstraintTest extends TestCase
             "`^\n".
             "Declaration specifier\n".
             "  Simple type specifier \"signed\"\n".
+            "\n".
+            "Declaration specifier: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', DeclarationSpecifier::class)
+        );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createUnsigned() and not instance of 
+     * DeclarationSpecifier.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndNotInstanceDeclarationSpecifier(): void
+    {
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        
+        $pattern = \sprintf(
+            "`^\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"unsigned\"\n".
             "\n".
             "Declaration specifier: .+ is not an instance of %s\\.$`", 
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
@@ -1093,6 +1191,30 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createUnsigned() and is not a simple type 
+     * specifier "unsigned".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierUnsignedProvider
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndNotSimpleTypeSpecifierUnsigned(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"unsigned\"\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier \"unsigned\".", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
      * instance is created by createInt() and is a simple type specifier 
      * "int".
      */
@@ -1260,6 +1382,27 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createUnsigned() and is a simple type specifier 
+     * "unsigned".
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndSimpleTypeSpecifierUnsigned(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createUnsignedSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createUnsigned();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"unsigned\"\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
      * Tests that failureDescription() is called when the value is invalid.
      * 
      * @param   DeclarationSpecifierConstraint  $sut    The system under test.
@@ -1308,6 +1451,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "signed"' => [
                 DeclarationSpecifierConstraint::createSigned(), 
             ], 
+            'Simple type specifier "unsigned"' => [
+                DeclarationSpecifierConstraint::createUnsigned(), 
+            ], 
         ];
     }
     
@@ -1345,6 +1491,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
             ], 
         ];
         
@@ -1386,6 +1535,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1425,6 +1577,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
             ], 
         ];
         
@@ -1466,6 +1621,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1505,6 +1663,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
             ], 
         ];
         
@@ -1546,6 +1707,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1586,6 +1750,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "signed"' => [
                 $declSpecFactory->createSignedSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1625,6 +1792,52 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "long"' => [
                 $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier "unsigned".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierUnsignedProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "int"' => [
+                $declSpecFactory->createIntSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "float"' => [
+                $declSpecFactory->createFloatSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                $declSpecFactory->createBoolSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "char"' => [
+                $declSpecFactory->createCharSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                $declSpecFactory->createWCharTSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "short"' => [
+                $declSpecFactory->createShortSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                $declSpecFactory->createSignedSimpleTypeSpecifier(), 
             ], 
         ];
         

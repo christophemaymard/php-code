@@ -25,6 +25,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_SHORT = 6;
     private const ST_LONG = 7;
     private const ST_SIGNED = 8;
+    private const ST_UNSIGNED = 9;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -137,6 +138,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "unsigned".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createUnsigned(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_UNSIGNED;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -193,6 +207,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isLong();
             case self::ST_SIGNED:
                 return $stSpec->isSigned();
+            case self::ST_UNSIGNED:
+                return $stSpec->isUnsigned();
         }
     }
     
@@ -225,6 +241,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "long"');
         } elseif ($this->stSpecType == self::ST_SIGNED && !$stSpec->isSigned()) {
             return $this->isReason(TRUE, 'simple type specifier "signed"');
+        } elseif ($this->stSpecType == self::ST_UNSIGNED && !$stSpec->isUnsigned()) {
+            return $this->isReason(TRUE, 'simple type specifier "unsigned"');
         }
         
         return $this->failureDefaultReason($other);
@@ -275,6 +293,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_SIGNED:
                 $type = 'signed';
+                break;
+            case self::ST_UNSIGNED:
+                $type = 'unsigned';
                 break;
         }
         
