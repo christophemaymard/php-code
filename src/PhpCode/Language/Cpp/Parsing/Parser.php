@@ -303,6 +303,7 @@ class Parser
      *     signed
      *     unsigned
      *     float
+     *     double
      * 
      * @return  DeclarationSpecifier
      * 
@@ -327,8 +328,10 @@ class Parser
                 $stSpec = SimpleTypeSpecifier::createLong();
             } elseif ($this->tokenIs(Tag::KW_SIGNED)) {
                 $stSpec = SimpleTypeSpecifier::createSigned();
-            } else {
+            } elseif ($this->tokenIs(Tag::KW_UNSIGNED)) {
                 $stSpec = SimpleTypeSpecifier::createUnsigned();
+            } else {
+                $stSpec = SimpleTypeSpecifier::createDouble();
             }
             
             $this->move();
@@ -394,6 +397,7 @@ class Parser
             Tag::KW_SIGNED, 
             Tag::KW_UNSIGNED, 
             Tag::KW_FLOAT, 
+            Tag::KW_DOUBLE, 
         ]);
     }
     

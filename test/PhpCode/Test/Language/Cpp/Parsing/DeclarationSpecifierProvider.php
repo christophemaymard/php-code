@@ -125,6 +125,13 @@ class DeclarationSpecifierProvider
                 }, 
                 'unsigned', 
             ], 
+            [
+                'double', 
+                function() {
+                    return DeclarationSpecifierConstraint::createDouble();
+                }, 
+                'double', 
+            ], 
         ];
     }
     
