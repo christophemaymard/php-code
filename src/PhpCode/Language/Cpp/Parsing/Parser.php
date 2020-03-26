@@ -294,6 +294,7 @@ class Parser
      *     simple-type-specifier
      * 
      * simple-type-specifier:
+     *     identifier
      *     char
      *     wchar_t
      *     bool
@@ -330,8 +331,14 @@ class Parser
                 $stSpec = SimpleTypeSpecifier::createSigned();
             } elseif ($this->tokenIs(Tag::KW_UNSIGNED)) {
                 $stSpec = SimpleTypeSpecifier::createUnsigned();
-            } else {
+            } elseif ($this->tokenIs(Tag::KW_DOUBLE)) {
                 $stSpec = SimpleTypeSpecifier::createDouble();
+            } else {
+                // The token to process is an identifier.
+                
+                $stSpec = SimpleTypeSpecifier::createIdentifier(
+                    new Identifier($this->tkn->getLexeme())
+                );
             }
             
             $this->move();
@@ -388,6 +395,7 @@ class Parser
     private function tokenIsSimpleTypeSpecifier(): bool
     {
         return $this->tokenIsOneOf([
+            Tag::ID, 
             Tag::KW_CHAR, 
             Tag::KW_WCHAR_T, 
             Tag::KW_BOOL, 

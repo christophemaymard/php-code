@@ -9,6 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Parsing;
 
 use PhpCode\Test\Language\Cpp\CallableConceptConstraintFactory;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
+use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint;
 
 /**
  * Represents the data provider related to declaration specifiers.
@@ -131,6 +132,15 @@ class DeclarationSpecifierProvider
                     return DeclarationSpecifierConstraint::createDouble();
                 }, 
                 'double', 
+            ], 
+            [
+                'declspec_id1', 
+                function() {
+                    return DeclarationSpecifierConstraint::createIdentifier(
+                        new IdentifierConstraint('declspec_id1')
+                    );
+                }, 
+                'declspec_id1', 
             ], 
         ];
     }
