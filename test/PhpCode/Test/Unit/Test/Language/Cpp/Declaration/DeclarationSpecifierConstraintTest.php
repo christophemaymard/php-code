@@ -164,6 +164,20 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that constraintDescription() returns a string when the instance 
+     * is created by createLong().
+     */
+    public function testConstraintDescriptionReturnsStringWhenCreateLong(): void
+    {
+        $sut = DeclarationSpecifierConstraint::createLong();
+        self::assertSame(
+            "Declaration specifier\n".
+            "  Simple type specifier \"long\"", 
+            $sut->constraintDescription()
+        );
+    }
+    
+    /**
      * Tests that matches() returns FALSE when not instance of 
      * DeclarationSpecifier.
      * 
@@ -275,6 +289,22 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createLong() and not simple type specifier "long".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierLongProvider
+     */
+    public function testMatchesReturnsFalseWhenCreateLongAndNotSimpleTypeSpecifierLong(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createLong();
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
      * Tests that matches() returns TRUE when the instance is created by 
      * createInt() and simple type specifier "int".
      */
@@ -349,6 +379,19 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createShortSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createShort();
+        self::assertTrue($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns TRUE when the instance is created by 
+     * createLong() and simple type specifier "long".
+     */
+    public function testMatchesReturnsTrueWhenCreateLongAndSimpleTypeSpecifierLong(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createLongSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createLong();
         self::assertTrue($sut->matches($declSpec));
     }
     
@@ -489,6 +532,25 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that failureReason() returns a string when the instance is 
+     * created by createLong() and is not a simple type specifier "long".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierLongProvider
+     */
+    public function testFailureReasonReturnsStringWhenCreateLongAndNotSimpleTypeSpecifierLong(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createLong();
+        self::assertSame(
+            'Declaration specifier: It should be simple type specifier "long".', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
      * created by createInt() and is a simple type specifier "int".
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
@@ -577,6 +639,22 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->createShortSimpleTypeSpecifier();
         
         $sut = DeclarationSpecifierConstraint::createShort();
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createLong() and is a simple type specifier "long".
+     */
+    public function testFailureReasonReturnsStringWhenCreateLongAndSimpleTypeSpecifierLong(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createLongSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createLong();
         self::assertSame(
             'Declaration specifier: Unknown reason.', 
             $sut->failureReason($declSpec)
@@ -696,6 +774,26 @@ class DeclarationSpecifierConstraintTest extends TestCase
             "`^\n".
             "Declaration specifier\n".
             "  Simple type specifier \"short\"\n".
+            "\n".
+            "Declaration specifier: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', DeclarationSpecifier::class)
+        );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createLong() and not instance of 
+     * DeclarationSpecifier.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndNotInstanceDeclarationSpecifier(): void
+    {
+        $sut = DeclarationSpecifierConstraint::createLong();
+        
+        $pattern = \sprintf(
+            "`^\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"long\"\n".
             "\n".
             "Declaration specifier: .+ is not an instance of %s\\.$`", 
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
@@ -849,6 +947,30 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createLong() and is not a simple type 
+     * specifier "long".
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierLongProvider
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndNotSimpleTypeSpecifierLong(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $sut = DeclarationSpecifierConstraint::createLong();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"long\"\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier \"long\".", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
      * instance is created by createInt() and is a simple type specifier 
      * "int".
      */
@@ -974,6 +1096,27 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createLong() and is a simple type specifier 
+     * "long".
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndSimpleTypeSpecifierLong(): void
+    {
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createLongSimpleTypeSpecifier();
+        
+        $sut = DeclarationSpecifierConstraint::createLong();
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier \"long\"\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
      * Tests that failureDescription() is called when the value is invalid.
      * 
      * @param   DeclarationSpecifierConstraint  $sut    The system under test.
@@ -1016,6 +1159,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "short"' => [
                 DeclarationSpecifierConstraint::createShort(), 
             ], 
+            'Simple type specifier "long"' => [
+                DeclarationSpecifierConstraint::createLong(), 
+            ], 
         ];
     }
     
@@ -1047,6 +1193,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "short"' => [
                 $declSpecFactory->createShortSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
             ], 
         ];
         
@@ -1082,6 +1231,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "short"' => [
                 $declSpecFactory->createShortSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1115,6 +1267,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "short"' => [
                 $declSpecFactory->createShortSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
             ], 
         ];
         
@@ -1150,6 +1305,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "short"' => [
                 $declSpecFactory->createShortSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1184,6 +1342,9 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "short"' => [
                 $declSpecFactory->createShortSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
         ];
         
         return $dataSet;
@@ -1217,6 +1378,46 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "wchar_t"' => [
                 $declSpecFactory->createWCharTSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier "long".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierLongProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "int"' => [
+                $declSpecFactory->createIntSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "float"' => [
+                $declSpecFactory->createFloatSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                $declSpecFactory->createBoolSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "char"' => [
+                $declSpecFactory->createCharSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                $declSpecFactory->createWCharTSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "short"' => [
+                $declSpecFactory->createShortSimpleTypeSpecifier(), 
             ], 
         ];
         

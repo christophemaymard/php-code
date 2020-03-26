@@ -23,6 +23,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_CHAR = 4;
     private const ST_WCHART = 5;
     private const ST_SHORT = 6;
+    private const ST_LONG = 7;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -109,6 +110,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is "long".
+     * 
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createLong(): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_LONG;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -161,6 +175,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 return $stSpec->isWCharT();
             case self::ST_SHORT:
                 return $stSpec->isShort();
+            case self::ST_LONG:
+                return $stSpec->isLong();
         }
     }
     
@@ -189,6 +205,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             return $this->isReason(TRUE, 'simple type specifier "wchar_t"');
         } elseif ($this->stSpecType == self::ST_SHORT && !$stSpec->isShort()) {
             return $this->isReason(TRUE, 'simple type specifier "short"');
+        } elseif ($this->stSpecType == self::ST_LONG && !$stSpec->isLong()) {
+            return $this->isReason(TRUE, 'simple type specifier "long"');
         }
         
         return $this->failureDefaultReason($other);
@@ -233,6 +251,9 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 break;
             case self::ST_SHORT:
                 $type = 'short';
+                break;
+            case self::ST_LONG:
+                $type = 'long';
                 break;
         }
         
