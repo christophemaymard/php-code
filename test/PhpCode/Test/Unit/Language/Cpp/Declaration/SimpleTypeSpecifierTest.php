@@ -82,6 +82,31 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
+     * Tests that createShort() returns new instances of SimpleTypeSpecifier.
+     */
+    public function testCreateShortReturnsNewInstanceSimpleTypeSpecifier(): void
+    {
+        $stSpec1 = SimpleTypeSpecifier::createShort();
+        $stSpec2 = SimpleTypeSpecifier::createShort();
+        self::assertNotSame($stSpec1, $stSpec2);
+    }
+    
+    /**
+     * Tests that isInt() returns FALSE when the instance is not created by 
+     * createInt().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierIntProvider
+     */
+    public function testIsIntReturnsFalseWhenNotCreateInt(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isInt());
+    }
+    
+    /**
      * Tests that isInt() returns TRUE when the instance has been created by 
      * createInt().
      */
@@ -92,58 +117,23 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
-     * Tests that isInt() returns FALSE when the instance has been created by 
+     * Tests that isFloat() returns FALSE when the instance is not created by 
      * createFloat().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierFloatProvider
      */
-    public function testIsIntReturnsFalseWhenCreateFloat(): void
+    public function testIsFloatReturnsFalseWhenNotCreateFloat(
+        SimpleTypeSpecifier $sut
+    ): void
     {
-        $sut = SimpleTypeSpecifier::createFloat();
-        self::assertFalse($sut->isInt());
-    }
-    
-    /**
-     * Tests that isInt() returns FALSE when the instance has been created by 
-     * createBool().
-     */
-    public function testIsIntReturnsFalseWhenCreateBool(): void
-    {
-        $sut = SimpleTypeSpecifier::createBool();
-        self::assertFalse($sut->isInt());
-    }
-    
-    /**
-     * Tests that isInt() returns FALSE when the instance has been created by 
-     * createChar().
-     */
-    public function testIsIntReturnsFalseWhenCreateChar(): void
-    {
-        $sut = SimpleTypeSpecifier::createChar();
-        self::assertFalse($sut->isInt());
-    }
-    
-    /**
-     * Tests that isInt() returns FALSE when the instance has been created by 
-     * createWCharT().
-     */
-    public function testIsIntReturnsFalseWhenCreateWCharT(): void
-    {
-        $sut = SimpleTypeSpecifier::createWCharT();
-        self::assertFalse($sut->isInt());
-    }
-    
-    /**
-     * Tests that isFloat() returns FALSE when the instance has been created by 
-     * createInt().
-     */
-    public function testIsFloatReturnsFalseWhenCreateInt(): void
-    {
-        $sut = SimpleTypeSpecifier::createInt();
         self::assertFalse($sut->isFloat());
     }
     
     /**
-     * Tests that isFloat() returns TRUE when the instance has been created by 
-     * createFloat().
+     * Tests that isFloat() returns TRUE when the instance has been created 
+     * by createFloat().
      */
     public function testIsFloatReturnsTrueWhenCreateFloat(): void
     {
@@ -152,52 +142,17 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
-     * Tests that isFloat() returns FALSE when the instance has been created by 
+     * Tests that isBool() returns FALSE when the instance is not created by 
      * createBool().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierBoolProvider
      */
-    public function testIsFloatReturnsFalseWhenCreateBool(): void
+    public function testIsBoolReturnsFalseWhenNotCreateBool(
+        SimpleTypeSpecifier $sut
+    ): void
     {
-        $sut = SimpleTypeSpecifier::createBool();
-        self::assertFalse($sut->isFloat());
-    }
-    
-    /**
-     * Tests that isFloat() returns FALSE when the instance has been created by 
-     * createChar().
-     */
-    public function testIsFloatReturnsFalseWhenCreateChar(): void
-    {
-        $sut = SimpleTypeSpecifier::createChar();
-        self::assertFalse($sut->isFloat());
-    }
-    
-    /**
-     * Tests that isFloat() returns FALSE when the instance has been created by 
-     * createWCharT().
-     */
-    public function testIsFloatReturnsFalseWhenCreateWCharT(): void
-    {
-        $sut = SimpleTypeSpecifier::createWCharT();
-        self::assertFalse($sut->isFloat());
-    }
-    
-    /**
-     * Tests that isBool() returns FALSE when the instance has been created 
-     * by createInt().
-     */
-    public function testIsBoolReturnsFalseWhenCreateInt(): void
-    {
-        $sut = SimpleTypeSpecifier::createInt();
-        self::assertFalse($sut->isBool());
-    }
-    
-    /**
-     * Tests that isBool() returns FALSE when the instance has been created 
-     * by createFloat().
-     */
-    public function testIsBoolReturnsFalseWhenCreateFloat(): void
-    {
-        $sut = SimpleTypeSpecifier::createFloat();
         self::assertFalse($sut->isBool());
     }
     
@@ -212,52 +167,17 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
-     * Tests that isBool() returns FALSE when the instance has been created 
-     * by createChar().
+     * Tests that isChar() returns FALSE when the instance is not created by 
+     * createChar().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierCharProvider
      */
-    public function testIsBoolReturnsFalseWhenCreateChar(): void
+    public function testIsCharReturnsFalseWhenNotCreateChar(
+        SimpleTypeSpecifier $sut
+    ): void
     {
-        $sut = SimpleTypeSpecifier::createChar();
-        self::assertFalse($sut->isBool());
-    }
-    
-    /**
-     * Tests that isBool() returns FALSE when the instance has been created 
-     * by createWCharT().
-     */
-    public function testIsBoolReturnsFalseWhenCreateWCharT(): void
-    {
-        $sut = SimpleTypeSpecifier::createWCharT();
-        self::assertFalse($sut->isBool());
-    }
-    
-    /**
-     * Tests that isChar() returns FALSE when the instance has been created 
-     * by createInt().
-     */
-    public function testIsCharReturnsFalseWhenCreateInt(): void
-    {
-        $sut = SimpleTypeSpecifier::createInt();
-        self::assertFalse($sut->isChar());
-    }
-    
-    /**
-     * Tests that isChar() returns FALSE when the instance has been created 
-     * by createFloat().
-     */
-    public function testIsCharReturnsFalseWhenCreateFloat(): void
-    {
-        $sut = SimpleTypeSpecifier::createFloat();
-        self::assertFalse($sut->isChar());
-    }
-    
-    /**
-     * Tests that isChar() returns FALSE when the instance has been created 
-     * by createBool().
-     */
-    public function testIsCharReturnsFalseWhenCreateBool(): void
-    {
-        $sut = SimpleTypeSpecifier::createBool();
         self::assertFalse($sut->isChar());
     }
     
@@ -272,52 +192,17 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
-     * Tests that isChar() returns FALSE when the instance has been created 
-     * by createBool().
+     * Tests that isWCharT() returns FALSE when the instance is not created 
+     * by createWCharT().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierWCharTProvider
      */
-    public function testIsCharReturnsFalseWhenCreateWCharT(): void
+    public function testIsWCharTReturnsFalseWhenNotCreateWCharT(
+        SimpleTypeSpecifier $sut
+    ): void
     {
-        $sut = SimpleTypeSpecifier::createWCharT();
-        self::assertFalse($sut->isChar());
-    }
-    
-    /**
-     * Tests that isWCharT() returns FALSE when the instance has been created 
-     * by createInt().
-     */
-    public function testIsWCharTReturnsFalseWhenCreateInt(): void
-    {
-        $sut = SimpleTypeSpecifier::createInt();
-        self::assertFalse($sut->isWCharT());
-    }
-    
-    /**
-     * Tests that isWCharT() returns FALSE when the instance has been created 
-     * by createFloat().
-     */
-    public function testIsWCharTReturnsFalseWhenCreateFloat(): void
-    {
-        $sut = SimpleTypeSpecifier::createFloat();
-        self::assertFalse($sut->isWCharT());
-    }
-    
-    /**
-     * Tests that isWCharT() returns FALSE when the instance has been created 
-     * by createBool().
-     */
-    public function testIsWCharTReturnsFalseWhenCreateBool(): void
-    {
-        $sut = SimpleTypeSpecifier::createBool();
-        self::assertFalse($sut->isWCharT());
-    }
-    
-    /**
-     * Tests that isWCharT() returns FALSE when the instance has been created 
-     * by createChar().
-     */
-    public function testIsWCharTReturnsFalseWhenCreateChar(): void
-    {
-        $sut = SimpleTypeSpecifier::createChar();
         self::assertFalse($sut->isWCharT());
     }
     
@@ -329,6 +214,193 @@ class SimpleTypeSpecifierTest extends TestCase
     {
         $sut = SimpleTypeSpecifier::createWCharT();
         self::assertTrue($sut->isWCharT());
+    }
+    
+    /**
+     * Tests that isShort() returns FALSE when the instance is not created by 
+     * createShort().
+     * 
+     * @param   SimpleTypeSpecifier $sut    The system under test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierShortProvider
+     */
+    public function testIsShortReturnsFalseWhenNotCreateShort(
+        SimpleTypeSpecifier $sut
+    ): void
+    {
+        self::assertFalse($sut->isShort());
+    }
+    
+    /**
+     * Tests that isShort() returns TRUE when the instance has been created 
+     * by createShort().
+     */
+    public function testIsShortReturnsTrueWhenCreateShort(): void
+    {
+        $sut = SimpleTypeSpecifier::createShort();
+        self::assertTrue($sut->isShort());
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "int".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierIntProvider(): array
+    {
+        return [
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "float".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierFloatProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "bool".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierBoolProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "char".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierCharProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "wchar_t".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierWCharTProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "short"' => [
+                SimpleTypeSpecifier::createShort(), 
+            ], 
+        ];
+    }
+    
+    /**
+     * Returns a set of systems under test that are not simple type 
+     * specifier "short".
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierShortProvider(): array
+    {
+        return [
+            'Simple type specifier "int"' => [
+                SimpleTypeSpecifier::createInt(), 
+            ], 
+            'Simple type specifier "float"' => [
+                SimpleTypeSpecifier::createFloat(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                SimpleTypeSpecifier::createBool(), 
+            ], 
+            'Simple type specifier "char"' => [
+                SimpleTypeSpecifier::createChar(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                SimpleTypeSpecifier::createWCharT(), 
+            ], 
+        ];
     }
 }
 
