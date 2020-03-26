@@ -9,6 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleFactory;
 use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -56,6 +57,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -89,6 +92,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -122,6 +127,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -155,6 +162,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -188,6 +197,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -221,6 +232,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -254,6 +267,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -287,6 +302,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -320,6 +337,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(TRUE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -353,6 +372,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(TRUE)
             ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -386,6 +407,46 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsSigned(FALSE)
             ->buildIsUnsigned(FALSE)
             ->buildIsDouble(TRUE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier()
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * ->getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as "identifier".
+     * 
+     * @param   Identifier  $id The value to return when getIdentifier() is called.
+     * @return  ProphecySubjectInterface
+     */
+    public function createIdentifierSimpleTypeSpecifier(
+        Identifier $id
+    ): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
+            ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
+            ->buildIsWCharT(FALSE)
+            ->buildIsShort(FALSE)
+            ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
+            ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(TRUE)
+            ->buildGetIdentifier($id)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
