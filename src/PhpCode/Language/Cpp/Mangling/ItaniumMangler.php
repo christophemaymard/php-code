@@ -247,8 +247,12 @@ class ItaniumMangler
             return 'j';
         }
         
-        // It is "double".
-        return 'd';
+        if ($stSpec->isDouble()) {
+            return 'd';
+        }
+        
+        // It is "identifier".
+        return $this->mangleSourceName($stSpec->getIdentifier()->getIdentifier());
     }
     
     /**

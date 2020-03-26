@@ -109,9 +109,10 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 
 ### type
 
-| Rule     | Definitions                   |
-|:---------|:------------------------------|
-| **type** | [builtin-type](#builtin-type) |
+| Rule     | Definitions                         |
+|:---------|:------------------------------------|
+| **type** | [builtin-type](#builtin-type)       |
+|          | [class-enum-type](#class-enum-type) |
 
 
 
@@ -141,6 +142,14 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 
 
 
+### class-enum-type
+
+| Rule                | Definitions                     | Comments                                                                       |
+|:--------------------|:--------------------------------|:-------------------------------------------------------------------------------|
+| **class-enum-type** | [unscoped-name](#unscoped-name) | Non-dependent type name, dependent type name, or dependent typename-specifier. |
+
+
+
 ## **Expressions**
 
 
@@ -164,6 +173,8 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 - **B**
   - [bare-function-type](#bare-function-type)
   - [builtin-type](#builtin-type)
+- **C**
+  - [class-enum-type](#class-enum-type)
 - **E**
   - [encoding](#encoding)
 - **I**
