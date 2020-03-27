@@ -62,7 +62,7 @@ class DeclarationSpecifierProvider
      */
     private static function getSpecifications(): array
     {
-        return [
+        $specifications = [
             [ 
                 'int', 
                 function() {
@@ -143,6 +143,28 @@ class DeclarationSpecifierProvider
                 'declspec_id1', 
             ], 
         ];
+        
+        // Qualified identifiers.
+        foreach (NestedNameSpecifierProvider::createValidDataSet() as $nnSpecData) {
+            $stream = \sprintf('%squal_id', $nnSpecData->getStream());
+            $firstTokenLexeme = $nnSpecData->getFirstTokenLexeme();
+            
+            $nnSpecFactory = $nnSpecData->getConstraintFactory();
+            $callable = function() use ($nnSpecFactory) {
+                return DeclarationSpecifierConstraint::createQualifiedIdentifier(
+                    $nnSpecFactory->createConstraint(), 
+                    new IdentifierConstraint('qual_id')
+                );
+            };
+            
+            $specifications[] = [
+                $stream, 
+                $callable, 
+                $firstTokenLexeme, 
+            ];
+        }
+        
+        return $specifications;
     }
     
     /**
@@ -225,6 +247,26 @@ class DeclarationSpecifierProvider
         
         $dataSet[] = self::createEmptyInvalidData();
         
+        foreach (self::createInvalidDataSet() as $invalidData) {
+            $dataSet[] = $invalidData;
+        }
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of invalid data.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSet(): array
+    {
+        $dataSet = [];
+        
+        foreach (NestedNameSpecifierProvider::createValidDataSet() as $nnSpecData) {
+            $dataSet[] = self::createNestedNameInvalidData($nnSpecData);
+        }
+        
         return $dataSet;
     }
     
@@ -242,6 +284,27 @@ class DeclarationSpecifierProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Empty string');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * NESTED_NAME_SPECIFIER
+     * 
+     * @param   ValidData   $nnSpecData The nested name specifier data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createNestedNameInvalidData(
+        ValidData $nnSpecData
+    ): InvalidData
+    {
+        $stream = $nnSpecData->getStream();
+        $message = 'Unexpected "", expected identifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Qualified name with nested name specifier and no identifier');
         
         return $data;
     }

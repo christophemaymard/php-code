@@ -293,19 +293,6 @@ class Parser
      * type-specifier:
      *     simple-type-specifier
      * 
-     * simple-type-specifier:
-     *     identifier
-     *     char
-     *     wchar_t
-     *     bool
-     *     short
-     *     int
-     *     long
-     *     signed
-     *     unsigned
-     *     float
-     *     double
-     * 
      * @return  DeclarationSpecifier
      * 
      * @throws  FormatException When no declaration specifier has been parsed.
@@ -313,35 +300,7 @@ class Parser
     public function parseDeclarationSpecifier(): DeclarationSpecifier
     {
         if ($this->tokenIsSimpleTypeSpecifier()) {
-            if ($this->tokenIs(Tag::KW_INT)) {
-                $stSpec = SimpleTypeSpecifier::createInt();
-            } elseif ($this->tokenIs(Tag::KW_FLOAT)) {
-                $stSpec = SimpleTypeSpecifier::createFloat();
-            } elseif ($this->tokenIs(Tag::KW_BOOL)) {
-                $stSpec = SimpleTypeSpecifier::createBool();
-            } elseif ($this->tokenIs(Tag::KW_CHAR)) {
-                $stSpec = SimpleTypeSpecifier::createChar();
-            } elseif ($this->tokenIs(Tag::KW_WCHAR_T)) {
-                $stSpec = SimpleTypeSpecifier::createWCharT();
-            } elseif ($this->tokenIs(Tag::KW_SHORT)) {
-                $stSpec = SimpleTypeSpecifier::createShort();
-            } elseif ($this->tokenIs(Tag::KW_LONG)) {
-                $stSpec = SimpleTypeSpecifier::createLong();
-            } elseif ($this->tokenIs(Tag::KW_SIGNED)) {
-                $stSpec = SimpleTypeSpecifier::createSigned();
-            } elseif ($this->tokenIs(Tag::KW_UNSIGNED)) {
-                $stSpec = SimpleTypeSpecifier::createUnsigned();
-            } elseif ($this->tokenIs(Tag::KW_DOUBLE)) {
-                $stSpec = SimpleTypeSpecifier::createDouble();
-            } else {
-                // The token to process is an identifier.
-                
-                $stSpec = SimpleTypeSpecifier::createIdentifier(
-                    new Identifier($this->tkn->getLexeme())
-                );
-            }
-            
-            $this->move();
+            $stSpec = $this->parseSimpleTypeSpecifier();
             
             return DeclarationSpecifier::createDefiningTypeSpecifier(
                 DefiningTypeSpecifier::createTypeSpecifier(
@@ -354,6 +313,92 @@ class Parser
             'Unexpected "%s", expected decl-specifier.', 
             $this->tkn->getLexeme()
         ));
+    }
+    
+    /**
+     * Parse a simple type specifier.
+     * 
+     * simple-type-specifier:
+     *     nested-name-specifier[opt] identifier
+     *     char
+     *     wchar_t
+     *     bool
+     *     short
+     *     int
+     *     long
+     *     signed
+     *     unsigned
+     *     float
+     *     double
+     * 
+     * @return  SimpleTypeSpecifier
+     * 
+     * @throws  FormatException When an identifier is expected.
+     */
+    private function parseSimpleTypeSpecifier(): SimpleTypeSpecifier
+    {
+        if ($this->moveIf(Tag::KW_CHAR)) {
+            return SimpleTypeSpecifier::createChar();
+        }
+        
+        if ($this->moveIf(Tag::KW_WCHAR_T)) {
+            return SimpleTypeSpecifier::createWCharT();
+        }
+        
+        if ($this->moveIf(Tag::KW_BOOL)) {
+            return SimpleTypeSpecifier::createBool();
+        }
+        
+        if ($this->moveIf(Tag::KW_SHORT)) {
+            return SimpleTypeSpecifier::createShort();
+        }
+        
+        if ($this->moveIf(Tag::KW_INT)) {
+            return SimpleTypeSpecifier::createInt();
+        }
+        
+        if ($this->moveIf(Tag::KW_LONG)) {
+            return SimpleTypeSpecifier::createLong();
+        }
+        
+        if ($this->moveIf(Tag::KW_SIGNED)) {
+            return SimpleTypeSpecifier::createSigned();
+        }
+        
+        if ($this->moveIf(Tag::KW_UNSIGNED)) {
+            return SimpleTypeSpecifier::createUnsigned();
+        }
+        
+        if ($this->moveIf(Tag::KW_FLOAT)) {
+            return SimpleTypeSpecifier::createFloat();
+        }
+        
+        if ($this->moveIf(Tag::KW_DOUBLE)) {
+            return SimpleTypeSpecifier::createDouble();
+        }
+        
+        // The token to process is an identifier.
+        
+        $nnSpec = new NestedNameSpecifier();
+        
+        while ($this->tokenIs(Tag::ID) && $this->lookAhead(1)->getTag() == TAG::PN_COLON_COLON) {
+            $nnSpec->addIdentifier(new Identifier($this->tkn->getLexeme()));
+            
+            // Consume the identifier and the scope.
+            $this->move();
+            $this->move();
+        }
+        
+        if (!$this->tokenIs(Tag::ID)) {
+            throw new FormatException(\sprintf('Unexpected "%s", expected identifier.', $this->tkn->getLexeme()));
+        }
+        
+        $id = new Identifier($this->tkn->getLexeme());
+        $this->move();
+        
+        return (\count($nnSpec) > 0) ?
+            SimpleTypeSpecifier::createQualifiedIdentifier($nnSpec, $id) : 
+            SimpleTypeSpecifier::createIdentifier($id);
     }
     
     /**

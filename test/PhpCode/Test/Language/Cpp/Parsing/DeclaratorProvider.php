@@ -268,6 +268,25 @@ class DeclaratorProvider
                 $dataSet[] = self::createParamCommaEllipsisParamInvalidData($didData, $prmDeclData);
                 $dataSet[] = self::createParamCommaEllipsisCommaParamInvalidData($didData, $prmDeclData);
             }
+            
+        
+            // Qualified name where identifier is missing.
+            
+            $nnSpecDataSet = NestedNameSpecifierProvider::createValidDataSet();
+            
+            foreach ($nnSpecDataSet as $nnSpecData) {
+                $dataSet[] = self::createNestedNameInvalidData($didData, $nnSpecData);
+            }
+            
+            foreach ($prmDeclDataSet as $prmDeclData) {
+                foreach ($nnSpecDataSet as $nnSpecData) {
+                    $dataSet[] = self::createParamNestedNameInvalidData(
+                        $didData, 
+                        $prmDeclData, 
+                        $nnSpecData
+                    );
+                }
+            }
         }
         
         return $dataSet;
@@ -584,6 +603,62 @@ class DeclaratorProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Parameter after parameter, comma, ellipsis and comma');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * ( NESTED_NAME_SPECIFIER )
+     * 
+     * @param   ValidData   $didData    The declarator identifier data used to create the data.
+     * @param   ValidData   $nnSpecData The nested name specifier data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createNestedNameInvalidData(
+        ValidData $didData, 
+        ValidData $nnSpecData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s(%s)', 
+            $didData->getStream(), 
+            $nnSpecData->getStream()
+        );
+        $message = 'Unexpected ")", expected identifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Qualified name with nested name specifier and no identifier');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * ( PRM_DECL , NESTED_NAME_SPECIFIER )
+     * 
+     * @param   ValidData   $didData        The declarator identifier data used to create the data.
+     * @param   ValidData   $prmDeclData    The parameter declaration data used to create the data.
+     * @param   ValidData   $nnSpecData     The nested name specifier data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createParamNestedNameInvalidData(
+        ValidData $didData, 
+        ValidData $prmDeclData, 
+        ValidData $nnSpecData
+    ): InvalidData
+    {
+        $stream = \sprintf('%s(%s,%s)', 
+            $didData->getStream(), 
+            $prmDeclData->getStream(), 
+            $nnSpecData->getStream()
+        );
+        $message = 'Unexpected ")", expected identifier.';
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName('Qualified name with nested name specifier and no identifier');
         
         return $data;
     }

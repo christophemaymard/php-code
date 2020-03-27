@@ -83,6 +83,28 @@ class ParameterDeclarationProvider
         
         $dataSet[] = self::createEmptyInvalidData();
         
+        foreach (self::createInvalidDataSet() as $invalidData) {
+            $dataSet[] = $invalidData;
+        }
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of invalid data.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSet(): array
+    {
+        $dataSet = [];
+        
+        // Add declaration specifier sequence invalid data.
+        
+        foreach (DeclarationSpecifierSequenceProvider::createInvalidDataSet() as $declSpecSeqInvalidData) {
+            $dataSet[] = $declSpecSeqInvalidData;
+        }
+        
         return $dataSet;
     }
     

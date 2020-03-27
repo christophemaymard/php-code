@@ -230,9 +230,28 @@ class ParameterDeclarationClauseProvider
     {
         $dataSet = [];
         
-        foreach (ParameterDeclarationProvider::createValidDataSet() as $prmDeclData) {
+        $prmDeclDataSet = ParameterDeclarationProvider::createValidDataSet();
+        
+        foreach ($prmDeclDataSet as $prmDeclData) {
             $dataSet[] = self::createSecondParamMissingInvalidData($prmDeclData);
             $dataSet[] = self::createLastParamMissingInvalidData($prmDeclData);
+        }
+        
+        // Add parameter declaration invalid data.
+        
+        $prmDeclInvalidDataSet = ParameterDeclarationProvider::createInvalidDataSet();
+        
+        foreach ($prmDeclInvalidDataSet as $prmDeclInvalidData) {
+            $dataSet[] = $prmDeclInvalidData;
+        }
+        
+        foreach ($prmDeclDataSet as $prmDeclData) {
+            foreach ($prmDeclInvalidDataSet as $prmDeclInvalidData) {
+                $dataSet[] = self::createParamParamInvalidData(
+                    $prmDeclData, 
+                    $prmDeclInvalidData
+                );
+            }
         }
         
         return $dataSet;
@@ -284,6 +303,33 @@ class ParameterDeclarationClauseProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Last parameter is missing');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * PRM_DECL , PRM_DECL_INVALID
+     * 
+     * @param   ValidData   $prmDeclData        The parameter declaration valid data used to create the data.
+     * @param   InvalidData $prmDeclInvalidData The parameter declaration invalid data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createParamParamInvalidData(
+        ValidData $prmDeclData, 
+        InvalidData $prmDeclInvalidData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '%s,%s', 
+            $prmDeclData->getStream(), 
+            $prmDeclInvalidData->getStream()
+        );
+        $message = $prmDeclInvalidData->getExceptionMessage();
+        
+        $data = new InvalidData($stream, $message);
+        
+        $data->setName($prmDeclInvalidData->getName());
         
         return $data;
     }
