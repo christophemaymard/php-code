@@ -9,6 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
 use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleFactory;
 use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
@@ -59,6 +60,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -94,6 +97,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -129,6 +134,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -164,6 +171,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -199,6 +208,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -234,6 +245,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -269,6 +282,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -304,6 +319,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -339,6 +356,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -374,6 +393,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -409,6 +430,8 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(TRUE)
             ->buildIsIdentifier(FALSE)
             ->buildGetIdentifier()
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
@@ -447,6 +470,50 @@ class DeclarationSpecifierDoubleFactory extends AbstractDoubleFactory
             ->buildIsDouble(FALSE)
             ->buildIsIdentifier(TRUE)
             ->buildGetIdentifier($id)
+            ->buildIsQualifiedIdentifier(FALSE)
+            ->buildGetNestedNameSpecifier()
+            ->getDouble();
+        
+        $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
+        
+        return $prophecy->reveal();
+    }
+    
+    /**
+     * Creates a double where: 
+     * ->getDefiningTypeSpecifier()
+     *     ->getTypeSpecifier()
+     *         ->getSimpleTypeSpecifier()
+     * can be called.
+     * 
+     * The simple type specifier is defined as a qualified identifier.
+     * 
+     * @param   NestedNameSpecifier $nnSpec The value to return when getNestedNameSpecifier() is called.
+     * @param   Identifier          $id     The value to return when getIdentifier() is called.
+     * @return  ProphecySubjectInterface
+     */
+    public function createQualifiedIdentifierSimpleTypeSpecifier(
+        NestedNameSpecifier $nnSpec, 
+        Identifier $id
+    ): ProphecySubjectInterface
+    {
+        $prophecy = $this->prophesizeSubject();
+        
+        $stSpec = ConceptDoubleBuilder::createSimpleTypeSpecifier($this->getTestCase())
+            ->buildIsInt(FALSE)
+            ->buildIsFloat(FALSE)
+            ->buildIsBool(FALSE)
+            ->buildIsChar(FALSE)
+            ->buildIsWCharT(FALSE)
+            ->buildIsShort(FALSE)
+            ->buildIsLong(FALSE)
+            ->buildIsSigned(FALSE)
+            ->buildIsUnsigned(FALSE)
+            ->buildIsDouble(FALSE)
+            ->buildIsIdentifier(FALSE)
+            ->buildGetIdentifier($id)
+            ->buildIsQualifiedIdentifier(TRUE)
+            ->buildGetNestedNameSpecifier($nnSpec)
             ->getDouble();
         
         $this->buildSimpleTypeSpecifierGetDefiningTypeSpecifier($prophecy, $stSpec);
