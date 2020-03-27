@@ -10,6 +10,8 @@ namespace PhpCode\Language\Cpp\Mangling;
 use PhpCode\Exception\FormatException;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
+use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
+use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Language\Cpp\Lexical\Lexer;
 use PhpCode\Language\Cpp\Lexical\Tag;
 use PhpCode\Language\Cpp\Parsing\Parser;
@@ -106,16 +108,6 @@ class ItaniumMangler
      * <unscoped-name>
      *     <unqualified-name>
      * 
-     * <unqualified-name>
-     *     <source-name>
-     * 
-     * <nested-name>
-     *     N <prefix> <unqualified-name> E
-     * 
-     * <prefix>
-     *     <unqualified-name>
-     *     <prefix> <unqualified-name>
-     * 
      * @param   Declarator  $dcltor The declarator used to mangle.
      * @return  string
      */
@@ -132,28 +124,21 @@ class ItaniumMangler
             // is defined as identifier.
             $id = $idExpr->getUnqualifiedId()->getIdentifier();
             
-            return $this->mangleSourceName($id->getIdentifier());
+            return $this->mangleUnqualifiedNameIdentifier($id);
         }
         
         // <nested-name>
-        $mangledName = 'N';
         
         $qid = $idExpr->getQualifiedId();
-        
-        // For instance, the parser supports nested name specifier with 
-        // identifier as name specifier.
-        foreach ($qid->getNestedNameSpecifier()->getNameSpecifiers() as $id) {
-            $mangledName .= $this->mangleSourceName($id->getIdentifier());
-        }
         
         // For instance, the parser supports unqualified identifier that is 
         // defined as identifier.
         $id = $qid->getUnqualifiedId()->getIdentifier();
         
-        $mangledName .= $this->mangleSourceName($id->getIdentifier());
-        $mangledName .= 'E';
-        
-        return $mangledName;
+        return $this->mangleNestedNameIdentifier(
+            $qid->getNestedNameSpecifier(), 
+            $id
+        );
     }
     
     /**
@@ -252,27 +237,62 @@ class ItaniumMangler
         }
         
         if ($stSpec->isIdentifier()) {
-            return $this->mangleSourceName($stSpec->getIdentifier()->getIdentifier());
+            return $this->mangleUnqualifiedNameIdentifier($stSpec->getIdentifier());
         }
         
         // It is a qualified identifier.
-        
+        return $this->mangleNestedNameIdentifier(
+            $stSpec->getNestedNameSpecifier(), 
+            $stSpec->getIdentifier()
+        );
+    }
+    
+    /**
+     * Mangles a nested-name from the specified nested name specifier and 
+     * identifier.
+     * 
+     * <nested-name>
+     *     N <prefix> <unqualified-name> E
+     * 
+     * <prefix>
+     *     <unqualified-name>
+     *     <prefix> <unqualified-name>
+     * 
+     * @param   NestedNameSpecifier $nnSpec The nested name specifier used to mangle.
+     * @param   Identifier          $id     The identifier used to mangle.
+     * @return  string
+     */
+    private function mangleNestedNameIdentifier(
+        NestedNameSpecifier $nnSpec, 
+        Identifier $id
+    ): string
+    {
         $mangledName = 'N';
         
         // For instance, the parser supports nested name specifier with 
         // identifier as name specifier.
-        foreach ($stSpec->getNestedNameSpecifier()->getNameSpecifiers() as $id) {
-            $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        foreach ($nnSpec->getNameSpecifiers() as $nameSpec) {
+            $mangledName .= $this->mangleUnqualifiedNameIdentifier($nameSpec);
         }
         
-        // For instance, the parser supports unqualified identifier that is 
-        // defined as identifier.
-        $id = $stSpec->getIdentifier();
-        
-        $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        $mangledName .= $this->mangleUnqualifiedNameIdentifier($id);
         $mangledName .= 'E';
         
         return $mangledName;
+    }
+    
+    /**
+     * Mangles an unqualified-name from the specified identifier.
+     * 
+     * <unqualified-name>
+     *     <source-name>
+     * 
+     * @param   Identifier  $id The identifier used to mangle.
+     * @return  string
+     */
+    private function mangleUnqualifiedNameIdentifier(Identifier $id): string
+    {
+        return $this->mangleSourceName($id->getIdentifier());
     }
     
     /**
