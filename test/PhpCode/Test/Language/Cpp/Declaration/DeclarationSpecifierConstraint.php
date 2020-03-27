@@ -9,6 +9,7 @@ namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraint;
+use PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierConstraint;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint;
 
 /**
@@ -29,6 +30,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private const ST_UNSIGNED = 9;
     private const ST_DOUBLE = 10;
     private const ST_ID = 11;
+    private const ST_QUALIFIED_ID = 12;
     
     /**
      * The type of simple type specifier (one of ST_XXX constant values).
@@ -37,10 +39,18 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private $stSpecType;
     
     /**
-     * The identifier constraint if it has been defined as "identifier".
+     * The identifier constraint if it has been defined as "identifier" or a 
+     * qualified identifier.
      * @var IdentifierConstraint|NULL
      */
     private $idConst;
+    
+    /**
+     * The nested name specifier constraint if it has been defined as a 
+     * qualified identifier.
+     * @var NestedNameSpecifierConstraint|NULL
+     */
+    private $nnSpecConst;
     
     /**
      * Creates a constraint for a simple type specifier that is "int".
@@ -188,6 +198,27 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
+     * Creates a constraint for a simple type specifier that is a qualified 
+     * identifier.
+     * 
+     * @param   NestedNameSpecifierConstraint   $nnSpecConst    The nested name specifier constraint.
+     * @param   IdentifierConstraint            $idConst        The identifier constraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     */
+    public static function createQualifiedIdentifier(
+        NestedNameSpecifierConstraint $nnSpecConst, 
+        IdentifierConstraint $idConst
+    ): self
+    {
+        $const = new self();
+        $const->stSpecType = self::ST_QUALIFIED_ID;
+        $const->nnSpecConst = $nnSpecConst;
+        $const->idConst = $idConst;
+        
+        return $const;
+    }
+    
+    /**
      * Private constructor.
      */
     private function __construct()
@@ -211,7 +242,15 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
         $lines[] = $this->getConceptName();
         $lines[] = $this->indent($this->getType());
         
-        if ($this->stSpecType == self::ST_ID) {
+        if ($this->stSpecType == self::ST_QUALIFIED_ID) {
+            $lines[] = $this->indent(
+                $this->indent(
+                    $this->nnSpecConst->constraintDescription()
+                )
+            );
+        }
+        
+        if ($this->stSpecType == self::ST_ID || $this->stSpecType == self::ST_QUALIFIED_ID) {
             $lines[] = $this->indent(
                 $this->indent(
                     $this->idConst->constraintDescription()
@@ -262,6 +301,16 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
                 }
                 
                 return $this->idConst->matches($stSpec->getIdentifier());
+            case self::ST_QUALIFIED_ID:
+                if (!$stSpec->isQualifiedIdentifier()) {
+                    return FALSE;
+                }
+                
+                if (!$this->nnSpecConst->matches($stSpec->getNestedNameSpecifier())) {
+                    return FALSE;
+                }
+                
+                return $this->idConst->matches($stSpec->getIdentifier());
         }
         
     }
@@ -303,7 +352,19 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             if (!$stSpec->isIdentifier()) {
                 return $this->isReason(TRUE, 'simple type specifier "identifier"');
             }
+        } elseif ($this->stSpecType == self::ST_QUALIFIED_ID) {
+            if (!$stSpec->isQualifiedIdentifier()) {
+                return $this->isReason(TRUE, 'simple type specifier qualified identifier');
+            }
             
+            if (!$this->nnSpecConst->matches($stSpec->getNestedNameSpecifier())) {
+                return $this->conceptIndent(
+                    $this->nnSpecConst->failureReason($stSpec->getNestedNameSpecifier())
+                );
+            }
+        }
+        
+        if ($this->stSpecType == self::ST_ID || $this->stSpecType == self::ST_QUALIFIED_ID) {
             if (!$this->idConst->matches($stSpec->getIdentifier())) {
                 return $this->conceptIndent(
                     $this->idConst->failureReason($stSpec->getIdentifier())
@@ -369,6 +430,8 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
             case self::ST_ID:
                 $type = 'identifier';
                 break;
+            case self::ST_QUALIFIED_ID:
+                return 'Simple type specifier qualified identifier';
         }
         
         return \sprintf('Simple type specifier "%s"', $type);

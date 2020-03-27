@@ -11,6 +11,7 @@ use PhpCode\Language\Cpp\Declaration\DeclarationSpecifier;
 use PhpCode\Test\Language\Cpp\ConceptConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierConstraint;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierDoubleFactory;
+use PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierDoubleFactory;
 use PhpCode\Test\Language\Cpp\Lexical\IdentifierDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -241,6 +242,32 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that constraintDescription() returns a string when the instance 
+     * is created by createQualifiedIdentifier().
+     */
+    public function testConstraintDescriptionReturnsStringWhenCreateQualifiedIdentifier(): void
+    {
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildConstraintDescription('foo NestedNameSpecifier')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('bar Identifier')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo NestedNameSpecifier\n".
+            "    bar Identifier", 
+            $sut->constraintDescription()
+        );
+    }
+    
+    /**
      * Tests that matches() returns FALSE when not instance of 
      * DeclarationSpecifier.
      * 
@@ -453,6 +480,80 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createQualifiedIdentifier() and not simple type specifier qualified 
+     * identifier.
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
+     */
+    public function testMatchesReturnsFalseWhenCreateQualifiedIdentifierAndNotSimpleTypeSpecifierQualifiedIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createQualifiedIdentifier() and the nested name specifier is invalid.
+     */
+    public function testMatchesReturnsFalseWhenCreateQualifiedIdentifierAndNestedNameSpecifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, FALSE)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns FALSE when the instance is created by 
+     * createQualifiedIdentifier() and the identifier is invalid.
+     */
+    public function testMatchesReturnsFalseWhenCreateQualifiedIdentifierAndIdentifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertFalse($sut->matches($declSpec));
+    }
+    
+    /**
      * Tests that matches() returns TRUE when the instance is created by 
      * createInt() and simple type specifier "int".
      */
@@ -597,6 +698,31 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertTrue($sut->matches($declSpec));
+    }
+    
+    /**
+     * Tests that matches() returns TRUE when the instance is created by 
+     * createQualifiedIdentifier() and the identifier is valid.
+     */
+    public function testMatchesReturnsTrueWhenCreateQualifiedIdentifierAndIdentifierIsValid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
         self::assertTrue($sut->matches($declSpec));
     }
     
@@ -859,6 +985,94 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that failureReason() returns a string when the instance is 
+     * created by createQualifiedIdentifier() and is not a simple type 
+     * specifier qualified identifier.
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
+     */
+    public function testFailureReasonReturnsStringWhenCreateQualifiedIdentifierAndNotSimpleTypeSpecifierQualifiedIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            'Declaration specifier: It should be simple type specifier qualified identifier.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createQualifiedIdentifier() and the nested name specifier 
+     * is invalid.
+     */
+    public function testFailureReasonReturnsStringWhenCreateQualifiedIdentifierAndNestedNameSpecifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, FALSE)
+            ->buildFailureReason($nnSpec, 'foo reason')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "Declaration specifier\n".
+            "  foo reason", 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createQualifiedIdentifier() and the identifier is invalid.
+     */
+    public function testFailureReasonReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildFailureReason($id, 'bar reason')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "Declaration specifier\n".
+            "  bar reason", 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
      * created by createInt() and is a simple type specifier "int".
      */
     public function testFailureReasonReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
@@ -1032,6 +1246,35 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
+        self::assertSame(
+            'Declaration specifier: Unknown reason.', 
+            $sut->failureReason($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that failureReason() returns a string when the instance is 
+     * created by createQualifiedIdentifier() and the identifier is valid.
+     */
+    public function testFailureReasonReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsValid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->buildFailureReason($id, 'bar reason')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
         self::assertSame(
             'Declaration specifier: Unknown reason.', 
             $sut->failureReason($declSpec)
@@ -1256,6 +1499,38 @@ class DeclarationSpecifierConstraintTest extends TestCase
             "Declaration specifier\n".
             "  Simple type specifier \"identifier\"\n".
             "    foo description\n".
+            "\n".
+            "Declaration specifier: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', DeclarationSpecifier::class)
+        );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createIdentifier() and not instance of 
+     * DeclarationSpecifier.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNotInstanceDeclarationSpecifier(): void
+    {
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('bar description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        
+        $pattern = \sprintf(
+            "`^\n".
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo description\n".
+            "    bar description\n".
             "\n".
             "Declaration specifier: .+ is not an instance of %s\\.$`", 
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
@@ -1564,6 +1839,119 @@ class DeclarationSpecifierConstraintTest extends TestCase
     
     /**
      * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createQualifiedIdentifier() and is not a simple 
+     * type specifier qualified identifier.
+     * 
+     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
+     * 
+     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNotSimpleTypeSpecifierQualifiedIdentifier(
+        DeclarationSpecifier $declSpec
+    ): void
+    {
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('bar description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo description\n".
+            "    bar description\n".
+            "\n".
+            "Declaration specifier: It should be simple type specifier qualified identifier.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createQualifiedIdentifier() and the nested name 
+     * specifier is invalid.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNestedNameSpecifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, FALSE)
+            ->buildConstraintDescription('foo description')
+            ->buildFailureReason($nnSpec, 'foo reason')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildConstraintDescription('bar description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo description\n".
+            "    bar description\n".
+            "\n".
+            "Declaration specifier\n".
+            "  foo reason", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createQualifiedIdentifier() and the identifier 
+     * is invalid.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsInvalid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, FALSE)
+            ->buildConstraintDescription('bar description')
+            ->buildFailureReason($id, 'bar reason')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo description\n".
+            "    bar description\n".
+            "\n".
+            "Declaration specifier\n".
+            "  bar reason", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
+     * Tests that additionalFailureDescription() returns a string when the 
      * instance is created by createInt() and is a simple type specifier 
      * "int".
      */
@@ -1800,6 +2188,43 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
+     * Tests that additionalFailureDescription() returns a string when the 
+     * instance is created by createQualifiedIdentifier() and the identifier 
+     * is valid.
+     */
+    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsValid(): void
+    {
+        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
+        $id = $this->createIdentifierDoubleFactory()->createDummy();
+        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
+            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildMatches($nnSpec, TRUE)
+            ->buildConstraintDescription('foo description')
+            ->getDouble();
+        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
+            ->buildMatches($id, TRUE)
+            ->buildConstraintDescription('bar description')
+            ->getDouble();
+        
+        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
+            $nnSpecConst, 
+            $idConst
+        );
+        self::assertSame(
+            "\n".
+            "Declaration specifier\n".
+            "  Simple type specifier qualified identifier\n".
+            "    foo description\n".
+            "    bar description\n".
+            "\n".
+            "Declaration specifier: Unknown reason.", 
+            $sut->additionalFailureDescription($declSpec)
+        );
+    }
+    
+    /**
      * Tests that failureDescription() is called when the value is invalid.
      * 
      * @param   DeclarationSpecifierConstraint  $sut    The system under test.
@@ -1825,6 +2250,10 @@ class DeclarationSpecifierConstraintTest extends TestCase
     {
         $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
             ->buildConstraintDescription('foo Identifier')
+            ->getDouble();
+        
+        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
+            ->buildConstraintDescription('bar NestedNameSpecifier')
             ->getDouble();
         
         return [
@@ -1860,6 +2289,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 DeclarationSpecifierConstraint::createIdentifier($idConst), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                DeclarationSpecifierConstraint::createQualifiedIdentifier(
+                    $nnSpecConst, 
+                    $idConst
+                ), 
             ], 
         ];
     }
@@ -1907,6 +2342,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -1961,6 +2402,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2009,6 +2456,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -2063,6 +2516,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2111,6 +2570,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -2165,6 +2630,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2213,6 +2684,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -2267,6 +2744,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2315,6 +2798,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
             ], 
             'Simple type specifier "identifier"' => [
                 $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
@@ -2369,6 +2858,12 @@ class DeclarationSpecifierConstraintTest extends TestCase
                     $this->createIdentifierDoubleFactory()->createDummy()
                 ), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2418,6 +2913,66 @@ class DeclarationSpecifierConstraintTest extends TestCase
             'Simple type specifier "double"' => [
                 $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
             ], 
+            'Simple type specifier qualified identifier' => [
+                $declSpecFactory->createQualifiedIdentifierSimpleTypeSpecifier(
+                    $this->createNestedNameSpecifierDoubleFactory()->createDummy(), 
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
+        ];
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of declaration specifiers that are not simple type 
+     * specifier qualified identifier.
+     * 
+     * @return  array[]
+     */
+    public function getNotSimpleTypeSpecifierQualifiedIdentifierProvider(): array
+    {
+        $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
+        
+        $dataSet = [
+            'Simple type specifier NONE' => [
+                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "int"' => [
+                $declSpecFactory->createIntSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "float"' => [
+                $declSpecFactory->createFloatSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "bool"' => [
+                $declSpecFactory->createBoolSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "char"' => [
+                $declSpecFactory->createCharSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "wchar_t"' => [
+                $declSpecFactory->createWCharTSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "short"' => [
+                $declSpecFactory->createShortSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "long"' => [
+                $declSpecFactory->createLongSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "signed"' => [
+                $declSpecFactory->createSignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "unsigned"' => [
+                $declSpecFactory->createUnsignedSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "double"' => [
+                $declSpecFactory->createDoubleSimpleTypeSpecifier(), 
+            ], 
+            'Simple type specifier "identifier"' => [
+                $declSpecFactory->createIdentifierSimpleTypeSpecifier(
+                    $this->createIdentifierDoubleFactory()->createDummy()
+                ), 
+            ], 
         ];
         
         return $dataSet;
@@ -2441,6 +2996,16 @@ class DeclarationSpecifierConstraintTest extends TestCase
     private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
     {
         return new IdentifierDoubleFactory($this);
+    }
+    
+    /**
+     * Creates a factory of nested name specifier doubles.
+     * 
+     * @return  NestedNameSpecifierDoubleFactory    The created instance of NestedNameSpecifierDoubleFactory.
+     */
+    private function createNestedNameSpecifierDoubleFactory(): NestedNameSpecifierDoubleFactory
+    {
+        return new NestedNameSpecifierDoubleFactory($this);
     }
 }
 
