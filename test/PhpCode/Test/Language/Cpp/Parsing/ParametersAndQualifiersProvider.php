@@ -82,9 +82,26 @@ class ParametersAndQualifiersProvider
         $dataSet = [];
         
         $dataSet[] = self::createEmptyInvalidData();
-        $dataSet[] = self::createNoCloseInvalidData();
         $dataSet[] = self::createNoOpenInvalidData();
         $dataSet[] = self::createCloseBeforeOpenInvalidData();
+        
+        foreach (self::createInvalidDataSet() as $invalidData) {
+            $dataSet[] = $invalidData;
+        }
+        
+        return $dataSet;
+    }
+    
+    /**
+     * Returns a set of invalid data.
+     * 
+     * @return  InvalidData[]
+     */
+    public static function createInvalidDataSet(): array
+    {
+        $dataSet = [];
+        
+        $dataSet[] = self::createNoCloseInvalidData();
         
         $prmDeclDataSet = ParameterDeclarationProvider::createValidDataSet();
         

@@ -241,51 +241,14 @@ class DeclaratorProvider
             $dataSet[] = self::createNestedNameSpecifierInvalidData($nnSpecData);
         }
         
+        // Add parameters and qualifiers invalid data.
+        
         $didDataSet = DeclaratorIdProvider::createValidDataSet();
+        $prmQualInvalidDataSet = ParametersAndQualifiersProvider::createInvalidDataSet();
         
         foreach ($didDataSet as $didData) {
-            $dataSet[] = self::createNoCloseInvalidData($didData);
-        }
-        
-        $prmDeclDataSet = ParameterDeclarationProvider::createValidDataSet();
-        
-        foreach ($didDataSet as $didData) {
-            foreach ($prmDeclDataSet as $prmDeclData) {
-                $dataSet[] = self::createFirstParamMissingInvalidData($didData, $prmDeclData);
-                $dataSet[] = self::createSecondParamMissingInvalidData($didData, $prmDeclData);
-                $dataSet[] = self::createLastParamMissingInvalidData($didData, $prmDeclData);
-            }
-        }
-        
-        foreach ($didDataSet as $didData) {
-            foreach ($prmDeclDataSet as $prmDeclData) {
-                $dataSet[] = self::createEllipsisParamInvalidData($didData, $prmDeclData);
-                $dataSet[] = self::createEllipsisCommaParamInvalidData($didData, $prmDeclData);
-                
-                $dataSet[] = self::createParamEllipsisParamInvalidData($didData, $prmDeclData);
-                $dataSet[] = self::createParamEllipsisCommaParamInvalidData($didData, $prmDeclData);
-                
-                $dataSet[] = self::createParamCommaEllipsisParamInvalidData($didData, $prmDeclData);
-                $dataSet[] = self::createParamCommaEllipsisCommaParamInvalidData($didData, $prmDeclData);
-            }
-            
-        
-            // Qualified name where identifier is missing.
-            
-            $nnSpecDataSet = NestedNameSpecifierProvider::createValidDataSet();
-            
-            foreach ($nnSpecDataSet as $nnSpecData) {
-                $dataSet[] = self::createNestedNameInvalidData($didData, $nnSpecData);
-            }
-            
-            foreach ($prmDeclDataSet as $prmDeclData) {
-                foreach ($nnSpecDataSet as $nnSpecData) {
-                    $dataSet[] = self::createParamNestedNameInvalidData(
-                        $didData, 
-                        $prmDeclData, 
-                        $nnSpecData
-                    );
-                }
+            foreach ($prmQualInvalidDataSet as $prmQualInvalidData) {
+                $dataSet[] = self::createDIdPrmQualInvalidData($didData, $prmQualInvalidData);
             }
         }
         
@@ -331,334 +294,27 @@ class DeclaratorProvider
     
     /**
      * Creates an invalid data for the case:
-     * No close parenthesis
-     * 
-     * @param   ValidData   $didData    The declarator identifier data used to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createNoCloseInvalidData(ValidData $didData): InvalidData
-    {
-        $stream = \sprintf('%s(', $didData->getStream());
-        $message = 'Missing ")" before "".';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('No close parenthesis');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * The first parameter is missing
+     * DECLARATOR_ID PARAMETERS_AND_QUALIFIERS_INVALID
      * 
      * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
+     * @param   InvalidData $prmQualData    The parameters and qualifiers data used to create the data.
      * @return  InvalidData The created instance of InvalidData.
      */
-    private static function createFirstParamMissingInvalidData(
+    private static function createDIdPrmQualInvalidData(
         ValidData $didData, 
-        ValidData $prmDeclData
+        InvalidData $prmQualData
     ): InvalidData
     {
         $stream = \sprintf(
-            '%s(,%s,%s)', 
+            '%s%s', 
             $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
+            $prmQualData->getStream()
         );
-        $message = 'Missing ")" before ",".';
+        $message = $prmQualData->getExceptionMessage();
         
         $data = new InvalidData($stream, $message);
         
-        $data->setName('First parameter is missing');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * The second parameter is missing
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createSecondParamMissingInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s,,%s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = 'Unexpected ",", expected decl-specifier.';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Second parameter is missing');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * The last parameter is missing
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createLastParamMissingInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s,%s,)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = 'Unexpected ")", expected decl-specifier.';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Last parameter is missing');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after ellipsis
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createEllipsisParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(... %s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = \sprintf(
-            'Missing ")" before "%s".', 
-            $prmDeclData->getFirstTokenLexeme()
-        );
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after ellipsis');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after ellipsis and comma
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createEllipsisCommaParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(...,%s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = 'Missing ")" before ",".';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after ellipsis and comma');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after parameter and ellipsis
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createParamEllipsisParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s ... %s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = \sprintf(
-            'Missing ")" before "%s".', 
-            $prmDeclData->getFirstTokenLexeme()
-        );
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after parameter and ellipsis');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after parameter, ellipsis and comma
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createParamEllipsisCommaParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s ...,%s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = 'Missing ")" before ",".';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after parameter, ellipsis and comma');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after parameter, comma and ellipsis
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createParamCommaEllipsisParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s,... %s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = \sprintf(
-            'Missing ")" before "%s".', 
-            $prmDeclData->getFirstTokenLexeme()
-        );
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after parameter, comma and ellipsis');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * Parameter after parameter, comma, ellipsis and comma
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data use to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createParamCommaEllipsisCommaParamInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s,...,%s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $prmDeclData->getStream()
-        );
-        $message = 'Missing ")" before ",".';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Parameter after parameter, comma, ellipsis and comma');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * ( NESTED_NAME_SPECIFIER )
-     * 
-     * @param   ValidData   $didData    The declarator identifier data used to create the data.
-     * @param   ValidData   $nnSpecData The nested name specifier data used to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createNestedNameInvalidData(
-        ValidData $didData, 
-        ValidData $nnSpecData
-    ): InvalidData
-    {
-        $stream = \sprintf(
-            '%s(%s)', 
-            $didData->getStream(), 
-            $nnSpecData->getStream()
-        );
-        $message = 'Unexpected ")", expected identifier.';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Qualified name with nested name specifier and no identifier');
-        
-        return $data;
-    }
-    
-    /**
-     * Creates an invalid data for the case:
-     * ( PRM_DECL , NESTED_NAME_SPECIFIER )
-     * 
-     * @param   ValidData   $didData        The declarator identifier data used to create the data.
-     * @param   ValidData   $prmDeclData    The parameter declaration data used to create the data.
-     * @param   ValidData   $nnSpecData     The nested name specifier data used to create the data.
-     * @return  InvalidData The created instance of InvalidData.
-     */
-    private static function createParamNestedNameInvalidData(
-        ValidData $didData, 
-        ValidData $prmDeclData, 
-        ValidData $nnSpecData
-    ): InvalidData
-    {
-        $stream = \sprintf('%s(%s,%s)', 
-            $didData->getStream(), 
-            $prmDeclData->getStream(), 
-            $nnSpecData->getStream()
-        );
-        $message = 'Unexpected ")", expected identifier.';
-        
-        $data = new InvalidData($stream, $message);
-        
-        $data->setName('Qualified name with nested name specifier and no identifier');
+        $data->setName($prmQualData->getName());
         
         return $data;
     }
