@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Language\Cpp\Declaration;
 
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
+use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
 use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleBuilder;
 
@@ -202,6 +203,36 @@ class SimpleTypeSpecifierDoubleBuilder extends AbstractDoubleBuilder
     {
         $this->getSubjectProphecy()
             ->getIdentifier()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds a prophecy where isQualifiedIdentifier() can be called.
+     * 
+     * @param   bool    $return The value to return when isQualifiedIdentifier() is called.
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildIsQualifiedIdentifier(bool $return): self
+    {
+        $this->getSubjectProphecy()
+            ->isQualifiedIdentifier()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds a prophecy where getNestedNameSpecifier() can be called.
+     * 
+     * @param   NestedNameSpecifier $return The value to return when getNestedNameSpecifier() is called (optional)(default to NULL).
+     * @return  SimpleTypeSpecifierDoubleBuilder    This instance.
+     */
+    public function buildGetNestedNameSpecifier(NestedNameSpecifier $return = NULL): self
+    {
+        $this->getSubjectProphecy()
+            ->getNestedNameSpecifier()
             ->willReturn($return);
         
         return $this;
