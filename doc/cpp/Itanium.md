@@ -113,6 +113,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 |:---------|:------------------------------------|
 | **type** | [builtin-type](#builtin-type)       |
 |          | [class-enum-type](#class-enum-type) |
+|          | [nested-name](#nested-name)         |
 
 
 

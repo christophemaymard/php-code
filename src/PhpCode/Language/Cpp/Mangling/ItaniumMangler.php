@@ -251,8 +251,28 @@ class ItaniumMangler
             return 'd';
         }
         
-        // It is "identifier".
-        return $this->mangleSourceName($stSpec->getIdentifier()->getIdentifier());
+        if ($stSpec->isIdentifier()) {
+            return $this->mangleSourceName($stSpec->getIdentifier()->getIdentifier());
+        }
+        
+        // It is a qualified identifier.
+        
+        $mangledName = 'N';
+        
+        // For instance, the parser supports nested name specifier with 
+        // identifier as name specifier.
+        foreach ($stSpec->getNestedNameSpecifier()->getNameSpecifiers() as $id) {
+            $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        }
+        
+        // For instance, the parser supports unqualified identifier that is 
+        // defined as identifier.
+        $id = $stSpec->getIdentifier();
+        
+        $mangledName .= $this->mangleSourceName($id->getIdentifier());
+        $mangledName .= 'E';
+        
+        return $mangledName;
     }
     
     /**
