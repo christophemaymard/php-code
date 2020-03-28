@@ -100,9 +100,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertSame(
             "Nested name specifier (3)\n".
             "  foo\n".
@@ -156,7 +156,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[0]);
         self::assertFalse($sut->matches($nnSpec));
     }
     
@@ -188,9 +188,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertFalse($sut->matches($nnSpec));
     }
     
@@ -235,9 +235,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertTrue($sut->matches($nnSpec));
     }
     
@@ -295,7 +295,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[0]);
         self::assertSame(
             'Nested name specifier: '.
             'nested name specifier should have 1 name specifier(s), got 3.', 
@@ -337,9 +337,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertSame(
             "Nested name specifier\n".
             "  foo\n".
@@ -393,9 +393,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertSame(
             'Nested name specifier: Unknown reason.', 
             $sut->failureReason($nnSpec)
@@ -442,9 +442,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         
         $pattern = \sprintf(
             "`^\n".
@@ -500,7 +500,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[0]);
         self::assertSame(
             "\n".
             "Nested name specifier (1)\n".
@@ -548,9 +548,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertSame(
             "\n".
             "Nested name specifier (3)\n".
@@ -616,9 +616,9 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
-        $sut->addIdentifierConstraint($consts[1]);
-        $sut->addIdentifierConstraint($consts[2]);
+        $sut->addNameSpecifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[1]);
+        $sut->addNameSpecifierConstraint($consts[2]);
         self::assertSame(
             "\n".
             "Nested name specifier (3)\n".
@@ -659,7 +659,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
             ->getDouble();
         
         $sut = new NestedNameSpecifierConstraint();
-        $sut->addIdentifierConstraint($consts[0]);
+        $sut->addNameSpecifierConstraint($consts[0]);
         $sut->evaluate(NULL, '', FALSE);
     }
     
@@ -671,13 +671,13 @@ class NestedNameSpecifierConstraintTest extends TestCase
     public function getSutProvider(): array
     {
         $idConstSut = new NestedNameSpecifierConstraint();
-        $idConstSut->addIdentifierConstraint(
+        $idConstSut->addNameSpecifierConstraint(
             ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble()
         );
-        $idConstSut->addIdentifierConstraint(
+        $idConstSut->addNameSpecifierConstraint(
             ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble()
         );
-        $idConstSut->addIdentifierConstraint(
+        $idConstSut->addNameSpecifierConstraint(
             ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)->getDouble()
         );
         

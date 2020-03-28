@@ -46,7 +46,7 @@ class NestedNameSpecifierProvider
         
         $callable = function(){
             $nnSpecConst = new NestedNameSpecifierConstraint();
-            $nnSpecConst->addIdentifierConstraint(new IdentifierConstraint('nns_id1'));
+            $nnSpecConst->addNameSpecifierConstraint(new IdentifierConstraint('nns_id1'));
             
             return $nnSpecConst;
         };
@@ -71,8 +71,8 @@ class NestedNameSpecifierProvider
         
         $callable = function(){
             $nnSpecConst = new NestedNameSpecifierConstraint();
-            $nnSpecConst->addIdentifierConstraint(new IdentifierConstraint('nns_id1'));
-            $nnSpecConst->addIdentifierConstraint(new IdentifierConstraint('nns_id2'));
+            $nnSpecConst->addNameSpecifierConstraint(new IdentifierConstraint('nns_id1'));
+            $nnSpecConst->addNameSpecifierConstraint(new IdentifierConstraint('nns_id2'));
             
             return $nnSpecConst;
         };

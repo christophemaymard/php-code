@@ -30,7 +30,7 @@ class NestedNameSpecifierConstraint extends AbstractConceptConstraint
      * 
      * @param   IdentifierConstraint    $constraint The identifier constraint to add.
      */
-    public function addIdentifierConstraint(IdentifierConstraint $constraint): void
+    public function addNameSpecifierConstraint(IdentifierConstraint $constraint): void
     {
         $this->nameSpecConsts[] = $constraint;
     }
