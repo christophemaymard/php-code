@@ -298,12 +298,12 @@ class ItaniumMangler
     /**
      * Mangles a source-name with the specified identifier.
      * 
-     * @param   string  $id The identifier.
+     * @param   string  $name The identifier.
      * @return  string
      */
-    private function mangleSourceName(string $id): string
+    private function mangleSourceName(string $name): string
     {
-        return \sprintf('%s%s', \mb_strlen($id), $id);
+        return \sprintf('%s%s', \mb_strlen($name), $name);
     }
 }
 
