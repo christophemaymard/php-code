@@ -1,5 +1,6 @@
 {
     "name": "cmaymard/php-code",
+    "description": "Provides support to mangle C++ names.", 
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -8,7 +9,11 @@
             "email": "christophe.maymard@hotmail.com"
         }
     ],
-    "keywords": [ "code", "cpp" ],
+    "keywords": [
+        "code", 
+        "mangling",
+        "cpp" 
+    ],
     "require": {
         "php": ">=7.3",
         "ext-mbstring": "*"
