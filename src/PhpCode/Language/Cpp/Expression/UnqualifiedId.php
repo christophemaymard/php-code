@@ -21,7 +21,7 @@ class UnqualifiedId
 {
     /**
      * The identifier.
-     * @var Identifier|NULL
+     * @var Identifier
      */
     private $identifier;
     
@@ -49,9 +49,9 @@ class UnqualifiedId
     /**
      * Returns the identifier.
      * 
-     * @return  Identifier|NULL The instance of the identifier if this unqualified identifier has been defined with an identifier, otherwise NULL.
+     * @return  Identifier
      */
-    public function getIdentifier(): ?Identifier
+    public function getIdentifier(): Identifier
     {
         return $this->identifier;
     }

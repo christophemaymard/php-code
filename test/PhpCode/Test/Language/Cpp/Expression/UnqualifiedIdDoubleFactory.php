@@ -31,10 +31,10 @@ class UnqualifiedIdDoubleFactory extends AbstractDoubleFactory
     /**
      * Creates a double where getIdentifier() can be called.
      * 
-     * @param   Identifier  $return The value to return when getIdentifier() is called (optional)(default to NULL).
+     * @param   Identifier  $return The value to return when getIdentifier() is called.
      * @return  ProphecySubjectInterface
      */
-    public function createGetIdentifier(Identifier $return = NULL): ProphecySubjectInterface
+    public function createGetIdentifier(Identifier $return): ProphecySubjectInterface
     {
         $prophecy = $this->prophesizeSubject();
         $prophecy
