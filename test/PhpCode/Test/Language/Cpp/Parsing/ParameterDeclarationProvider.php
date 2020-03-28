@@ -59,7 +59,7 @@ class ParameterDeclarationProvider
         
         $declSpecSeqFactory = $declSpecSeqData->getConstraintFactory();
         $callable = function() use ($declSpecSeqFactory) {
-            return ParameterDeclarationConstraint::create(
+            return new ParameterDeclarationConstraint(
                 $declSpecSeqFactory->createConstraint()
             );
         };

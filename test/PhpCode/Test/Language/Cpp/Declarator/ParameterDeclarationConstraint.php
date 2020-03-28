@@ -25,27 +25,13 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
     private $declSpecSeqConst;
     
     /**
-     * Creates a constraint for a parameter declaration with a declaration 
-     * specifier sequence.
+     * Constructor.
      * 
      * @param   DeclarationSpecifierSequenceConstraint  $declSpecSeqConst   The declaration specifier sequence constraint.
-     * @return  ParameterDeclarationConstraint  The created instance of parameter declaration constraint.
      */
-    public static function create(
-        DeclarationSpecifierSequenceConstraint $declSpecSeqConst
-    ): self
+    public function __construct(DeclarationSpecifierSequenceConstraint $declSpecSeqConst)
     {
-        $const = new self();
-        $const->declSpecSeqConst = $declSpecSeqConst;
-        
-        return $const;
-    }
-    
-    /**
-     * Private constructor.
-     */
-    private function __construct()
-    {
+        $this->declSpecSeqConst = $declSpecSeqConst;
     }
     
     /**

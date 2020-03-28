@@ -52,63 +52,49 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that __construct() throws an exception.
-     */
-    public function test__constructThrowsException(): void
-    {
-        $this->expectException(\Throwable::class);
-        $this->expectExceptionMessageMatches('`private `');
-        
-        $sut = new ParameterDeclarationConstraint();
-    }
-    
-    /**
      * Tests that toString() returns a string when the instance is created 
      * by create().
      */
-    public function testToStringReturnsStringWhenCreate(): void
+    public function testToStringReturnsStringWhenInstantiated(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createDummy();
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame('parameter declaration', $sut->toString());
     }
     
     /**
-     * Tests that getConceptName() returns a string when the instance is 
-     * created by create().
+     * Tests that getConceptName() returns a string when instantiated.
      */
-    public function testGetConceptNameReturnsStringWhenCreate(): void
+    public function testGetConceptNameReturnsStringWhenInstantiated(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createDummy();
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame('Parameter declaration', $sut->getConceptName());
     }
     
     /**
-     * Tests that failureDefaultReason() returns a string when the instance 
-     * is created by create().
+     * Tests that failureDefaultReason() returns a string when instantiated.
      */
-    public function testFailureDefaultReasonReturnsStringWhenCreate(): void
+    public function testFailureDefaultReasonReturnsStringWhenInstantiated(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createDummy();
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame('Parameter declaration: Unknown reason.', $sut->failureDefaultReason(NULL));
     }
     
     /**
-     * Tests that constraintDescription() returns a string when the instance 
-     * is created by create().
+     * Tests that constraintDescription() returns a string when instantiated.
      */
-    public function testConstraintDescriptionReturnsStringWhenCreate(): void
+    public function testConstraintDescriptionReturnsStringWhenInstantiated(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createConstraintDescription(
             "foo DeclarationSpecifierSequence\n  bar DeclarationSpecifier"
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame(
             "Parameter declaration\n".
             "  foo DeclarationSpecifierSequence\n".
@@ -118,54 +104,54 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that matches() returns FALSE when the instance is created by 
-     * create() and not instance of ParameterDeclaration.
+     * Tests that matches() returns FALSE when the instantiated and not 
+     * instance of ParameterDeclaration.
      */
-    public function testMatchesReturnsFalseWhenCreateAndNotInstanceParameterDeclaration(): void
+    public function testMatchesReturnsFalseWhenInstantiatedAndNotInstanceParameterDeclaration(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createDummy();
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertFalse($sut->matches(NULL));
     }
     
     /**
-     * Tests that matches() returns FALSE when the instance is created by 
-     * create() and the declaration specifier sequence is invalid.
+     * Tests that matches() returns FALSE when instantiated and the 
+     * declaration specifier sequence is invalid.
      */
-    public function testMatchesReturnsFalseWhenCreateAndDeclarationSpecifierSequenceIsInvalid(): void
+    public function testMatchesReturnsFalseWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, FALSE);
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertFalse($sut->matches($prmDecl));
     }
     
     /**
-     * Tests that matches() returns TRUE when the instance is created by 
-     * create() and the parameter declaration is valid.
+     * Tests that matches() returns TRUE when instantiated and the parameter 
+     * declaration is valid.
      */
-    public function testMatchesReturnsTrueWhenCreateAndParameterDeclarationIsValid(): void
+    public function testMatchesReturnsTrueWhenInstantiatedAndParameterDeclarationIsValid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, TRUE);
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertTrue($sut->matches($prmDecl));
     }
     
     /**
-     * Tests that failureReason() returns a string when the instance is 
-     * created by create() and not instance of ParameterDeclaration.
+     * Tests that failureReason() returns a string when instantiated and not 
+     * instance of ParameterDeclaration.
      */
-    public function testFailureReasonReturnsStringWhenCreateAndNotInstanceParameterDeclaration(): void
+    public function testFailureReasonReturnsStringWhenInstantiatedAndNotInstanceParameterDeclaration(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createDummy();
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertRegExp(
             \sprintf(
                 '`^Parameter declaration: .+ is not an instance of %s\\.$`', 
@@ -176,10 +162,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that failureReason() returns a string when the instance is 
-     * created by create() and the declaration specifier sequence is invalid.
+     * Tests that failureReason() returns a string when instantiated and the 
+     * declaration specifier sequence is invalid.
      */
-    public function testFailureReasonReturnsStringWhenCreateAndDeclarationSpecifierSequenceIsInvalid(): void
+    public function testFailureReasonReturnsStringWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
@@ -190,7 +176,7 @@ class ParameterDeclarationConstraintTest extends TestCase
             "  bar DeclarationSpecifier"
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame(
             "Parameter declaration\n".
             "  foo DeclarationSpecifierSequence\n".
@@ -200,16 +186,16 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that failureReason() returns a string when the instance is 
-     * created by create() and the parameter declaration is valid.
+     * Tests that failureReason() returns a string when instantiated and the 
+     * parameter declaration is valid.
      */
-    public function testFailureReasonReturnsStringWhenCreateAndParameterDeclarationIsValid(): void
+    public function testFailureReasonReturnsStringWhenInstantiatedAndParameterDeclarationIsValid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, TRUE);
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame(
             'Parameter declaration: Unknown reason.', 
             $sut->failureReason($prmDecl)
@@ -217,18 +203,17 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and not instance of 
-     * ParameterDeclaration.
+     * Tests that additionalFailureDescription() returns a string when 
+     * instantiated and not instance of ParameterDeclaration.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndNotInstanceParameterDeclaration(): void
+    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndNotInstanceParameterDeclaration(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createConstraintDescription(
             "foo DeclarationSpecifierSequence\n".
             "  bar DeclarationSpecifier"
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         $pattern = \sprintf(
             "`^\n".
             "Parameter declaration\n". 
@@ -242,11 +227,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and the declaration specifier sequence 
-     * is invalid.
+     * Tests that additionalFailureDescription() returns a string when 
+     * instantiated and the declaration specifier sequence is invalid.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndDeclarationSpecifierSequenceIsInvalid(): void
+    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
@@ -259,7 +243,7 @@ class ParameterDeclarationConstraintTest extends TestCase
             "  bar description"
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame(
             "\n".
             "Parameter declaration\n".
@@ -274,10 +258,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and the parameter declaration is valid.
+     * Tests that additionalFailureDescription() returns a string when 
+     * instantiated and the parameter declaration is valid.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndParameterDeclarationIsValid(): void
+    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParameterDeclarationIsValid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
         $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
@@ -288,7 +272,7 @@ class ParameterDeclarationConstraintTest extends TestCase
             "  bar description"
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         self::assertSame(
             "\n".
             "Parameter declaration\n".
@@ -301,10 +285,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that failureDescription() is called when the instance is created 
-     * by create() and a value is invalid.
+     * Tests that failureDescription() is called when instantiated and the 
+     * value is invalid.
      */
-    public function testFailureDescriptionWhenCreateAndInvalid(): void
+    public function testFailureDescriptionWhenInstantiatedAndInvalid(): void
     {
         $this->expectException(ExpectationFailedException::class);
         $this->expectExceptionMessageMatches('` is a parameter declaration`');
@@ -313,7 +297,7 @@ class ParameterDeclarationConstraintTest extends TestCase
                 'foo description'
         );
         
-        $sut = ParameterDeclarationConstraint::create($declSpecSeqConst);
+        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
         $sut->evaluate(NULL, '', FALSE);
     }
 }
