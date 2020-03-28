@@ -35,7 +35,7 @@ class ParameterDeclarationList implements \Countable
     }
     
     /**
-     * Returns the parameter declarations.
+     * Returns all the parameter declarations.
      * 
      * @return  ParameterDeclaration[]  An indexed array of parameter declarations.
      */

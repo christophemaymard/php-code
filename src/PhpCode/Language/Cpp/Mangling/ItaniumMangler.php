@@ -39,7 +39,7 @@ class ItaniumMangler
     /**
      * Constructor.
      * 
-     * @param   LanguageContextInterface    $ctx
+     * @param   LanguageContextInterface    $ctx    The language context.
      */
     public function __construct(LanguageContextInterface $ctx)
     {
@@ -84,9 +84,9 @@ class ItaniumMangler
     }
     
     /**
-     * Mangles a function with the specified declarator.
+     * Mangles a function from the specified declarator.
      * 
-     * @param   Declarator  $dcltor The declarator.
+     * @param   Declarator  $dcltor The declarator used to mangle.
      * @return  string
      */
     private function mangleFunctionDeclarator(Declarator $dcltor): string
@@ -142,9 +142,9 @@ class ItaniumMangler
     }
     
     /**
-     * Mangles a bare-function-type with the specified declarator.
+     * Mangles a bare-function-type from the specified declarator.
      * 
-     * @param   Declarator  $dcltor The declarator.
+     * @param   Declarator  $dcltor The declarator used to mangle.
      * @return  string
      * 
      * @throws  FormatException When the declarator does not have parameters-and-qualifiers.
@@ -185,7 +185,7 @@ class ItaniumMangler
     /**
      * Mangles a type from the specified parameter declaration.
      * 
-     * @param   ParameterDeclaration    $prmDecl    The parameter declaration to use.
+     * @param   ParameterDeclaration    $prmDecl    The parameter declaration used to mangle.
      * @return  string
      */
     private function mangleTypeParameterDeclaration(ParameterDeclaration $prmDecl): string
@@ -296,9 +296,9 @@ class ItaniumMangler
     }
     
     /**
-     * Mangles a source-name with the specified identifier.
+     * Mangles a source-name from the specified name.
      * 
-     * @param   string  $name The identifier.
+     * @param   string  $name   The name used to mangle.
      * @return  string
      */
     private function mangleSourceName(string $name): string

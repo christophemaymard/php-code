@@ -24,10 +24,10 @@ class Declarator
     private $ptrDcltor;
     
     /**
-     * Creates an instance of a declarator defined with a pointer declarator.
+     * Creates an instance of a declarator defined as a pointer declarator.
      * 
-     * @param   PtrDeclarator   $ptrDcltor  The pointer declarator to use.
-     * @return  Declarator  The created instance of Declarator.
+     * @param   PtrDeclarator   $ptrDcltor  The pointer declarator.
+     * @return  Declarator  The created instance of declarator.
      */
     public static function createPtrDeclarator(PtrDeclarator $ptrDcltor): self
     {

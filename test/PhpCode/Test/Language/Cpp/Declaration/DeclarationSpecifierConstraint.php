@@ -39,7 +39,7 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private $stSpecType;
     
     /**
-     * The identifier constraint if it has been defined as "identifier" or a 
+     * The identifier constraint if it has been defined as an identifier or a 
      * qualified identifier.
      * @var IdentifierConstraint|NULL
      */
@@ -53,9 +53,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     private $nnSpecConst;
     
     /**
-     * Creates a constraint for a simple type specifier that is "int".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "int".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createInt(): self
     {
@@ -66,9 +67,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "float".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "float".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createFloat(): self
     {
@@ -79,9 +81,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "bool".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "bool".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createBool(): self
     {
@@ -92,9 +95,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "char".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "char".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createChar(): self
     {
@@ -105,9 +109,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "wchar_t".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "wchar_t".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createWCharT(): self
     {
@@ -118,9 +123,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "short".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "short".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createShort(): self
     {
@@ -131,9 +137,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "long".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "long".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createLong(): self
     {
@@ -144,9 +151,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "signed".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "signed".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createSigned(): self
     {
@@ -157,9 +165,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "unsigned".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "unsigned".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createUnsigned(): self
     {
@@ -170,9 +179,10 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "double".
+     * Creates a constraint for a simple type specifier that is defined as 
+     * "double".
      * 
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createDouble(): self
     {
@@ -183,10 +193,11 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is "identifier".
+     * Creates a constraint for a simple type specifier that is defined as an 
+     * identifier.
      * 
      * @param   IdentifierConstraint    $idConst    The identifier constraint.
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createIdentifier(IdentifierConstraint $idConst): self
     {
@@ -198,12 +209,12 @@ class DeclarationSpecifierConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a simple type specifier that is a qualified 
-     * identifier.
+     * Creates a constraint for a simple type specifier that is defined as a 
+     * qualified identifier.
      * 
      * @param   NestedNameSpecifierConstraint   $nnSpecConst    The nested name specifier constraint.
      * @param   IdentifierConstraint            $idConst        The identifier constraint.
-     * @return  DeclarationSpecifierConstraint  The created instance of DeclarationSpecifierConstraint.
+     * @return  DeclarationSpecifierConstraint  The created instance of declaration specifier constraint.
      */
     public static function createQualifiedIdentifier(
         NestedNameSpecifierConstraint $nnSpecConst, 

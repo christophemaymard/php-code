@@ -35,7 +35,7 @@ class DeclarationSpecifierSequence implements \Countable
     }
     
     /**
-     * Returns the declaration specifiers.
+     * Returns all the declaration specifiers.
      * 
      * @return  DeclarationSpecifier[]  An indexed array of declaration specifiers.
      */

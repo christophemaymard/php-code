@@ -732,7 +732,7 @@ class IdExpressionConstraintTest extends TestCase
     /**
      * Creates a factory of identifier expression doubles.
      * 
-     * @return  IdExpressionDoubleFactory   The created instance of IdExpressionDoubleFactory.
+     * @return  IdExpressionDoubleFactory
      */
     private function createIdExpressionDoubleFactory(): IdExpressionDoubleFactory
     {
@@ -742,7 +742,7 @@ class IdExpressionConstraintTest extends TestCase
     /**
      * Creates a factory of unqualified identifier doubles.
      * 
-     * @return  UnqualifiedIdDoubleFactory  The created instance of UnqualifiedIdDoubleFactory.
+     * @return  UnqualifiedIdDoubleFactory
      */
     private function createUnqualifiedIdDoubleFactory(): UnqualifiedIdDoubleFactory
     {
@@ -752,7 +752,7 @@ class IdExpressionConstraintTest extends TestCase
     /**
      * Creates a factory of qualified identifier doubles.
      * 
-     * @return  QualifiedIdDoubleFactory    The created instance of QualifiedIdDoubleFactory.
+     * @return  QualifiedIdDoubleFactory
      */
     private function createQualifiedIdDoubleFactory(): QualifiedIdDoubleFactory
     {

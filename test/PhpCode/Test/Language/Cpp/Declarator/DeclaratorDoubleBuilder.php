@@ -12,7 +12,7 @@ use PhpCode\Language\Cpp\Declarator\PtrDeclarator;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Declarator\Declarator} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Declarator\Declarator} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

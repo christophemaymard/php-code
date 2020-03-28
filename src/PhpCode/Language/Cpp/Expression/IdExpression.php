@@ -31,10 +31,11 @@ class IdExpression
     private $qid;
     
     /**
-     * Creates an instance of an identifier expression defined with an unqualified identifier.
+     * Creates an instance of an identifier expression defined as an 
+     * unqualified identifier.
      * 
-     * @param   UnqualifiedId   $uid    The unqualified identifier to use.
-     * @return  IdExpression    The created instance of IdExpression.
+     * @param   UnqualifiedId   $uid    The unqualified identifier.
+     * @return  IdExpression    The created instance of identifier expression.
      */
     public static function createUnqualifiedId(UnqualifiedId $uid): self
     {
@@ -45,10 +46,11 @@ class IdExpression
     }
     
     /**
-     * Creates an instance of an identifier expression defined with a qualified identifier.
+     * Creates an instance of an identifier expression defined as a 
+     * qualified identifier.
      * 
-     * @param   QualifiedId     $qid    The qualified identifier to use.
-     * @return  IdExpression    The created instance of IdExpression.
+     * @param   QualifiedId     $qid    The qualified identifier.
+     * @return  IdExpression    The created instance of identifier expression.
      */
     public static function createQualifiedId(QualifiedId $qid): self
     {
@@ -68,7 +70,7 @@ class IdExpression
     /**
      * Returns the unqualified identifier.
      * 
-     * @return  UnqualifiedId|NULL  The instance of the unqualified identifier if this identifier expression has been defined with an unqualified identifier, otherwise NULL.
+     * @return  UnqualifiedId|NULL  The instance of the unqualified identifier if this identifier expression has been defined as an unqualified identifier, otherwise NULL.
      */
     public function getUnqualifiedId(): ?UnqualifiedId
     {
@@ -76,10 +78,10 @@ class IdExpression
     }
     
     /**
-     * Indicates whether this identifier expression has been defined with an 
+     * Indicates whether this identifier expression has been defined as an 
      * unqualified identifier.
      * 
-     * @return  bool    TRUE if this identifier expression has been defined with an unqualified identifier, otherwise FALSE.
+     * @return  bool    TRUE if this identifier expression has been defined as an unqualified identifier, otherwise FALSE.
      */
     public function isUnqualifiedId(): bool
     {
@@ -89,7 +91,7 @@ class IdExpression
     /**
      * Returns the qualified identifier.
      * 
-     * @return  QualifiedId|NULL    The instance of the qualified identifier if this identifier expression has been defined with a qualified identifier, otherwise NULL.
+     * @return  QualifiedId|NULL    The instance of the qualified identifier if this identifier expression has been defined as a qualified identifier, otherwise NULL.
      */
     public function getQualifiedId(): ?QualifiedId
     {
@@ -97,10 +99,10 @@ class IdExpression
     }
     
     /**
-     * Indicates whether this identifier expression has been defined with a 
+     * Indicates whether this identifier expression has been defined as a 
      * qualified identifier.
      * 
-     * @return  bool    TRUE if this identifier expression has been defined with a qualified identifier, otherwise FALSE.
+     * @return  bool    TRUE if this identifier expression has been defined as a qualified identifier, otherwise FALSE.
      */
     public function isQualifiedId(): bool
     {

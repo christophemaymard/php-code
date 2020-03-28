@@ -24,10 +24,11 @@ class DeclaratorConstraint extends AbstractConceptConstraint
     private $ptrDcltorConst;
     
     /**
-     * Creates a constraint for a declarator that is a pointer declarator.
+     * Creates a constraint for a declarator that is defined as a pointer 
+     * declarator.
      * 
-     * @param   PtrDeclaratorConstraint  $ptrDcltorConst    The pointer declarator constraint.
-     * @return  DeclaratorConstraint    The created instance of DeclaratorConstraint.
+     * @param   PtrDeclaratorConstraint $ptrDcltorConst The pointer declarator constraint.
+     * @return  DeclaratorConstraint    The created instance of declarator constraint.
      */
     public static function createPtrDeclarator(
         PtrDeclaratorConstraint $ptrDcltorConst

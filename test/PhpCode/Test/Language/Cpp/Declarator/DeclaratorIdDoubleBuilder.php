@@ -12,7 +12,7 @@ use PhpCode\Language\Cpp\Expression\IdExpression;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Declarator\DeclaratorId} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Declarator\DeclaratorId} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

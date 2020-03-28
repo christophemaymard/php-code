@@ -13,7 +13,7 @@ use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Declarator\NoptrDeclarator} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Declarator\NoptrDeclarator} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

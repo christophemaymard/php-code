@@ -51,7 +51,7 @@ class SimpleTypeSpecifier
     
     /**
      * The identifier of this simple type specifier if it has been defined 
-     * as "identifier" or a qualified identifier.
+     * as an identifier or a qualified identifier.
      * @var Identifier|NULL
      */
     private $id;
@@ -66,7 +66,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "int".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createInt(): self
     {
@@ -79,7 +79,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "float".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createFloat(): self
     {
@@ -92,7 +92,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "bool".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createBool(): self
     {
@@ -105,7 +105,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "char".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createChar(): self
     {
@@ -118,7 +118,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "wchar_t".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createWCharT(): self
     {
@@ -131,7 +131,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "short".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createShort(): self
     {
@@ -144,7 +144,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "long".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createLong(): self
     {
@@ -157,7 +157,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "signed".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createSigned(): self
     {
@@ -170,7 +170,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "unsigned".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createUnsigned(): self
     {
@@ -183,7 +183,7 @@ class SimpleTypeSpecifier
     /**
      * Creates an instance of a simple type specifier defined as "double".
      * 
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createDouble(): self
     {
@@ -194,10 +194,11 @@ class SimpleTypeSpecifier
     }
     
     /**
-     * Creates an instance of a simple type specifier defined as "identifier".
+     * Creates an instance of a simple type specifier defined as an 
+     * identifier.
      * 
      * @param   Identifier  $id The identifier.
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createIdentifier(Identifier $id): self
     {
@@ -214,7 +215,7 @@ class SimpleTypeSpecifier
      * 
      * @param   NestedNameSpecifier $nnSpec The nested name specifier.
      * @param   Identifier          $id     The identifier.
-     * @return  SimpleTypeSpecifier The created instance of SimpleTypeSpecifier.
+     * @return  SimpleTypeSpecifier The created instance of simple type specifier.
      */
     public static function createQualifiedIdentifier(
         NestedNameSpecifier $nnSpec, 
@@ -337,9 +338,10 @@ class SimpleTypeSpecifier
     }
     
     /**
-     * Indicates whether this simple type specifier is defined as "identifier".
+     * Indicates whether this simple type specifier is defined as an 
+     * identifier.
      * 
-     * @return  bool    TRUE if this simple type specifier is defined as "identifier", otherwise FALSE.
+     * @return  bool    TRUE if this simple type specifier is defined as an identifier, otherwise FALSE.
      */
     public function isIdentifier(): bool
     {
@@ -360,7 +362,7 @@ class SimpleTypeSpecifier
     /**
      * Returns the identifier.
      * 
-     * @return  Identifier|NULL The instance of Identifier if this simple type specifier is defined as "identifier" or a qualified identifier, otherwise NULL.
+     * @return  Identifier|NULL The instance of identifier if this simple type specifier is defined as an identifier or a qualified identifier, otherwise NULL.
      */
     public function getIdentifier(): ?Identifier
     {
@@ -370,7 +372,7 @@ class SimpleTypeSpecifier
     /**
      * Returns the nested name specifier.
      * 
-     * @return  NestedNameSpecifier|NULL    The instance of NestedNameSpecifier if this simple type specifier is defined as a qualified identifier, otherwise NULL.
+     * @return  NestedNameSpecifier|NULL    The instance of nested name specifier if this simple type specifier is defined as a qualified identifier, otherwise NULL.
      */
     public function getNestedNameSpecifier(): ?NestedNameSpecifier
     {

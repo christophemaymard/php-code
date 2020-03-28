@@ -37,9 +37,9 @@ class NestedNameSpecifier implements \Countable
     }
     
     /**
-     * Returns the name specifiers.
+     * Returns all the name specifiers.
      * 
-     * @return  Identifier[]    An indexed array of Identifier instances.
+     * @return  Identifier[]    An indexed array of identifiers.
      */
     public function getNameSpecifiers(): array
     {

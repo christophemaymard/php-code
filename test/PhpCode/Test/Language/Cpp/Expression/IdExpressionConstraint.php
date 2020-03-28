@@ -30,11 +30,11 @@ class IdExpressionConstraint extends AbstractConceptConstraint
     private $qidConst;
     
     /**
-     * Creates a constraint for an identifier expression that is an 
-     * unqualified identifier.
+     * Creates a constraint for an identifier expression that is defined as 
+     * an unqualified identifier.
      * 
      * @param   UnqualifiedIdConstraint $uidConst   The unqualified identifier constraint.
-     * @return  IdExpressionConstraint  The created instance of IdExpressionConstraint.
+     * @return  IdExpressionConstraint  The created instance of identifier expression constraint.
      */
     public static function createUnqualifiedId(
         UnqualifiedIdConstraint $uidConst
@@ -51,7 +51,7 @@ class IdExpressionConstraint extends AbstractConceptConstraint
      * identifier.
      * 
      * @param   QualifiedIdConstraint   $qidConst   The qualified identifier constraint.
-     * @return  IdExpressionConstraint  The created instance of IdExpressionConstraint.
+     * @return  IdExpressionConstraint  The created instance of identifier expression constraint.
      */
     public static function createQualifiedId(
         QualifiedIdConstraint $qidConst

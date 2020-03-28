@@ -24,10 +24,11 @@ class TypeSpecifier
     private $stSpec;
     
     /**
-     * Creates an instance of a type specifier defined as a simple type specifier.
+     * Creates an instance of a type specifier defined as a simple type 
+     * specifier.
      * 
      * @param   SimpleTypeSpecifier $stSpec The simple type specifier.
-     * @return  TypeSpecifier   The created instance of TypeSpecifier.
+     * @return  TypeSpecifier   The created instance of type specifier.
      */
     public static function createSimpleTypeSpecifier(SimpleTypeSpecifier $stSpec): self
     {

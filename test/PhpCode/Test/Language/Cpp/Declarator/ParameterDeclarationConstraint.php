@@ -29,7 +29,7 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
      * specifier sequence.
      * 
      * @param   DeclarationSpecifierSequenceConstraint  $declSpecSeqConst   The declaration specifier sequence constraint.
-     * @return  ParameterDeclarationConstraint  The created instance of ParameterDeclarationConstraint.
+     * @return  ParameterDeclarationConstraint  The created instance of parameter declaration constraint.
      */
     public static function create(
         DeclarationSpecifierSequenceConstraint $declSpecSeqConst

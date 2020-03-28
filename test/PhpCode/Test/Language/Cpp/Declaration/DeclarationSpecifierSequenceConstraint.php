@@ -34,7 +34,7 @@ class DeclarationSpecifierSequenceConstraint extends AbstractConceptConstraint
      * Creates a constraint for a declaration specifier sequence.
      * 
      * @param   DeclarationSpecifierConstraint[]    $declSpecConsts The declaration specifier constraints.
-     * @return  DeclarationSpecifierSequenceConstraint  The created instance of DeclarationSpecifierSequenceConstraint.
+     * @return  DeclarationSpecifierSequenceConstraint  The created instance of declaration specifier sequence constraint.
      */
     public static function create(array $declSpecConsts): self
     {

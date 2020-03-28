@@ -183,7 +183,7 @@ class LanguageContextFactory
      * Creates a language context for the specified standard.
      * 
      * @param   int $standard   The standard to create the language context for.
-     * @return  LanguageContextInterface    The created instance.
+     * @return  LanguageContextInterface    The created instance of language context.
      */
     public function create(int $standard): LanguageContextInterface
     {
@@ -197,7 +197,7 @@ class LanguageContextFactory
      * Creates a token table for the keywords of the specified standard.
      * 
      * @param   int $standard   The standard to create the keyword token table for.
-     * @return  TokenTable  The created instance.
+     * @return  TokenTable  The created instance of token table.
      */
     private function createKeywordTable(int $standard): TokenTable
     {
@@ -216,7 +216,7 @@ class LanguageContextFactory
      * Creates a token table for the punctuators of the specified standard.
      * 
      * @param   int $standard   The standard to create the punctuator token table for.
-     * @return  TokenTable  The created instance.
+     * @return  TokenTable  The created instance of token table.
      */
     private function createPunctuatorTable(int $standard): TokenTable
     {

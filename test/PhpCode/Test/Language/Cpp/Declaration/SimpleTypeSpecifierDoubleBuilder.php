@@ -13,7 +13,7 @@ use PhpCode\Language\Cpp\Lexical\Identifier;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

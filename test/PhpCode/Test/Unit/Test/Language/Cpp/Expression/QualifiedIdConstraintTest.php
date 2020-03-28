@@ -465,7 +465,7 @@ class QualifiedIdConstraintTest extends TestCase
     /**
      * Creates a factory of qualified identifier doubles.
      * 
-     * @return  QualifiedIdDoubleFactory    The created instance of QualifiedIdDoubleFactory.
+     * @return  QualifiedIdDoubleFactory
      */
     private function createQualifiedIdDoubleFactory(): QualifiedIdDoubleFactory
     {
@@ -475,7 +475,7 @@ class QualifiedIdConstraintTest extends TestCase
     /**
      * Creates a factory of nested name specifier doubles.
      * 
-     * @return  NestedNameSpecifierDoubleFactory    The created instance of NestedNameSpecifierDoubleFactory.
+     * @return  NestedNameSpecifierDoubleFactory
      */
     private function createNestedNameSpecifierDoubleFactory(): NestedNameSpecifierDoubleFactory
     {
@@ -485,7 +485,7 @@ class QualifiedIdConstraintTest extends TestCase
     /**
      * Creates a factory of unqualified identifier doubles.
      * 
-     * @return  UnqualifiedIdDoubleFactory  The created instance of UnqualifiedIdDoubleFactory.
+     * @return  UnqualifiedIdDoubleFactory
      */
     private function createUnqualifiedIdDoubleFactory(): UnqualifiedIdDoubleFactory
     {

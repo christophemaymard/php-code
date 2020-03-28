@@ -28,7 +28,7 @@ class DefiningTypeSpecifier
      * specifier.
      * 
      * @param   TypeSpecifier   $typeSpec   The type specifier.
-     * @return  DefiningTypeSpecifier   The created instance of DefiningTypeSpecifier.
+     * @return  DefiningTypeSpecifier   The created instance of defining type specifier.
      */
     public static function createTypeSpecifier(TypeSpecifier $typeSpec): self
     {

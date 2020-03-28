@@ -39,9 +39,9 @@ class ParameterDeclarationClause
     }
     
     /**
-     * Indicates whether an ellipsis is present.
+     * Indicates whether this parameter declaration clause has an ellipsis.
      * 
-     * @return  bool    TRUE if an ellipsis is present, otherwise FALSE.
+     * @return  bool    TRUE if this parameter declaration clause has an ellipsis, otherwise FALSE.
      */
     public function hasEllipsis(): bool
     {
@@ -51,7 +51,7 @@ class ParameterDeclarationClause
     /**
      * Returns the parameter declaration list.
      * 
-     * @return  ParameterDeclarationList|NULL   The instance of the parameter declaration list if it has been set, otherwise NULL.
+     * @return  ParameterDeclarationList|NULL   The instance of parameter declaration list if it has been set, otherwise NULL.
      */
     public function getParameterDeclarationList(): ?ParameterDeclarationList
     {
@@ -69,9 +69,10 @@ class ParameterDeclarationClause
     }
     
     /**
-     * Indicates whether a parameter declaration list has been set.
+     * Indicates whether this parameter declaration clause has a parameter 
+     * declaration list.
      * 
-     * @return  bool    TRUE if a parameter declaration list has been set, otherwise FALSE.
+     * @return  bool    TRUE if this parameter declaration clause has a parameter declaration list, otherwise FALSE.
      */
     public function hasParameterDeclarationList(): bool
     {

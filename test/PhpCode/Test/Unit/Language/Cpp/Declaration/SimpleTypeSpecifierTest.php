@@ -438,8 +438,8 @@ class SimpleTypeSpecifierTest extends TestCase
     }
     
     /**
-     * Tests that isIdentifier() returns TRUE when the instance has been created 
-     * by createIdentifier().
+     * Tests that isIdentifier() returns TRUE when the instance has been 
+     * created by createIdentifier().
      */
     public function testIsIdentifierReturnsTrueWhenCreateIdentifier(): void
     {

@@ -10,7 +10,7 @@ namespace PhpCode\Test\Language\Cpp\Declarator;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraintDoubleBuilder;
 
 /**
- * Represents a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraint} 
+ * Represents a builder of constraint double for the {@see PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraint} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

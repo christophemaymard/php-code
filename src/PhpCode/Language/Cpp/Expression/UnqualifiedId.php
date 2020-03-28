@@ -26,10 +26,11 @@ class UnqualifiedId
     private $identifier;
     
     /**
-     * Creates an instance of an unqualified identifier defined with an identifier.
+     * Creates an instance of an unqualified identifier defined as an 
+     * identifier.
      * 
-     * @param   Identifier  $identifier The identifier to use.
-     * @return  UnqualifiedId   The created instance of UnqualifiedId.
+     * @param   Identifier  $identifier The identifier.
+     * @return  UnqualifiedId   The created instance of unqualified identifier.
      */
     public static function createIdentifier(Identifier $identifier): self
     {

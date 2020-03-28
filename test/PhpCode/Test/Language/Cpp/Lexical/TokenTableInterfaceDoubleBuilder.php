@@ -20,8 +20,7 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
 class TokenTableInterfaceDoubleBuilder
 {
     /**
-     * The prophecy of a {@see PhpCode\Language\Cpp\Lexical\TokenTableInterface} 
-     * interface.
+     * The prophecy of a TokenTableInterface interface.
      * @var ObjectProphecy
      */
     private $prophecy;
@@ -29,7 +28,7 @@ class TokenTableInterfaceDoubleBuilder
     /**
      * Constructor.
      * 
-     * @param   ObjectProphecy  $prophecy   The prophecy of a PhpCode\Language\Cpp\Lexical\TokenTableInterface interface.
+     * @param   ObjectProphecy  $prophecy   The prophecy of a TokenTableInterface interface.
      */
     public function __construct(ObjectProphecy $prophecy)
     {

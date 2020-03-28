@@ -694,7 +694,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
     /**
      * Creates a factory of nested name specifier doubles.
      * 
-     * @return  NestedNameSpecifierDoubleFactory    The created instance of NestedNameSpecifierDoubleFactory.
+     * @return  NestedNameSpecifierDoubleFactory
      */
     private function createNestedNameSpecifierDoubleFactory(): NestedNameSpecifierDoubleFactory
     {
@@ -704,7 +704,7 @@ class NestedNameSpecifierConstraintTest extends TestCase
     /**
      * Creates a factory of identifier doubles.
      * 
-     * @return  IdentifierDoubleFactory The created instance of IdentifierDoubleFactory.
+     * @return  IdentifierDoubleFactory
      */
     private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
     {

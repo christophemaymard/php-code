@@ -10,7 +10,7 @@ namespace PhpCode\Test\Language\Cpp\Lexical;
 use PhpCode\Test\Language\Cpp\AbstractConceptConstraintDoubleBuilder;
 
 /**
- * Represents a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint} 
+ * Represents a builder of constraint double for the {@see PhpCode\Test\Language\Cpp\Lexical\IdentifierConstraint} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

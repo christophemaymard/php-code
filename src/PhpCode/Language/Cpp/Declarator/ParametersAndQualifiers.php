@@ -8,7 +8,7 @@
 namespace PhpCode\Language\Cpp\Declarator;
 
 /**
- * Represents parameters and qualifiers of a function.
+ * Represents parameters and qualifiers.
  * 
  * parameters-and-qualifiers:
  *     ( parameter-declaration-clause )

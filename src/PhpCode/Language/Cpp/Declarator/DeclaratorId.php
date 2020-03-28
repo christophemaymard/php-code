@@ -28,7 +28,7 @@ class DeclaratorId
     /**
      * Constructor.
      * 
-     * @param   IdExpression    $idExpr The identifier expression to set.
+     * @param   IdExpression    $idExpr The identifier expression.
      */
     public function __construct(IdExpression $idExpr)
     {
@@ -38,7 +38,7 @@ class DeclaratorId
     /**
      * Returns the identifier expression.
      * 
-     * @return  IdExpression    The instance of the identifier expression.
+     * @return  IdExpression
      */
     public function getIdExpression(): IdExpression
     {

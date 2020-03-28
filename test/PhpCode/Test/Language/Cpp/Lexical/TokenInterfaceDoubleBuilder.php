@@ -11,7 +11,7 @@ use PhpCode\Language\Cpp\Lexical\TokenInterface;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Lexical\TokenInterface} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Lexical\TokenInterface} 
  * interface.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

@@ -12,7 +12,7 @@ use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
 use PhpCode\Test\AbstractDoubleBuilder;
 
 /**
- * Represents a double builder of the {@see PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier} 
+ * Represents a builder of double for the {@see PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier} 
  * class.
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>

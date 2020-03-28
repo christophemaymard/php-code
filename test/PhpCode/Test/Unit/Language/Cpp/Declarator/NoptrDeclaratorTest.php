@@ -33,7 +33,8 @@ class NoptrDeclaratorTest extends TestCase
     }
     
     /**
-     * Tests that createDeclaratorId() returns new instances of NoptrDeclarator.
+     * Tests that createDeclaratorId() returns new instances of 
+     * NoptrDeclarator.
      */
     public function testCreateDeclaratorIdReturnsNewInstanceNoptrDeclarator(): void
     {
@@ -57,10 +58,13 @@ class NoptrDeclaratorTest extends TestCase
     }
     
     /**
+     * Tests that getParametersAndQualifiers() returns NULL when the instance 
+     * has been created by createDeclaratorId().
+     * 
      * Tests that getParametersAndQualifiers() returns the instance of 
-     * ParametersAndQualifiers when the instance has been created by 
-     * createDeclaratorId() and if the parameters and the qualifiers have 
-     * been set, otherwise NULL.
+     * ParametersAndQualifiers when:
+     * - the instance has been created by createDeclaratorId(), and 
+     * - the parameters and the qualifiers have been set.
      */
     public function testGetParametersAndQualifiersWhenCreateDeclaratorId(): void
     {
@@ -81,9 +85,12 @@ class NoptrDeclaratorTest extends TestCase
     }
     
     /**
-     * Tests that hasParametersAndQualifiers() returns TRUE when the 
-     * instance has been created by createDeclaratorId() and if the 
-     * parameters and the qualifiers have been set, otherwise FALSE.
+     * Tests that hasParametersAndQualifiers() returns FALSE when the 
+     * instance has been created by createDeclaratorId().
+     * 
+     * Tests that hasParametersAndQualifiers() returns TRUE when:
+     * - the instance has been created by createDeclaratorId(), and 
+     * - the parameters and the qualifiers have been set.
      */
     public function testHasParametersAndQualifiersReturnsBoolWhenCreateDeclaratorId(): void
     {

@@ -2981,7 +2981,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
     /**
      * Creates a factory of declaration specifier doubles.
      * 
-     * @return  DeclarationSpecifierDoubleFactory   The created instance of DeclarationSpecifierDoubleFactory.
+     * @return  DeclarationSpecifierDoubleFactory
      */
     private function createDeclarationSpecifierDoubleFactory(): DeclarationSpecifierDoubleFactory
     {
@@ -2991,7 +2991,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
     /**
      * Creates a factory of identifier doubles.
      * 
-     * @return  IdentifierDoubleFactory The created instance of IdentifierDoubleFactory.
+     * @return  IdentifierDoubleFactory
      */
     private function createIdentifierDoubleFactory(): IdentifierDoubleFactory
     {
@@ -3001,7 +3001,7 @@ class DeclarationSpecifierConstraintTest extends TestCase
     /**
      * Creates a factory of nested name specifier doubles.
      * 
-     * @return  NestedNameSpecifierDoubleFactory    The created instance of NestedNameSpecifierDoubleFactory.
+     * @return  NestedNameSpecifierDoubleFactory
      */
     private function createNestedNameSpecifierDoubleFactory(): NestedNameSpecifierDoubleFactory
     {

@@ -18,7 +18,7 @@ use PhpCode\Test\Language\Cpp\AbstractConceptConstraint;
 class NoptrDeclaratorConstraint extends AbstractConceptConstraint
 {
     /**
-     * The unqualified identifier constraint.
+     * The declarator identifier constraint.
      * @var DeclaratorIdConstraint
      */
     private $didConst;
@@ -30,11 +30,11 @@ class NoptrDeclaratorConstraint extends AbstractConceptConstraint
     private $prmQualConst;
     
     /**
-     * Creates a constraint for a no-pointer declarator with an unqualified 
-     * identifier.
+     * Creates a constraint for a no-pointer declarator that is defined as an 
+     * declarator identifier.
      * 
-     * @param   DeclaratorIdConstraint  $didConst   The unqualified identifier constraint.
-     * @return  NoptrDeclaratorConstraint   The created instance of NoptrDeclaratorConstraint.
+     * @param   DeclaratorIdConstraint  $didConst   The declarator identifier constraint.
+     * @return  NoptrDeclaratorConstraint   The created instance of no-pointer declarator constraint.
      */
     public static function createDeclaratorId(DeclaratorIdConstraint $didConst): self
     {
@@ -45,12 +45,12 @@ class NoptrDeclaratorConstraint extends AbstractConceptConstraint
     }
     
     /**
-     * Creates a constraint for a no-pointer declarator with an unqualified 
-     * identifier and parameters and qualifiers.
+     * Creates a constraint for a no-pointer declarator that is defined as an 
+     * declarator identifier with parameters and qualifiers.
      * 
-     * @param   DeclaratorIdConstraint              $didConst       The unqualified identifier constraint.
+     * @param   DeclaratorIdConstraint              $didConst       The declarator identifier constraint.
      * @param   ParametersAndQualifiersConstraint   $prmQualConst   The parameters and qualifiers constraint.
-     * @return  NoptrDeclaratorConstraint   The created instance of NoptrDeclaratorConstraint.
+     * @return  NoptrDeclaratorConstraint   The created instance of no-pointer declarator constraint.
      */
     public static function createDeclaratorIdParametersAndQualifiers(
         DeclaratorIdConstraint $didConst, 

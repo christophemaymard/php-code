@@ -32,8 +32,8 @@ class QualifiedId
     /**
      * Constructor.
      * 
-     * @param   NestedNameSpecifier $nnSpec     The nested name specifier to set.
-     * @param   UnqualifiedId       $unqualId   The unqualified identifier to set.
+     * @param   NestedNameSpecifier $nnSpec     The nested name specifier.
+     * @param   UnqualifiedId       $unqualId   The unqualified identifier.
      */
     public function __construct(NestedNameSpecifier $nnSpec, UnqualifiedId $unqualId)
     {

@@ -20,8 +20,7 @@ use Prophecy\Prophecy\ProphecySubjectInterface;
 class LanguageContextInterfaceDoubleBuilder
 {
     /**
-     * The prophecy of a {@see PhpCode\Language\Cpp\Specification\LanguageContextInterface} 
-     * interface.
+     * The prophecy of a LanguageContextInterface interface.
      * @var ObjectProphecy
      */
     private $prophecy;
@@ -29,7 +28,7 @@ class LanguageContextInterfaceDoubleBuilder
     /**
      * Constructor.
      * 
-     * @param   ObjectProphecy  $prophecy   The prophecy of a PhpCode\Language\Cpp\Specification\LanguageContextInterface interface.
+     * @param   ObjectProphecy  $prophecy   The prophecy of a LanguageContextInterface interface.
      */
     public function __construct(ObjectProphecy $prophecy)
     {

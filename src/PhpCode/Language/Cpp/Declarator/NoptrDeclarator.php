@@ -25,16 +25,17 @@ class NoptrDeclarator
     private $did;
     
     /**
-     * The parameters and the qualifiers.
+     * The parameters and qualifiers.
      * @var ParametersAndQualifiers|NULL
      */
     private $prmQual;
     
     /**
-     * Creates an instance of a no-pointer declarator defined with a declarator identifier.
+     * Creates an instance of a no-pointer declarator defined as a declarator 
+     * identifier.
      * 
-     * @param   DeclaratorId    $did    The declarator identifier to use.
-     * @return  NoptrDeclarator The created instance of NoptrDeclarator.
+     * @param   DeclaratorId    $did    The declarator identifier.
+     * @return  NoptrDeclarator The created instance of no-pointer declarator.
      */
     public static function createDeclaratorId(DeclaratorId $did): self
     {
@@ -62,7 +63,7 @@ class NoptrDeclarator
     }
     
     /**
-     * Returns the parameters and the qualifiers.
+     * Returns the parameters and qualifiers.
      * 
      * @return  ParametersAndQualifiers|NULL    The instance of parameters and qualifiers if it has been set, otherwise NULL.
      */
@@ -82,9 +83,10 @@ class NoptrDeclarator
     }
     
     /**
-     * Indicates whether the parameters and the qualifiers have been set.
+     * Indicates whether this no-pointer declarator has parameters and 
+     * qualifiers.
      * 
-     * @return  TRUE if the parameters and the qualifiers have been set, otherwise FALSE. 
+     * @return  TRUE if this no-pointer declarator has parameters and qualifiers, otherwise FALSE. 
      */
     public function hasParametersAndQualifiers(): bool
     {

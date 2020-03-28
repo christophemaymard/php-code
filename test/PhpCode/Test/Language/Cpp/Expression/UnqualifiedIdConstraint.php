@@ -25,11 +25,11 @@ class UnqualifiedIdConstraint extends AbstractConceptConstraint
     private $idConst;
     
     /**
-     * Creates a constraint for an unqualified identifier that is an 
-     * identifier.
+     * Creates a constraint for an unqualified identifier that is defined as 
+     * an identifier.
      * 
      * @param   IdentifierConstraint    $idConst   The identifier constraint.
-     * @return  UnqualifiedIdConstraint The created instance of UnqualifiedIdConstraint.
+     * @return  UnqualifiedIdConstraint The created instance of unqualified identifier constraint.
      */
     public static function createIdentifier(
         IdentifierConstraint $idConst
