@@ -49,16 +49,6 @@ class ParameterDeclarationClause
     }
     
     /**
-     * Sets the parameter declaration list.
-     * 
-     * @param   ParameterDeclarationList    $prmDeclList    The parameter declaration list to set.
-     */
-    public function setParameterDeclarationList(ParameterDeclarationList $prmDeclList): void
-    {
-        $this->prmDeclList = $prmDeclList;
-    }
-    
-    /**
      * Returns the parameter declaration list.
      * 
      * @return  ParameterDeclarationList|NULL   The instance of the parameter declaration list if it has been set, otherwise NULL.
@@ -66,6 +56,16 @@ class ParameterDeclarationClause
     public function getParameterDeclarationList(): ?ParameterDeclarationList
     {
         return $this->prmDeclList;
+    }
+    
+    /**
+     * Sets the parameter declaration list.
+     * 
+     * @param   ParameterDeclarationList    $prmDeclList    The parameter declaration list to set.
+     */
+    public function setParameterDeclarationList(ParameterDeclarationList $prmDeclList): void
+    {
+        $this->prmDeclList = $prmDeclList;
     }
     
     /**
