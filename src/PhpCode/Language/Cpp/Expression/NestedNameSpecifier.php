@@ -29,11 +29,11 @@ class NestedNameSpecifier implements \Countable
     /**
      * Adds the specified identifier to the name specifiers.
      * 
-     * @param   Identifier  $id The identifier to add.
+     * @param   Identifier  $name   The identifier to add.
      */
-    public function addIdentifier(Identifier $id): void
+    public function addNameSpecifier(Identifier $name): void
     {
-        $this->nameSpecs[] = $id;
+        $this->nameSpecs[] = $name;
     }
     
     /**

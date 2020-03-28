@@ -24,9 +24,9 @@ class NestedNameSpecifierTest extends TestCase
 {
     /**
      * Tests that getNameSpecifiers() returns an indexed array of Identifier 
-     * instances when using addIdentifier().
+     * instances when using addNameSpecifier().
      */
-    public function testGetNameSpecifiersReturnsArrayIdentifierWhenAddIdentifier(): void
+    public function testGetNameSpecifiersReturnsArrayIdentifierWhenAddNameSpecifier(): void
     {
         $idFactory = $this->createIdentifierDoubleFactory();
         $nameSpecs = [];
@@ -35,15 +35,15 @@ class NestedNameSpecifierTest extends TestCase
         self::assertSame($nameSpecs, $sut->getNameSpecifiers());
         
         $nameSpecs[] = $idFactory->createDummy();
-        $sut->addIdentifier($nameSpecs[0]);
+        $sut->addNameSpecifier($nameSpecs[0]);
         self::assertSame($nameSpecs, $sut->getNameSpecifiers());
         
         $nameSpecs[] = $idFactory->createDummy();
-        $sut->addIdentifier($nameSpecs[1]);
+        $sut->addNameSpecifier($nameSpecs[1]);
         self::assertSame($nameSpecs, $sut->getNameSpecifiers());
         
         $nameSpecs[] = $idFactory->createDummy();
-        $sut->addIdentifier($nameSpecs[2]);
+        $sut->addNameSpecifier($nameSpecs[2]);
         self::assertSame($nameSpecs, $sut->getNameSpecifiers());
     }
     
@@ -57,13 +57,13 @@ class NestedNameSpecifierTest extends TestCase
         
         self::assertCount(0, $sut);
         
-        $sut->addIdentifier($idFactory->createDummy());
+        $sut->addNameSpecifier($idFactory->createDummy());
         self::assertCount(1, $sut);
         
-        $sut->addIdentifier($idFactory->createDummy());
+        $sut->addNameSpecifier($idFactory->createDummy());
         self::assertCount(2, $sut);
         
-        $sut->addIdentifier($idFactory->createDummy());
+        $sut->addNameSpecifier($idFactory->createDummy());
         self::assertCount(3, $sut);
     }
     

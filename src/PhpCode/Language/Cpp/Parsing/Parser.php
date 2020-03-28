@@ -114,7 +114,7 @@ class Parser
         $nnSpec = new NestedNameSpecifier();
         
         while ($this->tokenIs(Tag::ID) && $this->lookAhead(1)->getTag() == TAG::PN_COLON_COLON) {
-            $nnSpec->addIdentifier(new Identifier($this->tkn->getLexeme()));
+            $nnSpec->addNameSpecifier(new Identifier($this->tkn->getLexeme()));
             
             // Consume the identifier and the scope.
             $this->move();
@@ -382,7 +382,7 @@ class Parser
         $nnSpec = new NestedNameSpecifier();
         
         while ($this->tokenIs(Tag::ID) && $this->lookAhead(1)->getTag() == TAG::PN_COLON_COLON) {
-            $nnSpec->addIdentifier(new Identifier($this->tkn->getLexeme()));
+            $nnSpec->addNameSpecifier(new Identifier($this->tkn->getLexeme()));
             
             // Consume the identifier and the scope.
             $this->move();
