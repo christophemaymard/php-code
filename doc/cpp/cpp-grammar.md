@@ -1,4 +1,4 @@
-# **C++ Grammar**
+# C++ Grammar
 
 Table of contents
 
