@@ -30,10 +30,10 @@ class DeclaratorDoubleBuilder extends AbstractDoubleBuilder
     /**
      * Builds a prophecy where getPtrDeclarator() can be called.
      * 
-     * @param   PtrDeclarator   $return The value to return when getPtrDeclarator() is called (optional)(default to NULL).
+     * @param   PtrDeclarator   $return The value to return when getPtrDeclarator() is called.
      * @return  DeclaratorDoubleBuilder  This instance.
      */
-    public function buildGetPtrDeclarator(PtrDeclarator $return = NULL): self
+    public function buildGetPtrDeclarator(PtrDeclarator $return): self
     {
         $this->getSubjectProphecy()
             ->getPtrDeclarator()

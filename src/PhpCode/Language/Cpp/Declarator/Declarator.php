@@ -19,7 +19,7 @@ class Declarator
 {
     /**
      * The pointer declarator.
-     * @var PtrDeclarator|NULL
+     * @var PtrDeclarator
      */
     private $ptrDcltor;
     
@@ -47,9 +47,9 @@ class Declarator
     /**
      * Returns the pointer declarator.
      * 
-     * @return  PtrDeclarator|NULL  The instance of the pointer declarator if this declarator has been defined with a pointer declarator, otherwise NULL.
+     * @return  PtrDeclarator
      */
-    public function getPtrDeclarator(): ?PtrDeclarator
+    public function getPtrDeclarator(): PtrDeclarator
     {
         return $this->ptrDcltor;
     }
