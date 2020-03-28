@@ -31,10 +31,10 @@ class NoptrDeclaratorDoubleBuilder extends AbstractDoubleBuilder
     /**
      * Builds a prophecy where getDeclaratorId() can be called.
      * 
-     * @param   DeclaratorId    $return The value to return when getDeclaratorId() is called (optional)(default to NULL).
+     * @param   DeclaratorId    $return The value to return when getDeclaratorId() is called.
      * @return  NoptrDeclaratorDoubleBuilder    This instance.
      */
-    public function buildGetDeclaratorId(DeclaratorId $return = NULL): self
+    public function buildGetDeclaratorId(DeclaratorId $return): self
     {
         $this->getSubjectProphecy()
             ->getDeclaratorId()

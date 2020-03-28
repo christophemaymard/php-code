@@ -20,7 +20,7 @@ class NoptrDeclarator
 {
     /**
      * The declarator identifier.
-     * @var DeclaratorId|NULL
+     * @var DeclaratorId
      */
     private $did;
     
@@ -54,9 +54,9 @@ class NoptrDeclarator
     /**
      * Returns the declarator identifier.
      * 
-     * @return  DeclaratorId|NULL   The instance of the declarator identifier if this no-pointer declarator has been defined with a declarator identifier, otherwise NULL.
+     * @return  DeclaratorId
      */
-    public function getDeclaratorId(): ?DeclaratorId
+    public function getDeclaratorId(): DeclaratorId
     {
         return $this->did;
     }
