@@ -1,4 +1,4 @@
-# **Itanium C++ mangling**
+# Itanium C++ mangling
 
 Table of contents
 
