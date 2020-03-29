@@ -2,7 +2,7 @@
 
 ## Table of contents
 
-
+* [Mangle C++ names](mangling.md)
 
 ## Annexes
 
