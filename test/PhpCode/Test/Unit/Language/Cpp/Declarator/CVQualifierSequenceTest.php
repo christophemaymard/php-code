@@ -8,9 +8,8 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Exception\InvalidOperationException;
-use PhpCode\Language\Cpp\Declarator\CVQualifier;
 use PhpCode\Language\Cpp\Declarator\CVQualifierSequence;
-use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\CVQualifierDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,8 +43,11 @@ class CVQualifierSequenceTest extends TestCase
         $this->expectException(InvalidOperationException::class);
         $this->expectExceptionMessage('Duplicate constant/volatile qualifier defined as constant.');
         
-        $sut->addCVQualifier($this->createConstCVQualifier());
+        $sut->addCVQualifier(
+            $this->createCVQualifierDoubleFactory()->createConstant()
+        );
     }
+    
     /**
      * Tests that addCVQualifier() throws an exception when adding a 
      * qualifier defined as volatile whereas a previous qualifier defined as 
@@ -66,7 +68,9 @@ class CVQualifierSequenceTest extends TestCase
         $this->expectException(InvalidOperationException::class);
         $this->expectExceptionMessage('Duplicate constant/volatile qualifier defined as volatile.');
         
-        $sut->addCVQualifier($this->createVolatileCVQualifier());
+        $sut->addCVQualifier(
+            $this->createCVQualifierDoubleFactory()->createVolatile()
+        );
     }
     
     /**
@@ -80,11 +84,11 @@ class CVQualifierSequenceTest extends TestCase
         $cvs = [];
         self::assertSame($cvs, $sut->getCVQualifiers());
         
-        $cvs[] = $this->createConstCVQualifier();
+        $cvs[] = $this->createCVQualifierDoubleFactory()->createConstant();
         $sut->addCVQualifier($cvs[0]);
         self::assertSame($cvs, $sut->getCVQualifiers());
         
-        $cvs[] = $this->createVolatileCVQualifier();
+        $cvs[] = $this->createCVQualifierDoubleFactory()->createVolatile();
         $sut->addCVQualifier($cvs[1]);
         self::assertSame($cvs, $sut->getCVQualifiers());
     }
@@ -97,22 +101,24 @@ class CVQualifierSequenceTest extends TestCase
      */
     public function getDuplicateConstProvider(): array
     {
+        $cvFactory = $this->createCVQualifierDoubleFactory();
+        
         return [
             'const' => [
                 [
-                    $this->createConstCVQualifier(), 
+                    $cvFactory->createConstant(), 
                 ], 
             ], 
             'const volatile' => [
                 [
-                    $this->createConstCVQualifier(), 
-                    $this->createVolatileCVQualifier(), 
+                    $cvFactory->createConstant(), 
+                    $cvFactory->createVolatile(), 
                 ], 
             ], 
             'volatile const' => [
                 [
-                $this->createVolatileCVQualifier(), 
-                $this->createConstCVQualifier(), 
+                    $cvFactory->createVolatile(), 
+                    $cvFactory->createConstant(), 
                 ], 
             ], 
         ];
@@ -126,51 +132,37 @@ class CVQualifierSequenceTest extends TestCase
      */
     public function getDuplicateVolatileProvider(): array
     {
+        $cvFactory = $this->createCVQualifierDoubleFactory();
+        
         return [
             'volatile' => [
                 [
-                    $this->createVolatileCVQualifier(), 
+                    $cvFactory->createVolatile(), 
                 ], 
             ], 
             'volatile const' => [
                 [
-                $this->createVolatileCVQualifier(), 
-                $this->createConstCVQualifier(), 
+                    $cvFactory->createVolatile(), 
+                    $cvFactory->createConstant(), 
                 ], 
             ], 
             'const volatile' => [
                 [
-                    $this->createConstCVQualifier(), 
-                    $this->createVolatileCVQualifier(), 
+                    $cvFactory->createConstant(), 
+                    $cvFactory->createVolatile(), 
                 ], 
             ], 
         ];
     }
     
     /**
-     * Creates a constant/volatile qualifier defined as constant.
+     * Creates a factory of constant/volatile qualifier doubles.
      * 
-     * @return  CVQualifier
+     * @return  CVQualifierDoubleFactory
      */
-    private function createConstCVQualifier(): CVQualifier
+    private function createCVQualifierDoubleFactory(): CVQualifierDoubleFactory
     {
-        return ConceptDoubleBuilder::createCVQualifier($this)
-            ->buildIsConst(TRUE)
-            ->buildIsVolatile(FALSE)
-            ->getDouble();        
-    }
-    
-    /**
-     * Creates a constant/volatile qualifier defined as volatile.
-     * 
-     * @return  CVQualifier
-     */
-    private function createVolatileCVQualifier(): CVQualifier
-    {
-        return ConceptDoubleBuilder::createCVQualifier($this)
-            ->buildIsConst(FALSE)
-            ->buildIsVolatile(TRUE)
-            ->getDouble();        
+        return new CVQualifierDoubleFactory($this);
     }
 }
 
