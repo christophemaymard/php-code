@@ -8,6 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationClauseDoubleFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -23,28 +24,74 @@ use PHPUnit\Framework\TestCase;
 class ParametersAndQualifiersTest extends TestCase
 {
     /**
-     * @var ParameterDeclarationClauseDoubleFactory
-     */
-    private $prmDeclClauseFactory;
-    
-    /**
-     * {@inheritDoc}
-     */
-    protected function setUp(): void
-    {
-        $this->prmDeclClauseFactory = new ParameterDeclarationClauseDoubleFactory($this);
-    }
-    
-    /**
-     * Tests that __construct() stores the instance of 
-     * ParameterDeclarationClause.
+     * Tests that __construct() stores the instance of the parameter 
+     * declaration clause.
      */
     public function test__constructStoresParameterDeclarationClause(): void
     {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
+        $prmDeclClause = $this->createParameterDeclarationClauseDoubleFactory()
+            ->createDummy();
         
         $sut = new ParametersAndQualifiers($prmDeclClause);
         self::assertSame($prmDeclClause, $sut->getParameterDeclarationClause());
+    }
+    
+    /**
+     * Tests that getCVQualifierSequence() returns:
+     * - NULL when instantiated, 
+     * - the instance of constant/volatile qualifier sequence that has been 
+     * set with setCVQualifierSequence().
+     */
+    public function testGetCVQualifierSequence(): void
+    {
+        $prmDeclClause = $this->createParameterDeclarationClauseDoubleFactory()
+            ->createDummy();
+        
+        $sut = new ParametersAndQualifiers($prmDeclClause);
+        
+        self::assertNull($sut->getCVQualifierSequence());
+        
+        $cvSeq1 = ConceptDoubleBuilder::createCVQualifierSequence($this)->getDouble();
+        $sut->setCVQualifierSequence($cvSeq1);
+        self::assertSame($cvSeq1, $sut->getCVQualifierSequence());
+        
+        $cvSeq2 = ConceptDoubleBuilder::createCVQualifierSequence($this)->getDouble();
+        $sut->setCVQualifierSequence($cvSeq2);
+        self::assertSame($cvSeq2, $sut->getCVQualifierSequence());
+    }
+    
+    /**
+     * Tests that hasCVQualifierSequence() returns:
+     * - FALSE when instantiated, 
+     * - TRUE when an instance of constant/volatile qualifier sequence has 
+     * been set with setCVQualifierSequence().
+     */
+    public function testHasCVQualifierSequenceReturnsBool(): void
+    {
+        $prmDeclClause = $this->createParameterDeclarationClauseDoubleFactory()
+            ->createDummy();
+        
+        $sut = new ParametersAndQualifiers($prmDeclClause);
+        
+        self::assertFalse($sut->hasCVQualifierSequence());
+        
+        $cvSeq1 = ConceptDoubleBuilder::createCVQualifierSequence($this)->getDouble();
+        $sut->setCVQualifierSequence($cvSeq1);
+        self::assertTrue($sut->hasCVQualifierSequence());
+        
+        $cvSeq2 = ConceptDoubleBuilder::createCVQualifierSequence($this)->getDouble();
+        $sut->setCVQualifierSequence($cvSeq2);
+        self::assertTrue($sut->hasCVQualifierSequence());
+    }
+    
+    /**
+     * Creates a factory of parameter declaration clause doubles.
+     * 
+     * @return  ParameterDeclarationClauseDoubleFactory
+     */
+    private function createParameterDeclarationClauseDoubleFactory(): ParameterDeclarationClauseDoubleFactory
+    {
+        return new ParameterDeclarationClauseDoubleFactory($this);
     }
 }
 
