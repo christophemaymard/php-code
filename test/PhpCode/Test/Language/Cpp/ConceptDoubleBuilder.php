@@ -10,6 +10,7 @@ namespace PhpCode\Test\Language\Cpp;
 use PhpCode\Test\Language\Cpp\Declaration\DefiningTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\SimpleTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\TypeSpecifierDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\CVQualifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleBuilder;
@@ -82,6 +83,18 @@ class ConceptDoubleBuilder
     public static function createParametersAndQualifiers(TestCase $testCase): ParametersAndQualifiersDoubleBuilder
     {
         return new ParametersAndQualifiersDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\CVQualifier} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  CVQualifierDoubleBuilder    The created instance of CVQualifierDoubleBuilder.
+     */
+    public static function createCVQualifier(TestCase $testCase): CVQualifierDoubleBuilder
+    {
+        return new CVQualifierDoubleBuilder($testCase);
     }
     
     /**
