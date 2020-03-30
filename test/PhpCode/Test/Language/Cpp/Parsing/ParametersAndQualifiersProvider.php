@@ -24,13 +24,7 @@ class ParametersAndQualifiersProvider
      */
     public static function createValidDataSetProvider(): array
     {
-        $dataSet = [];
-        
-        foreach (ParameterDeclarationClauseProvider::createValidDataSet() as $data) {
-            $dataSet[] = self::createPrmDeclClauseValidData($data);
-        }
-        
-        return $dataSet;
+        return self::createValidDataSet();
     }
     
     /**
@@ -40,7 +34,31 @@ class ParametersAndQualifiersProvider
      */
     public static function createValidDataSet(): array
     {
-        return self::createValidDataSetProvider();
+        $dataSet = [];
+        
+        $prmDeclClauseDataSet = ParameterDeclarationClauseProvider::createValidDataSet();
+        
+        // Parameter declaration clause.
+        
+        foreach ($prmDeclClauseDataSet as $prmDeclClauseData) {
+            $dataSet[] = self::createPrmDeclClauseValidData($prmDeclClauseData);
+        }
+        
+        // Parameter declaration clause and constant/volatile qualifier 
+        // sequence.
+        
+        $cvSeqDataSet = CVQualifierSequenceProvider::createValidDataSet();
+        
+        foreach ($prmDeclClauseDataSet as $prmDeclClauseData) {
+            foreach ($cvSeqDataSet as $cvSeqData) {
+                $dataSet[] = self::createPrmDeclClauseCVQualSeqValidData(
+                    $prmDeclClauseData, 
+                    $cvSeqData
+                );
+            }
+        }
+        
+        return $dataSet;
     }
     
     /**
@@ -67,6 +85,49 @@ class ParametersAndQualifiersProvider
         $data->setName(\sprintf(
             '( %s )', 
             $clauseData->getName()
+        ));
+        
+        return $data;
+    }
+    
+    /**
+     * Creates a valid data for the case:
+     * ( PRM_DECL_CLAUSE ) CV_QUAL_SEQ
+     * 
+     * @param   ValidData   $clauseData The parameter declaration clause data used to create the data.
+     * @param   ValidData   $cvSeqData  The constant/volatile qualifier sequence data used to create the data.
+     * @return  ValidData   The created instance of ValidData.
+     */
+    private static function createPrmDeclClauseCVQualSeqValidData(
+        ValidData $clauseData, 
+        ValidData $cvSeqData
+    ): ValidData
+    {
+        $stream = \sprintf(
+            '(%s) %s', 
+            $clauseData->getStream(), 
+            $cvSeqData->getStream()
+        );
+        $firstTokenLexeme = '(';
+        
+        $clauseFactory = $clauseData->getConstraintFactory();
+        $cvSeqFactory = $cvSeqData->getConstraintFactory();
+        $callable = function () use ($clauseFactory, $cvSeqFactory) {
+            $const = new ParametersAndQualifiersConstraint(
+                $clauseFactory->createConstraint()
+            );
+            
+            $const->setCVQualifierSequenceConstraint($cvSeqFactory->createConstraint());
+            
+            return $const;
+        };
+        $factory = new CallableConceptConstraintFactory($callable);
+        
+        $data = new ValidData($stream, $factory, $firstTokenLexeme);
+        $data->setName(\sprintf(
+            '( %s ) %s', 
+            $clauseData->getName(), 
+            $cvSeqData->getName()
         ));
         
         return $data;
@@ -135,6 +196,20 @@ class ParametersAndQualifiersProvider
                 $dataSet[] = self::createParamNestedNameInvalidData(
                     $prmDeclData, 
                     $nnSpecData
+                );
+            }
+        }
+        
+        // Parameter declaration clause is valid and constant/volatile 
+        // qualifier sequence is invalid.
+        
+        $cvSeqInvalidDataSet = CVQualifierSequenceProvider::createInvalidDataSet();
+        
+        foreach (ParameterDeclarationClauseProvider::createValidDataSet() as $prmDeclClauseData) {
+            foreach ($cvSeqInvalidDataSet as $cvSeqInvalidData) {
+                $dataSet[] = self::createPrmDeclClauseCVQualSeqInvalidData(
+                    $prmDeclClauseData, 
+                    $cvSeqInvalidData
                 );
             }
         }
@@ -483,6 +558,33 @@ class ParametersAndQualifiersProvider
         $data = new InvalidData($stream, $message);
         
         $data->setName('Qualified name with nested name specifier and no identifier');
+        
+        return $data;
+    }
+    
+    /**
+     * Creates an invalid data for the case:
+     * ( PRM_DECL_CLAUSE ) CV_QUAL_SEQ_INVALID
+     * 
+     * @param   ValidData   $clauseData         The parameter declaration clause data used to create the data.
+     * @param   InvalidData $cvSeqInvalidData   The constant/volatile qualifier sequence data used to create the data.
+     * @return  InvalidData The created instance of InvalidData.
+     */
+    private static function createPrmDeclClauseCVQualSeqInvalidData(
+        ValidData $clauseData, 
+        InvalidData $cvSeqInvalidData
+    ): InvalidData
+    {
+        $stream = \sprintf(
+            '(%s) %s', 
+            $clauseData->getStream(), 
+            $cvSeqInvalidData->getStream()
+        );
+        $message = $cvSeqInvalidData->getExceptionMessage();
+        
+        $data = new InvalidData($stream, $message);
+        $data->setExceptionName($cvSeqInvalidData->getExceptionName());
+        $data->setName($cvSeqInvalidData->getName());
         
         return $data;
     }

@@ -13,6 +13,8 @@ use PhpCode\Language\Cpp\Declaration\DeclarationSpecifierSequence;
 use PhpCode\Language\Cpp\Declaration\DefiningTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\SimpleTypeSpecifier;
 use PhpCode\Language\Cpp\Declaration\TypeSpecifier;
+use PhpCode\Language\Cpp\Declarator\CVQualifier;
+use PhpCode\Language\Cpp\Declarator\CVQualifierSequence;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\DeclaratorId;
 use PhpCode\Language\Cpp\Declarator\NoptrDeclarator;
@@ -154,7 +156,7 @@ class Parser
      * Parse parameters and qualifiers.
      * 
      * parameters-and-qualifiers:
-     *     ( parameter-declaration-clause )
+     *     ( parameter-declaration-clause ) cv-qualifier-seq[opt]
      * 
      * @return  ParametersAndQualifiers
      * 
@@ -174,6 +176,27 @@ class Parser
         }
         
         $prmQual = new ParametersAndQualifiers($prmDeclClause);
+        
+        // Check if a constant/volatile qualifier sequence is present.
+        if ($this->tokenIsOneOf([Tag::KW_CONST, Tag::KW_VOLATILE])) {
+            $cvSeq = new CVQualifierSequence();
+            
+            while ($this->tokenIsOneOf([Tag::KW_CONST, Tag::KW_VOLATILE])) {
+                $cv = $this->tokenIs(Tag::KW_CONST) ? 
+                    CVQualifier::createConst() : 
+                    CVQualifier::createVolatile();
+                
+                // In cases of duplicated constant/volatile qualifiers, the 
+                // constant/volatile qualifier sequence throws an exception 
+                // when adding the constant/volatile qualifier.
+                $cvSeq->addCVQualifier($cv);
+                
+                // Consume the constant/volatile qualifier.
+                $this->move();
+            }
+            
+            $prmQual->setCVQualifierSequence($cvSeq);
+        }
         
         return $prmQual;
     }

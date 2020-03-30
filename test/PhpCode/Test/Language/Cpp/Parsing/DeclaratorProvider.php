@@ -313,7 +313,7 @@ class DeclaratorProvider
         $message = $prmQualData->getExceptionMessage();
         
         $data = new InvalidData($stream, $message);
-        
+        $data->setExceptionName($prmQualData->getExceptionName());
         $data->setName($prmQualData->getName());
         
         return $data;

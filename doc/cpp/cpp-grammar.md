@@ -405,9 +405,26 @@ Table of contents
 
 ### parameters-and-qualifiers
 
-| Definitions                                                               | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
-|:--------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
-| **(** [parameter-declaration-clause](#parameter-declaration-clause) **)** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| Definitions                                                                                                          | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:---------------------------------------------------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **(** [parameter-declaration-clause](#parameter-declaration-clause) **)** [cv-qualifier-seq](#cv-qualifier-seq)[opt] | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### cv-qualifier-seq
+
+| Definitions                                                              | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:-------------------------------------------------------------------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| [cv-qualifier](#cv-qualifier) [cv-qualifier-seq](#cv-qualifier-seq)[opt] | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+
+
+
+### cv-qualifier
+
+| Definitions  | C++ 2003           | C++ 2011           | C++ 2014           | C++ 2017           |
+|:-------------|:------------------:|:------------------:|:------------------:|:------------------:|
+| **const**    | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| **volatile** | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 
 
 
@@ -471,6 +488,9 @@ Table of contents
 
 ## **Index of rules**
 
+- **C**
+  - [cv-qualifier](#cv-qualifier)
+  - [cv-qualifier-seq](#cv-qualifier-seq)
 - **D**
   - [decl-specifier](#decl-specifier)
   - [decl-specifier-seq](#decl-specifier-seq)
