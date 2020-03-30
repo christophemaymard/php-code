@@ -2310,9 +2310,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "float"' => [
                 $declSpecFactory->createFloatSimpleTypeSpecifier(), 
             ], 
@@ -2367,9 +2364,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2424,9 +2418,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2481,9 +2472,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2538,9 +2526,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2595,9 +2580,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2652,9 +2634,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2709,9 +2688,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2766,9 +2742,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2823,9 +2796,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2880,9 +2850,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
@@ -2935,9 +2902,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
         $declSpecFactory = $this->createDeclarationSpecifierDoubleFactory();
         
         $dataSet = [
-            'Simple type specifier NONE' => [
-                $declSpecFactory->createNoneSimpleTypeSpecifier(), 
-            ], 
             'Simple type specifier "int"' => [
                 $declSpecFactory->createIntSimpleTypeSpecifier(), 
             ], 
