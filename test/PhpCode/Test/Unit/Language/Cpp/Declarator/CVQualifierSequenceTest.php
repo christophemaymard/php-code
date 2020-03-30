@@ -94,6 +94,22 @@ class CVQualifierSequenceTest extends TestCase
     }
     
     /**
+     * Tests that count() returns an integer.
+     */
+    public function testCountReturnsInt(): void
+    {
+        $sut = new CVQualifierSequence();
+        
+        self::assertCount(0, $sut);
+        
+        $sut->addCVQualifier($this->createCVQualifierDoubleFactory()->createConstant());
+        self::assertCount(1, $sut);
+        
+        $sut->addCVQualifier($this->createCVQualifierDoubleFactory()->createVolatile());
+        self::assertCount(2, $sut);
+    }
+    
+    /**
      * Returns a set of constant/volatile qualifiers to add to the system 
      * under test before adding a constant qualifier.
      * 

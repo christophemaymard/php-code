@@ -17,7 +17,7 @@ use PhpCode\Exception\InvalidOperationException;
  * 
  * @author  Christophe Maymard  <christophe.maymard@hotmail.com>
  */
-class CVQualifierSequence
+class CVQualifierSequence implements \Countable
 {
     /**
      * The constant/volatile qualifiers.
@@ -76,6 +76,14 @@ class CVQualifierSequence
     public function getCVQualifiers(): array
     {
         return $this->cvs;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public function count(): int
+    {
+        return \count($this->cvs);
     }
 }
 
