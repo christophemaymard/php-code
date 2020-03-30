@@ -8,6 +8,7 @@
 namespace PhpCode\Language\Cpp\Mangling;
 
 use PhpCode\Exception\FormatException;
+use PhpCode\Language\Cpp\Declarator\CVQualifierSequence;
 use PhpCode\Language\Cpp\Declarator\Declarator;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Language\Cpp\Expression\NestedNameSpecifier;
@@ -64,6 +65,7 @@ class ItaniumMangler
      * @return  string  The mangled name.
      * 
      * @throws  FormatException When the name has not been parsed entirely.
+     * @throws  FormatException When the declarator does not have parameters-and-qualifiers.
      */
     public function mangleFunction(string $name): string
     {
@@ -78,6 +80,12 @@ class ItaniumMangler
                 'The name has not been parsed entirely, unexpected "%s".', 
                 $tkn->getLexeme()
             ));
+        }
+        
+        $noptrDcltor = $dcltor->getPtrDeclarator()->getNoptrDeclarator();
+        
+        if (!$noptrDcltor->hasParametersAndQualifiers()) {
+            throw new FormatException('The declarator does not have parameters-and-qualifiers.');
         }
         
         return $this->mangleFunctionDeclarator($dcltor);
@@ -113,10 +121,10 @@ class ItaniumMangler
      */
     private function mangleFunctionNameDeclarator(Declarator $dcltor): string
     {
-        $ptrDcltor = $dcltor->getPtrDeclarator();
-        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
-        $did = $noptrDcltor->getDeclaratorId();
-        $idExpr = $did->getIdExpression();
+        $noptrDcltor = $dcltor->getPtrDeclarator()->getNoptrDeclarator();
+        $idExpr = $noptrDcltor->getDeclaratorId()->getIdExpression();
+        
+        $cvSeq = $noptrDcltor->getParametersAndQualifiers()->getCVQualifierSequence();
         
         // <unscoped-name>
         if ($idExpr->isUnqualifiedId()) {
@@ -124,7 +132,9 @@ class ItaniumMangler
             // is defined as identifier.
             $id = $idExpr->getUnqualifiedId()->getIdentifier();
             
-            return $this->mangleUnqualifiedNameIdentifier($id);
+            return $cvSeq ? 
+                $this->mangleNestedNameIdentifier(NULL, $id, $cvSeq) :
+                $this->mangleUnqualifiedNameIdentifier($id);
         }
         
         // <nested-name>
@@ -137,7 +147,8 @@ class ItaniumMangler
         
         return $this->mangleNestedNameIdentifier(
             $qid->getNestedNameSpecifier(), 
-            $id
+            $id, 
+            $cvSeq
         );
     }
     
@@ -146,18 +157,10 @@ class ItaniumMangler
      * 
      * @param   Declarator  $dcltor The declarator used to mangle.
      * @return  string
-     * 
-     * @throws  FormatException When the declarator does not have parameters-and-qualifiers.
      */
     private function mangleBareFunctionTypeDeclarator(Declarator $dcltor): string
     {
-        $ptrDcltor = $dcltor->getPtrDeclarator();
-        $noptrDcltor = $ptrDcltor->getNoptrDeclarator();
-        
-        if (!$noptrDcltor->hasParametersAndQualifiers()) {
-            throw new FormatException('The declarator does not have parameters-and-qualifiers.');
-        }
-        
+        $noptrDcltor = $dcltor->getPtrDeclarator()->getNoptrDeclarator();
         $prmQual = $noptrDcltor->getParametersAndQualifiers();
         $prmDeclClause = $prmQual->getParameterDeclarationClause();
         
@@ -243,40 +246,64 @@ class ItaniumMangler
         // It is a qualified identifier.
         return $this->mangleNestedNameIdentifier(
             $stSpec->getNestedNameSpecifier(), 
-            $stSpec->getIdentifier()
+            $stSpec->getIdentifier(), 
+            NULL
         );
     }
     
     /**
-     * Mangles a nested-name from the specified nested name specifier and 
-     * identifier.
+     * Mangles a nested-name from the specified nested name specifier, 
+     * identifier and  constant/volatile qualifier sequence.
      * 
      * <nested-name>
-     *     N <prefix> <unqualified-name> E
+     *     N [<CV-qualifiers>] [<prefix>] <unqualified-name> E
+     * 
+     * @param   NestedNameSpecifier|NULL    $nnSpec The nested name specifier used to mangle (optional); the prefix is not mangled if NULL.
+     * @param   Identifier                  $id     The identifier used to mangle.
+     * @param   CVQualifierSequence|NULL    $cvSeq  The constant/volatile qualifier sequence used to mangle (optional); the CV-qualifiers is not mangled if NULL.
+     * @return  string
+     */
+    private function mangleNestedNameIdentifier($nnSpec, Identifier $id, $cvSeq): string
+    {
+        $mangledName = 'N';
+        
+        // <CV-qualifiers>
+        if ($cvSeq instanceof CVQualifierSequence) {
+            $mangledName .= $this->mangleCVQualifiers($cvSeq);
+        }
+        
+        // <prefix>
+        if ($nnSpec instanceof NestedNameSpecifier) {
+            $mangledName .= $this->manglePrefix($nnSpec);
+        }
+        
+        // <unqualified-name>
+        $mangledName .= $this->mangleUnqualifiedNameIdentifier($id);
+        
+        $mangledName .= 'E';
+        
+        return $mangledName;
+    }
+    
+    /**
+     * Mangles a prefix from the specified nested name specifier.
      * 
      * <prefix>
      *     <unqualified-name>
      *     <prefix> <unqualified-name>
      * 
      * @param   NestedNameSpecifier $nnSpec The nested name specifier used to mangle.
-     * @param   Identifier          $id     The identifier used to mangle.
      * @return  string
      */
-    private function mangleNestedNameIdentifier(
-        NestedNameSpecifier $nnSpec, 
-        Identifier $id
-    ): string
+    private function manglePrefix(NestedNameSpecifier $nnSpec): string
     {
-        $mangledName = 'N';
+        $mangledName = '';
         
         // For instance, the parser supports nested name specifier with 
         // identifier as name specifier.
         foreach ($nnSpec->getNameSpecifiers() as $nameSpec) {
             $mangledName .= $this->mangleUnqualifiedNameIdentifier($nameSpec);
         }
-        
-        $mangledName .= $this->mangleUnqualifiedNameIdentifier($id);
-        $mangledName .= 'E';
         
         return $mangledName;
     }
@@ -304,6 +331,28 @@ class ItaniumMangler
     private function mangleSourceName(string $name): string
     {
         return \sprintf('%s%s', \mb_strlen($name), $name);
+    }
+    
+    /**
+     * Mangles CV-qualifiers from the specified constant/volatile qualifier 
+     * sequence.
+     * 
+     * <CV-qualifiers>
+     *     [V] [K]
+     * 
+     * @param   CVQualifierSequence $cvSeq  The constant/volatile qualifier sequence used to mangle.
+     * @return  string
+     */
+    private function mangleCVQualifiers(CVQualifierSequence $cvSeq): string
+    {
+        $mangledName = '';
+        
+        // Mangles the qualifiers according to the "Clockwise/Spiral Rule".
+        foreach (\array_reverse($cvSeq->getCVQualifiers()) as $cv) {
+            $mangledName .= $cv->isConst() ? 'K' : 'V';
+        }
+        
+        return $mangledName;
     }
 }
 

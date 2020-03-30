@@ -56,9 +56,9 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 
 ### nested-name
 
-| Rule            | Definitions                                                         |
-|:----------------|:--------------------------------------------------------------------|
-| **nested-name** | **N** [prefix](#prefix) [unqualified-name](#unqualified-name) **E** |
+| Rule            | Definitions                                                                                         |
+|:----------------|:----------------------------------------------------------------------------------------------------|
+| **nested-name** | **N** [[CV-qualifiers](#CV-qualifiers)] [prefix](#prefix) [unqualified-name](#unqualified-name) **E** |
 
 
 
@@ -114,6 +114,14 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
 | **type** | [builtin-type](#builtin-type)       |
 |          | [class-enum-type](#class-enum-type) |
 |          | [nested-name](#nested-name)         |
+
+
+
+### CV-qualifiers
+
+| Rule              | Definitions     |Comments          |
+|:------------------|:----------------|:-----------------|
+| **CV-qualifiers** | [**V**] [**K**] | Volatile, const. |
 
 
 
@@ -176,6 +184,7 @@ Source: [Itanium C++ ABI](https://itanium-cxx-abi.github.io/cxx-abi/abi.html)
   - [builtin-type](#builtin-type)
 - **C**
   - [class-enum-type](#class-enum-type)
+  - [CV-qualifiers](#CV-qualifiers)
 - **E**
   - [encoding](#encoding)
 - **I**
