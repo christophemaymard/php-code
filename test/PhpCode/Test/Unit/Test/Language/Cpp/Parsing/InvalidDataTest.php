@@ -84,7 +84,14 @@ class InvalidDataTest extends TestCase
     public function testGetExceptionNameReturnsString(): void
     {
         $sut = new InvalidData('foo', 'Exception message.');
+        
         self::assertSame(FormatException::class, $sut->getExceptionName());
+        
+        $sut->setExceptionName('barException');
+        self::assertSame('barException', $sut->getExceptionName());
+        
+        $sut->setExceptionName('bazException');
+        self::assertSame('bazException', $sut->getExceptionName());
     }
 }
 

@@ -51,6 +51,16 @@ class InvalidData extends AbstractData
     }
     
     /**
+     * Sets the name of the exception.
+     * 
+     * @param   string  $name   The name to set.
+     */
+    public function setExceptionName(string $name): void
+    {
+        $this->exceptionName = $name;
+    }
+    
+    /**
      * Returns the message of the exception.
      * 
      * @return  string
