@@ -24,6 +24,12 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
     private $prmDeclClauseConst;
     
     /**
+     * The constant/volatile qualifier sequence constraint.
+     * @var CVQualifierSequenceConstraint|NULL
+     */
+    private $cvSeqConst;
+    
+    /**
      * Constructor.
      * 
      * @param   ParameterDeclarationClauseConstraint    $prmDeclClauseConst The parameter declaration clause constraint.
@@ -33,6 +39,18 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
     )
     {
         $this->prmDeclClauseConst = $prmDeclClauseConst;
+    }
+    
+    /**
+     * Sets the constant/volatile qualifier sequence constraint.
+     * 
+     * @param   CVQualifierSequenceConstraint   $cvSeqConst The constant/volatile qualifier sequence constraint to set.
+     */
+    public function setCVQualifierSequenceConstraint(
+        CVQualifierSequenceConstraint $cvSeqConst
+    ): void
+    {
+        $this->cvSeqConst = $cvSeqConst;
     }
     
     /**
@@ -52,6 +70,10 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
         $lines[] = $this->getConceptName();
         $lines[] = $this->indent($this->prmDeclClauseConst->constraintDescription());
         
+        if ($this->cvSeqConst) {
+            $lines[] = $this->indent($this->cvSeqConst->constraintDescription());
+        }
+        
         return \implode("\n", $lines);
     }
     
@@ -66,7 +88,21 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
         
         $prmDeclClause = $other->getParameterDeclarationClause();
         
-        return $this->prmDeclClauseConst->matches($prmDeclClause);
+        if (!$this->prmDeclClauseConst->matches($prmDeclClause)) {
+            return FALSE;
+        }
+        
+        $cvSeq = $other->getCVQualifierSequence();
+        
+        if (!$cvSeq && $this->cvSeqConst || $cvSeq && !$this->cvSeqConst) {
+            return FALSE;
+        }
+        
+        if ($this->cvSeqConst && !$this->cvSeqConst->matches($cvSeq)) {
+            return FALSE;
+        }
+        
+        return TRUE;
     }
     
     /**
@@ -86,6 +122,22 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
             );
         }
         
+        $cvSeq = $other->getCVQualifierSequence();
+        
+        if (!$cvSeq && $this->cvSeqConst) {
+            return $this->hasReason(TRUE, 'constant/volatile qualifier sequence');
+        }
+        
+        if ($cvSeq && !$this->cvSeqConst) {
+            return $this->hasReason(FALSE, 'constant/volatile qualifier sequence');
+        }
+        
+        if ($this->cvSeqConst && !$this->cvSeqConst->matches($cvSeq)) {
+            return $this->conceptIndent(
+                $this->cvSeqConst->failureReason($cvSeq)
+            );
+        }
+        
         return $this->failureDefaultReason($other);
     }
     
@@ -95,7 +147,7 @@ class ParametersAndQualifiersConstraint extends AbstractConceptConstraint
     protected function failureDescription($other): string
     {
         return \sprintf(
-            '%s is %s', 
+            '%s are %s', 
             $this->exporter()->shortenedExport($other), 
             $this->toString()
         );
