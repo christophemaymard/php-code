@@ -41,5 +41,20 @@ class CVQualifierSequenceDoubleBuilder extends AbstractDoubleBuilder
         
         return $this;
     }
+    
+    /**
+     * Builds a prophecy where count() can be called.
+     * 
+     * @param   int $return The value to return when count() is called.
+     * @return  CVQualifierSequenceDoubleBuilder    This instance.
+     */
+    public function buildCount(int $return): self
+    {
+        $this->getSubjectProphecy()
+            ->count()
+            ->willReturn($return);
+        
+        return $this;
+    }
 }
 
