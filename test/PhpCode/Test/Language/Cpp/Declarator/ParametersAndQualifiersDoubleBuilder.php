@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Language\Cpp\Declarator;
 
+use PhpCode\Language\Cpp\Declarator\CVQualifierSequence;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationClause;
 use PhpCode\Language\Cpp\Declarator\ParametersAndQualifiers;
 use PhpCode\Test\AbstractDoubleBuilder;
@@ -40,6 +41,24 @@ class ParametersAndQualifiersDoubleBuilder extends AbstractDoubleBuilder
     {
         $this->getSubjectProphecy()
             ->getParameterDeclarationClause()
+            ->willReturn($return);
+        
+        return $this;
+    }
+    
+    /**
+     * Builds and adds a prophecy where getCVQualifierSequence() can be 
+     * called.
+     * 
+     * @param   CVQualifierSequence $return The value to return when getCVQualifierSequence() is called (optional)(default to NULL).
+     * @return  ParametersAndQualifiersDoubleBuilder    This instance.
+     */
+    public function buildGetCVQualifierSequence(
+        CVQualifierSequence $return = NULL
+    ): self
+    {
+        $this->getSubjectProphecy()
+            ->getCVQualifierSequence()
             ->willReturn($return);
         
         return $this;
