@@ -15,6 +15,7 @@ use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -83,6 +84,18 @@ class ConceptDoubleBuilder
     public static function createParametersAndQualifiers(TestCase $testCase): ParametersAndQualifiersDoubleBuilder
     {
         return new ParametersAndQualifiersDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\PtrOperator} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  PtrOperatorDoubleBuilder    The created instance of PtrOperatorDoubleBuilder.
+     */
+    public static function createPtrOperator(TestCase $testCase): PtrOperatorDoubleBuilder
+    {
+        return new PtrOperatorDoubleBuilder($testCase);
     }
     
     /**
