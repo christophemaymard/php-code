@@ -15,6 +15,7 @@ use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\PtrAbstractDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorSequenceDoubleBuilder;
@@ -121,6 +122,18 @@ class ConceptDoubleBuilder
     public static function createCVQualifierSequence(TestCase $testCase): CVQualifierSequenceDoubleBuilder
     {
         return new CVQualifierSequenceDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\PtrAbstractDeclarator} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  PtrAbstractDeclaratorDoubleBuilder  The created instance of PtrAbstractDeclaratorDoubleBuilder.
+     */
+    public static function createPtrAbstractDeclarator(TestCase $testCase): PtrAbstractDeclaratorDoubleBuilder
+    {
+        return new PtrAbstractDeclaratorDoubleBuilder($testCase);
     }
     
     /**
