@@ -14,6 +14,7 @@ use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorConstraintDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorSequenceConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\IdExpressionConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\NestedNameSpecifierConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Expression\QualifiedIdConstraintDoubleBuilder;
@@ -74,6 +75,18 @@ class ConceptConstraintDoubleBuilder
     public static function createParametersAndQualifiersConstraint(TestCase $testCase): ParametersAndQualifiersConstraintDoubleBuilder
     {
         return new ParametersAndQualifiersConstraintDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\PtrOperatorSequenceConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  PtrOperatorSequenceConstraintDoubleBuilder  The created instance of PtrOperatorSequenceConstraintDoubleBuilder.
+     */
+    public static function createPtrOperatorSequenceConstraint(TestCase $testCase): PtrOperatorSequenceConstraintDoubleBuilder
+    {
+        return new PtrOperatorSequenceConstraintDoubleBuilder($testCase);
     }
     
     /**
