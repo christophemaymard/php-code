@@ -9,9 +9,9 @@ namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Exception\ArgumentException;
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraintDoubleFactory;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListConstraint;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationListDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -29,11 +29,6 @@ use PHPUnit\Framework\TestCase;
 class ParameterDeclarationListConstraintTest extends TestCase
 {
     /**
-     * @var ParameterDeclarationDoubleFactory
-     */
-    private $prmDeclFactory;
-    
-    /**
      * @var ParameterDeclarationListDoubleFactory
      */
     private $prmDeclListFactory;
@@ -48,7 +43,6 @@ class ParameterDeclarationListConstraintTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->prmDeclFactory =  new ParameterDeclarationDoubleFactory($this);
         $this->prmDeclListFactory =  new ParameterDeclarationListDoubleFactory($this);
         $this->prmDeclConstFactory =  new ParameterDeclarationConstraintDoubleFactory($this);
     }
@@ -175,9 +169,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenParameterDeclarationIsNotValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
         $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
@@ -196,9 +190,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testMatchesReturnsTrueWhenParameterDeclarationListIsValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
         $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
@@ -257,9 +251,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenParameterDeclarationIsNotValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
         $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];
@@ -290,9 +284,9 @@ class ParameterDeclarationListConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenParameterDeclarationListIsValid(): void
     {
         $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble();
         $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(3, $prmDecls);
         
         $consts = [];

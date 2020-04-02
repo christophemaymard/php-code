@@ -8,10 +8,10 @@
 namespace PhpCode\Test\Unit\Test\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceConstraintDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceDoubleFactory;
 use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationConstraint;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationDoubleFactory;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 
@@ -27,11 +27,6 @@ use PHPUnit\Framework\TestCase;
 class ParameterDeclarationConstraintTest extends TestCase
 {
     /**
-     * @var ParameterDeclarationDoubleFactory
-     */
-    private $prmDeclFactory;
-    
-    /**
      * @var DeclarationSpecifierSequenceDoubleFactory
      */
     private $declSpecSeqFactory;
@@ -46,7 +41,6 @@ class ParameterDeclarationConstraintTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->prmDeclFactory = new ParameterDeclarationDoubleFactory($this);
         $this->declSpecSeqFactory = new DeclarationSpecifierSequenceDoubleFactory($this);
         $this->declSpecSeqConstFactory = new DeclarationSpecifierSequenceConstraintDoubleFactory($this);
     }
@@ -122,7 +116,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     public function testMatchesReturnsFalseWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
+        $prmDecl = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->buildGetDeclarationSpecifierSequence($declSpecSeq)
+            ->getDouble();
+        
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, FALSE);
         
         $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
@@ -136,7 +133,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     public function testMatchesReturnsTrueWhenInstantiatedAndParameterDeclarationIsValid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
+        $prmDecl = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->buildGetDeclarationSpecifierSequence($declSpecSeq)
+            ->getDouble();
+        
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, TRUE);
         
         $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
@@ -168,7 +168,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
+        $prmDecl = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->buildGetDeclarationSpecifierSequence($declSpecSeq)
+            ->getDouble();
+        
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatchesFailureReason(
             $declSpecSeq, 
             FALSE,
@@ -192,7 +195,10 @@ class ParameterDeclarationConstraintTest extends TestCase
     public function testFailureReasonReturnsStringWhenInstantiatedAndParameterDeclarationIsValid(): void
     {
         $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
+        $prmDecl = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->buildGetDeclarationSpecifierSequence($declSpecSeq)
+            ->getDouble();
+        
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatches($declSpecSeq, TRUE);
         
         $sut = new ParameterDeclarationConstraint($declSpecSeqConst);

@@ -8,7 +8,7 @@
 namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclarationList;
-use PhpCode\Test\Language\Cpp\Declarator\ParameterDeclarationDoubleFactory;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,17 +29,11 @@ class ParameterDeclarationListTest extends TestCase
     private $sut;
     
     /**
-     * @var ParameterDeclarationDoubleFactory
-     */
-    private $prmDeclFactory;
-    
-    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->sut =  new ParameterDeclarationList();
-        $this->prmDeclFactory =  new ParameterDeclarationDoubleFactory($this);
     }
     
     /**
@@ -52,15 +46,18 @@ class ParameterDeclarationListTest extends TestCase
         
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->getDouble();
         $this->sut->addParameterDeclaration($prmDecls[0]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->getDouble();
         $this->sut->addParameterDeclaration($prmDecls[1]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
         
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
+        $prmDecls[] = ConceptDoubleBuilder::createParameterDeclaration($this)
+            ->getDouble();
         $this->sut->addParameterDeclaration($prmDecls[2]);
         self::assertSame($prmDecls, $this->sut->getParameterDeclarations());
     }
@@ -72,13 +69,19 @@ class ParameterDeclarationListTest extends TestCase
     {
         self::assertSame(0, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
+        $this->sut->addParameterDeclaration(
+            ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble()
+        );
         self::assertSame(1, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
+        $this->sut->addParameterDeclaration(
+            ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble()
+        );
         self::assertSame(2, $this->sut->count());
         
-        $this->sut->addParameterDeclaration($this->prmDeclFactory->createDummy());
+        $this->sut->addParameterDeclaration(
+            ConceptDoubleBuilder::createParameterDeclaration($this)->getDouble()
+        );
         self::assertSame(3, $this->sut->count());
     }
 }
