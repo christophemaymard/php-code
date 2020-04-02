@@ -12,6 +12,7 @@ use PhpCode\Test\Language\Cpp\Declarator\CVQualifierSequenceConstraintDoubleBuil
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\NoptrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\ParametersAndQualifiersConstraintDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\PtrAbstractDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\PtrOperatorSequenceConstraintDoubleBuilder;
@@ -123,6 +124,18 @@ class ConceptConstraintDoubleBuilder
     public static function createCVQualifierConstraint(TestCase $testCase): CVQualifierConstraintDoubleBuilder
     {
         return new CVQualifierConstraintDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\PtrAbstractDeclaratorConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  PtrAbstractDeclaratorConstraintDoubleBuilder    The created instance of PtrAbstractDeclaratorConstraintDoubleBuilder.
+     */
+    public static function createPtrAbstractDeclaratorConstraint(TestCase $testCase): PtrAbstractDeclaratorConstraintDoubleBuilder
+    {
+        return new PtrAbstractDeclaratorConstraintDoubleBuilder($testCase);
     }
     
     /**
