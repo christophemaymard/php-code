@@ -7,6 +7,7 @@
  */
 namespace PhpCode\Test\Language\Cpp;
 
+use PhpCode\Test\Language\Cpp\Declarator\AbstractDeclaratorConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\CVQualifierConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\CVQualifierSequenceConstraintDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdConstraintDoubleBuilder;
@@ -124,6 +125,18 @@ class ConceptConstraintDoubleBuilder
     public static function createCVQualifierConstraint(TestCase $testCase): CVQualifierConstraintDoubleBuilder
     {
         return new CVQualifierConstraintDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double constraint builder of the {@see PhpCode\Test\Language\Cpp\Declarator\AbstractDeclaratorConstraint} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  AbstractDeclaratorConstraintDoubleBuilder   The created instance of AbstractDeclaratorConstraintDoubleBuilder.
+     */
+    public static function createAbstractDeclaratorConstraint(TestCase $testCase): AbstractDeclaratorConstraintDoubleBuilder
+    {
+        return new AbstractDeclaratorConstraintDoubleBuilder($testCase);
     }
     
     /**
