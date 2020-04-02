@@ -423,11 +423,11 @@ class IdExpressionConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnqualifiedId() and not instance of 
-     * IdExpression.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createUnqualifiedId().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnqualifiedIdAndNotInstanceIdExpression(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateUnqualifiedId(): void
     {
         $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
             ->buildConstraintDescription(
@@ -450,11 +450,11 @@ class IdExpressionConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedId() and not instance of 
-     * IdExpression.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createQualifiedId().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdAndNotInstanceIdExpression(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateQualifiedId(): void
     {
         $qidConst = ConceptConstraintDoubleBuilder::createQualifiedIdConstraint($this)
             ->buildConstraintDescription(
@@ -474,202 +474,6 @@ class IdExpressionConstraintTest extends TestCase
             \str_replace('\\', '\\\\', IdExpression::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnqualifiedId() and the unqualified 
-     * identifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnqualifiedIdAndUnqualifiedIdIsInvalid(): void
-    {
-        $uid = $this->createUnqualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createUnqualifiedId($uid);
-        
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildMatches($uid, FALSE)
-            ->buildFailureReason(
-                $uid, 
-                "foo\n".
-                "  bar reason"
-            )
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createUnqualifiedId($uidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Identifier expression\n".
-            "  foo\n". 
-            "    bar reason", 
-            $sut->additionalFailureDescription($idExpr)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedId() and the qualified 
-     * identifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdAndQualifiedIdIsInvalid(): void
-    {
-        $qid = $this->createQualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createQualifiedId($qid);
-        
-        $qidConst = ConceptConstraintDoubleBuilder::createQualifiedIdConstraint($this)
-            ->buildMatches($qid, FALSE)
-            ->buildFailureReason(
-                $qid, 
-                "foo\n".
-                "  bar reason"
-            )
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createQualifiedId($qidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Identifier expression\n".
-            "  foo\n". 
-            "    bar reason", 
-            $sut->additionalFailureDescription($idExpr)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnqualifiedId() and the identifier 
-     * expression is defined as a qualified identifier.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnqualifiedIdAndQualifiedId(): void
-    {
-        $qid = $this->createQualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createQualifiedId($qid);
-        
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildMatches(NULL, FALSE)
-            ->buildConstraintDescription('foo description')
-            ->buildFailureReason(NULL, 'bar NULL reason')
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createUnqualifiedId($uidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "\n".
-            "Identifier expression\n".
-            "  bar NULL reason", 
-            $sut->additionalFailureDescription($idExpr)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedId() and the identifier 
-     * expression is defined as an unqualified identifier.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdAndUnqualifiedId(): void
-    {
-        $uid = $this->createUnqualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createUnqualifiedId($uid);
-        
-        $qidConst = ConceptConstraintDoubleBuilder::createQualifiedIdConstraint($this)
-            ->buildMatches(NULL, FALSE)
-            ->buildConstraintDescription('foo description')
-            ->buildFailureReason(NULL, 'bar NULL reason')
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createQualifiedId($qidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "\n".
-            "Identifier expression\n".
-            "  bar NULL reason", 
-            $sut->additionalFailureDescription($idExpr)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnqualifiedId() and the identifier 
-     * expression is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnqualifiedIdAndIdExpressionIsValid(): void
-    {
-        $uid = $this->createUnqualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createUnqualifiedId($uid);
-        
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildMatches($uid, TRUE)
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createUnqualifiedId($uidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Identifier expression: Unknown reason.", 
-            $sut->additionalFailureDescription($idExpr)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedId() and the identifier 
-     * expression is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdAndIdExpressionIsValid(): void
-    {
-        $qid = $this->createQualifiedIdDoubleFactory()->createDummy();
-        $idExpr = $this->createIdExpressionDoubleFactory()
-            ->createQualifiedId($qid);
-        
-        $qidConst = ConceptConstraintDoubleBuilder::createQualifiedIdConstraint($this)
-            ->buildMatches($qid, TRUE)
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = IdExpressionConstraint::createQualifiedId($qidConst);
-        self::assertSame(
-            "\n".
-            "Identifier expression\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Identifier expression: Unknown reason.", 
-            $sut->additionalFailureDescription($idExpr)
-        );
     }
     
     /**

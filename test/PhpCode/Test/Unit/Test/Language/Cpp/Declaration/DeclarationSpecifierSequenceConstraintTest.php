@@ -322,11 +322,11 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and not instance of 
-     * DeclarationSpecifierSequence.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by create().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndNotInstanceDeclarationSpecifierSequence(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreate(): void
     {
         $consts = [];
         $consts[] = $this->declSpecConstFactory->createConstraintDescription("foo\n  foo sub");
@@ -349,91 +349,6 @@ class DeclarationSpecifierSequenceConstraintTest extends TestCase
                 \str_replace('\\', '\\\\', DeclarationSpecifierSequence::class)
             ), 
             $sut->additionalFailureDescription(NULL)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and the constraint count is not equal 
-     * to the declaration specifier count of the sequence.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndConstraintCountNotEqualDeclarationSpecifierCount(): void
-    {
-        $declSpecSeq = $this->declSpecSeqFactory->createCount(0);
-        
-        $consts = [];
-        $consts[] = $this->declSpecConstFactory->createConstraintDescription("foo\n  foo sub");
-        
-        $sut = DeclarationSpecifierSequenceConstraint::create($consts);
-        self::assertSame(
-            "\n".
-            "Declaration specifier sequence (1)\n".
-            "  foo\n". 
-            "    foo sub\n".
-            "\n".
-            "Declaration specifier sequence: ".
-            "declaration specifier sequence should have 1 declaration specifier(s), got 0.", 
-            $sut->additionalFailureDescription($declSpecSeq)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and a declaration specifier is not 
-     * valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndDeclarationSpecifierIsNotValid(): void
-    {
-        $declSpecs = [];
-        $declSpecs[] = $this->declSpecFactory->createDummy();
-        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(1, $declSpecs);
-        
-        $consts = [];
-        $consts[] = $this->declSpecConstFactory->createMatchesFailureReasonConstraintDescription(
-            $declSpecs[0], 
-            FALSE, 
-            "foo reason", 
-            'foo description'
-        );
-        
-        $sut = DeclarationSpecifierSequenceConstraint::create($consts);
-        self::assertSame(
-            "\n".
-            "Declaration specifier sequence (1)\n".
-            "  foo description\n".
-            "\n".
-            "Declaration specifier sequence\n".
-            "  foo reason", 
-            $sut->additionalFailureDescription($declSpecSeq)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by create() and the declaration specifier sequence 
-     * is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateAndDeclarationSpecifierSequenceIsValid(): void
-    {
-        $declSpecs = [];
-        $declSpecs[] = $this->declSpecFactory->createDummy();
-        $declSpecSeq = $this->declSpecSeqFactory->createCountGetDeclarationSpecifiers(1, $declSpecs);
-        
-        $consts = [];
-        $consts[] = $this->declSpecConstFactory->createMatchesConstraintDescription(
-            $declSpecs[0], 
-            TRUE, 
-            'foo description'
-        );
-        
-        $sut = DeclarationSpecifierSequenceConstraint::create($consts);
-        self::assertSame(
-            "\n".
-            "Declaration specifier sequence (1)\n".
-            "  foo description\n".
-            "\n".
-            "Declaration specifier sequence: Unknown reason.",
-            $sut->additionalFailureDescription($declSpecSeq)
         );
     }
     

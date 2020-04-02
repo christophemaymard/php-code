@@ -204,10 +204,11 @@ class PtrDeclaratorConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and not instance of PtrDeclarator.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * instantiated.
      */
-    public function testAdditionalFailureReasonReturnsStringWhenInstantiatedAndNotInstancePtrDeclarator(): void
+    public function testAdditionalFailureReasonReturnsConstraintDescriptionAndFailureReasonWhenInstantiated(): void
     {
         $noptrDcltorConst = ConceptConstraintDoubleBuilder::createNoptrDeclaratorConstraint($this)
             ->buildConstraintDescription('foo no-pointer declarator description')
@@ -223,64 +224,6 @@ class PtrDeclaratorConstraintTest extends TestCase
             \str_replace('\\', '\\\\', PtrDeclarator::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the no-pointer declarator is invalid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenInstantiatedAndNoptrDeclaratorIsInvalid(): void
-    {
-        $noptrDcltor = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->getDouble();
-        $ptrDcltor = ConceptDoubleBuilder::createPtrDeclarator($this)
-            ->buildGetNoptrDeclarator($noptrDcltor)
-            ->getDouble();
-        
-        $noptrDcltorConst = ConceptConstraintDoubleBuilder::createNoptrDeclaratorConstraint($this)
-            ->buildMatches($noptrDcltor, FALSE)
-            ->buildFailureReason($noptrDcltor, 'foo reason')
-            ->buildConstraintDescription('foo no-pointer declarator description')
-            ->getDouble();
-        
-        $sut = new PtrDeclaratorConstraint($noptrDcltorConst);
-        self::assertSame(
-            "\n".
-            "Pointer declarator\n".
-            "  foo no-pointer declarator description\n".
-            "\n".
-            "Pointer declarator\n".
-            "  foo reason",
-            $sut->additionalFailureDescription($ptrDcltor)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the pointer declarator is valid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenInstantiatedAndPtrDeclaratorIsValid(): void
-    {
-        $noptrDcltor = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->getDouble();
-        $ptrDcltor = ConceptDoubleBuilder::createPtrDeclarator($this)
-            ->buildGetNoptrDeclarator($noptrDcltor)
-            ->getDouble();
-        
-        $noptrDcltorConst = ConceptConstraintDoubleBuilder::createNoptrDeclaratorConstraint($this)
-            ->buildMatches($noptrDcltor, TRUE)
-            ->buildConstraintDescription('foo no-pointer declarator description')
-            ->getDouble();
-        
-        $sut = new PtrDeclaratorConstraint($noptrDcltorConst);
-        self::assertSame(
-            "\n".
-            "Pointer declarator\n".
-            "  foo no-pointer declarator description\n".
-            "\n".
-            "Pointer declarator: Unknown reason.", 
-            $sut->additionalFailureDescription($ptrDcltor)
-        );
     }
     
     /**

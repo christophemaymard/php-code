@@ -225,11 +225,11 @@ class UnqualifiedIdConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and not instance of 
-     * UnqualifiedId.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createIdentifier().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotInstanceUnqualifiedId(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateIdentifier(): void
     {
         $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
             ->buildConstraintDescription(
@@ -249,71 +249,6 @@ class UnqualifiedIdConstraintTest extends TestCase
             \str_replace('\\', '\\\\', UnqualifiedId::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and the identifier is 
-     * invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndIdentifierIsInvalid(): void
-    {
-        $id = $this->idFactory->createDummy();
-        $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, FALSE)
-            ->buildFailureReason(
-                $id, 
-                "foo\n".
-                "  bar reason"
-            )
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
-        self::assertSame(
-            "\n".
-            "Unqualified identifier\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Unqualified identifier\n".
-            "  foo\n". 
-            "    bar reason", 
-            $sut->additionalFailureDescription($uid)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and the unqualified 
-     * identifier is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndUnqualifiedIdIsValid(): void
-    {
-        $id = $this->idFactory->createDummy();
-        $uid = $this->uidFactory->createGetIdentifier($id);
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, TRUE)
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = UnqualifiedIdConstraint::createIdentifier($idConst);
-        self::assertSame(
-            "\n".
-            "Unqualified identifier\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Unqualified identifier: Unknown reason.", 
-            $sut->additionalFailureDescription($uid)
-        );
     }
     
     /**

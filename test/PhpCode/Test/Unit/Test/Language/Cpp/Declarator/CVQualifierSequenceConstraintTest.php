@@ -321,10 +321,10 @@ class CVQualifierSequenceConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when not 
-     * instance of CVQualifierSequence.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNotInstanceCVQualifierSequence(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReason(): void
     {
         $consts = [];
         $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
@@ -341,116 +341,6 @@ class CVQualifierSequenceConstraintTest extends TestCase
             \str_replace('\\', '\\\\', CVQualifierSequence::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * constraint count is not equal to the constant/volatile qualifier count 
-     * of the sequence.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenConstraintCountNotEqualCVQualifierCount(): void
-    {
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->buildCount(0)
-            ->getDouble();
-        
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildConstraintDescription('bar description')
-            ->getDouble();
-       
-        $sut = new CVQualifierSequenceConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Constant/volatile qualifier sequence (2)\n".
-            "  foo description\n".
-            "  bar description\n".
-            "\n".
-            "Constant/volatile qualifier sequence: ".
-            "constant/volatile qualifier sequence should have 2 constant/volatile qualifier(s), got 0.", 
-            $sut->additionalFailureDescription($cvSeq)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when a 
-     * constant/volatile qualifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCVQualifierIsInvalid(): void
-    {
-        $cvFactory = $this->createCVQualifierDoubleFactory();
-        
-        $cvs = [];
-        $cvs[] = $cvFactory->createDummy();
-        $cvs[] = $cvFactory->createDummy();
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->buildCount(2)
-            ->buildGetCVQualifiers($cvs)
-            ->getDouble();
-        
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildMatches($cvs[0], TRUE)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildMatches($cvs[1], FALSE)
-            ->buildFailureReason($cvs[1], 'bar reason')
-            ->buildConstraintDescription('bar description')
-            ->getDouble();
-       
-        $sut = new CVQualifierSequenceConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Constant/volatile qualifier sequence (2)\n".
-            "  foo description\n".
-            "  bar description\n".
-            "\n".
-            "Constant/volatile qualifier sequence\n".
-            "  bar reason", 
-            $sut->additionalFailureDescription($cvSeq)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when all 
-     * the constant/volatile qualifiers are valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenAllCVQualifierAreValid(): void
-    {
-        $cvFactory = $this->createCVQualifierDoubleFactory();
-        
-        $cvs = [];
-        $cvs[] = $cvFactory->createDummy();
-        $cvs[] = $cvFactory->createDummy();
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->buildCount(2)
-            ->buildGetCVQualifiers($cvs)
-            ->getDouble();
-        
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildConstraintDescription('foo description')
-            ->buildMatches($cvs[0], TRUE)
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createCVQualifierConstraint($this)
-            ->buildConstraintDescription('bar description')
-            ->buildMatches($cvs[1], TRUE)
-            ->getDouble();
-       
-        $sut = new CVQualifierSequenceConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Constant/volatile qualifier sequence (2)\n".
-            "  foo description\n".
-            "  bar description\n".
-            "\n".
-            "Constant/volatile qualifier sequence: Unknown reason.", 
-            $sut->additionalFailureDescription($cvSeq)
-        );
     }
     
     /**

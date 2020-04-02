@@ -626,10 +626,11 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and not instance of ParametersAndQualifiers.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * instantiated.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndNotInstanceParametersAndQualifiers(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenInstantiated(): void
     {
         $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createConstraintDescription(
             "foo parameter declaration list description\n".
@@ -650,299 +651,34 @@ class ParametersAndQualifiersConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when:
-     * - instantiated, 
-     * - a constant/volatile qualifier sequence constraint has been set, and 
-     * - not instance of ParametersAndQualifiers.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceConstraintSetAndNotInstanceParametersAndQualifiers(): void
-    {
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createConstraintDescription(
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        $cvSeqConst = ConceptConstraintDoubleBuilder::createCVQualifierSequenceConstraint($this)
-            ->buildConstraintDescription('constant/volatile qualifier sequence description')
-            ->getDouble();
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        $sut->setCVQualifierSequenceConstraint($cvSeqConst);
-        $pattern = \sprintf(
-            "`^\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "  constant/volatile qualifier sequence description\n".
-            "\n".
-            "Parameters and qualifiers: .+ is not an instance of %s\\.$`", 
-            \str_replace('\\', '\\\\', ParametersAndQualifiers::class)
-        );
-        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the parameter declaration clause is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParameterDeclarationClauseIsInvalid(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesFailureReasonConstraintDescription(
-            $prmDeclClause, 
-            FALSE, 
-            "foo parameter declaration list\n".
-            "  bar parameter declaration reason", 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list\n".
-            "    bar parameter declaration reason", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when:
-     * - instantiated, 
-     * - a constant/volatile qualifier sequence constraint has been set, and 
-     * - the parameter declaration clause is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceConstraintSetAndParameterDeclarationClauseIsInvalid(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesFailureReasonConstraintDescription(
-            $prmDeclClause, 
-            FALSE, 
-            "foo parameter declaration list\n".
-            "  bar parameter declaration reason", 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        $cvSeqConst = ConceptConstraintDoubleBuilder::createCVQualifierSequenceConstraint($this)
-            ->buildConstraintDescription('constant/volatile qualifier sequence description')
-            ->getDouble();
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        $sut->setCVQualifierSequenceConstraint($cvSeqConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "  constant/volatile qualifier sequence description\n".
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list\n".
-            "    bar parameter declaration reason", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when:
-     * - instantiated, 
-     * - a constant/volatile qualifier sequence constraint has been set, and 
-     * - there is no constant/volatile qualifier sequence.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceConstraintSetAndNoCVQualifierSequence(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->buildGetCVQualifierSequence()
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
-            $prmDeclClause, 
-            TRUE, 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        $cvSeqConst = ConceptConstraintDoubleBuilder::createCVQualifierSequenceConstraint($this)
-            ->buildConstraintDescription('constant/volatile qualifier sequence description')
-            ->getDouble();
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        $sut->setCVQualifierSequenceConstraint($cvSeqConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "  constant/volatile qualifier sequence description\n".
-            "\n".
-            "Parameters and qualifiers: ".
-            "constant/volatile qualifier sequence absent whereas it should be present.", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when:
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when:
      * - instantiated, and 
-     * - a constant/volatile qualifier sequence is present.
+     * - a constant/volatile qualifier sequence constraint has been set.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceIsPresent(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenInstantiatedAndCVQualifierSequenceConstraintSet(): void
     {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->buildGetCVQualifierSequence($cvSeq)
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
-            $prmDeclClause, 
-            TRUE, 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "\n".
-            "Parameters and qualifiers: ".
-            "constant/volatile qualifier sequence present whereas it should be absent.", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when:
-     * - instantiated, 
-     * - a constant/volatile qualifier sequence constraint has been set, and 
-     * - the constant/volatile qualifier sequence is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceConstraintSetAndCVQualifierSequenceIsInvalid(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->buildGetCVQualifierSequence($cvSeq)
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
-            $prmDeclClause, 
-            TRUE, 
+        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createConstraintDescription(
             "foo parameter declaration list description\n".
             "  bar parameter declaration description"
         );
         $cvSeqConst = ConceptConstraintDoubleBuilder::createCVQualifierSequenceConstraint($this)
-            ->buildMatches($cvSeq, FALSE)
-            ->buildConstraintDescription('constant/volatile qualifier sequence description')
-            ->buildFailureReason($cvSeq, 'constant/volatile qualifier sequence reason')
-            ->getDouble();
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        $sut->setCVQualifierSequenceConstraint($cvSeqConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "  constant/volatile qualifier sequence description\n".
-            "\n".
-            "Parameters and qualifiers\n".
-            "  constant/volatile qualifier sequence reason", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and parameters and the parameter declaration clause is 
-     * valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParameterDeclarationClauseIsValid(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->buildGetCVQualifierSequence()
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
-            $prmDeclClause, 
-            TRUE, 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        
-        $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
-        self::assertSame(
-            "\n".
-            "Parameters and qualifiers\n".
-            "  foo parameter declaration list description\n".
-            "    bar parameter declaration description\n".
-            "\n".
-            "Parameters and qualifiers: Unknown reason.", 
-            $sut->additionalFailureDescription($prmQual)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when:
-     * - instantiated, 
-     * - a constant/volatile qualifier sequence constraint has been set, and 
-     * - the constant/volatile qualifier sequence is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndCVQualifierSequenceConstraintSetAndCVQualifierSequenceIsValid(): void
-    {
-        $prmDeclClause = $this->prmDeclClauseFactory->createDummy();
-        $cvSeq = ConceptDoubleBuilder::createCVQualifierSequence($this)
-            ->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->buildGetParameterDeclarationClause($prmDeclClause)
-            ->buildGetCVQualifierSequence($cvSeq)
-            ->getDouble();
-        
-        $prmDeclClauseConst = $this->prmDeclClauseConstFactory->createMatchesConstraintDescription(
-            $prmDeclClause, 
-            TRUE, 
-            "foo parameter declaration list description\n".
-            "  bar parameter declaration description"
-        );
-        $cvSeqConst = ConceptConstraintDoubleBuilder::createCVQualifierSequenceConstraint($this)
-            ->buildMatches($cvSeq, TRUE)
             ->buildConstraintDescription('constant/volatile qualifier sequence description')
             ->getDouble();
         
         $sut = new ParametersAndQualifiersConstraint($prmDeclClauseConst);
         $sut->setCVQualifierSequenceConstraint($cvSeqConst);
-        self::assertSame(
-            "\n".
+        $pattern = \sprintf(
+            "`^\n".
             "Parameters and qualifiers\n".
             "  foo parameter declaration list description\n".
             "    bar parameter declaration description\n".
             "  constant/volatile qualifier sequence description\n".
             "\n".
-            "Parameters and qualifiers: Unknown reason.", 
-            $sut->additionalFailureDescription($prmQual)
+            "Parameters and qualifiers: .+ is not an instance of %s\\.$`", 
+            \str_replace('\\', '\\\\', ParametersAndQualifiers::class)
         );
+        self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
     }
     
     /**

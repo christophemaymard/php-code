@@ -403,10 +403,11 @@ class NestedNameSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when no 
-     * constraint has been added and not instance of NestedNameSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * no constraint has been added.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNoConstraintAndNotInstanceNestedNameSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenNoConstraint(): void
     {
         $sut = new NestedNameSpecifierConstraint();
         $pattern = \sprintf(
@@ -424,11 +425,11 @@ class NestedNameSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * identifier constraints have been added and not instance of 
-     * NestedNameSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * identifier constraints have been added.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenIdentifierConstraintsAndNotInstanceNestedNameSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenIdentifierConstraints(): void
     {
         $consts = [];
         $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
@@ -460,174 +461,6 @@ class NestedNameSpecifierConstraintTest extends TestCase
         self::assertRegExp(
             $pattern, 
             $sut->additionalFailureDescription(NULL)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when no 
-     * constraint has been added and the constraint count is not equal to the 
-     * name specifier count.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNoConstraintAndConstraintCountNotEqualNameSpecifierCount(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()
-            ->createCount(3);
-        
-        $sut = new NestedNameSpecifierConstraint();
-        self::assertSame(
-            "\n".
-            "Nested name specifier (0)\n".
-            "\n".
-            "Nested name specifier: ".
-            "nested name specifier should have 0 name specifier(s), got 3.", 
-            $sut->additionalFailureDescription($nnSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * identifier constraints have been added and the constraint count is not 
-     * equal to the name specifier count.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenIdentifierConstraintsAndConstraintCountNotEqualNameSpecifierCount(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()
-            ->createCount(3);
-        
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildConstraintDescription('foo')
-            ->getDouble();
-        
-        $sut = new NestedNameSpecifierConstraint();
-        $sut->addNameSpecifierConstraint($consts[0]);
-        self::assertSame(
-            "\n".
-            "Nested name specifier (1)\n".
-            "  foo\n".
-            "\n".
-            "Nested name specifier: ".
-            "nested name specifier should have 1 name specifier(s), got 3.", 
-            $sut->additionalFailureDescription($nnSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * identifier constraints have been added and a name specifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenIdentifierConstraintsAndNameSpecifierIsInvalid(): void
-    {
-        $idFactory = $this->createIdentifierDoubleFactory();
-        
-        $ids = [];
-        $ids[] = $idFactory->createDummy();
-        $ids[] = $idFactory->createDummy();
-        $ids[] = $idFactory->createDummy();
-        
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()
-            ->createCountGetNameSpecifiers(3, $ids);
-            
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[0], TRUE)
-            ->buildConstraintDescription('foo')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[1], TRUE)
-            ->buildConstraintDescription('bar')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[2], FALSE)
-            ->buildConstraintDescription('baz')
-            ->buildFailureReason(
-                $ids[2], 
-                "qux\n".
-                "  foobar reason"
-            )
-            ->getDouble();
-        
-        $sut = new NestedNameSpecifierConstraint();
-        $sut->addNameSpecifierConstraint($consts[0]);
-        $sut->addNameSpecifierConstraint($consts[1]);
-        $sut->addNameSpecifierConstraint($consts[2]);
-        self::assertSame(
-            "\n".
-            "Nested name specifier (3)\n".
-            "  foo\n".
-            "  bar\n".
-            "  baz\n".
-            "\n".
-            "Nested name specifier\n".
-            "  qux\n".
-            "    foobar reason", 
-            $sut->additionalFailureDescription($nnSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when no 
-     * constraint has been added and the nested name specifier is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNoConstraintAndNestedNameSpecifierIsValid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()
-            ->createCountGetNameSpecifiers(0, []);
-        
-        $sut = new NestedNameSpecifierConstraint();
-        self::assertSame(
-            "\n".
-            "Nested name specifier (0)\n".
-            "\n".
-            "Nested name specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($nnSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * identifier constraints have been added and the nested name specifier 
-     * is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenIdentifierConstraintsAndNestedNameSpecifierIsValid(): void
-    {
-        $idFactory = $this->createIdentifierDoubleFactory();
-        
-        $ids = [];
-        $ids[] = $idFactory->createDummy();
-        $ids[] = $idFactory->createDummy();
-        $ids[] = $idFactory->createDummy();
-        
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()
-            ->createCountGetNameSpecifiers(3, $ids);
-            
-        $consts = [];
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[0], TRUE)
-            ->buildConstraintDescription('foo')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[1], TRUE)
-            ->buildConstraintDescription('bar')
-            ->getDouble();
-        $consts[] = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($ids[2], TRUE)
-            ->buildConstraintDescription('baz')
-            ->getDouble();
-        
-        $sut = new NestedNameSpecifierConstraint();
-        $sut->addNameSpecifierConstraint($consts[0]);
-        $sut->addNameSpecifierConstraint($consts[1]);
-        $sut->addNameSpecifierConstraint($consts[2]);
-        self::assertSame(
-            "\n".
-            "Nested name specifier (3)\n".
-            "  foo\n".
-            "  bar\n".
-            "  baz\n".
-            "\n".
-            "Nested name specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($nnSpec)
         );
     }
     

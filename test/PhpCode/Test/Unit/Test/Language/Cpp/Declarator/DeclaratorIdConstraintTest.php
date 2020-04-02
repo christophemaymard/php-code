@@ -216,10 +216,11 @@ class DeclaratorIdConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and not instance of DeclaratorId.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * instantiated.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndNotInstanceDeclaratorId(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenInstantiated(): void
     {
         $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
             ->buildConstraintDescription(
@@ -239,75 +240,6 @@ class DeclaratorIdConstraintTest extends TestCase
             \str_replace('\\', '\\\\', DeclaratorId::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the identifier expression is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndIdExpressionIsInvalid(): void
-    {
-        $idExpr = $this->idExprFactory->createDummy();
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)
-            ->buildGetIdExpression($idExpr)
-            ->getDouble();
-        
-        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
-            ->buildMatches($idExpr, FALSE)
-            ->buildFailureReason(
-                $idExpr, 
-                "foo\n".
-                "  bar reason"
-            )
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = new DeclaratorIdConstraint($idExprConst);
-        self::assertSame(
-            "\n".
-            "Declarator identifier\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declarator identifier\n".
-            "  foo\n". 
-            "    bar reason", 
-            $sut->additionalFailureDescription($did)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the declarator identifier is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndDeclaratorIdIsValid(): void
-    {
-        $idExpr = $this->idExprFactory->createDummy();
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)
-            ->buildGetIdExpression($idExpr)
-            ->getDouble();
-        
-        $idExprConst = ConceptConstraintDoubleBuilder::createIdExpressionConstraint($this)
-            ->buildMatches($idExpr, TRUE)
-            ->buildConstraintDescription(
-                "foo description\n".
-                "  bar description"
-            )
-            ->getDouble();
-        
-        $sut = new DeclaratorIdConstraint($idExprConst);
-        self::assertSame(
-            "\n".
-            "Declarator identifier\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declarator identifier: Unknown reason.", 
-            $sut->additionalFailureDescription($did)
-        );
     }
     
     /**

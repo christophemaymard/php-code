@@ -286,11 +286,11 @@ class CVQualifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createConst() and not instance of 
-     * CVQualifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance has been created by createConst().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateConstAndNotInstanceCVQualifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateConst(): void
     {
         $sut = CVQualifierConstraint::createConst();
         $pattern = \sprintf(
@@ -304,11 +304,11 @@ class CVQualifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createVolatile() and not instance of 
-     * CVQualifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance has been created by createVolatile().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateVolatileAndNotInstanceCVQualifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateVolatile(): void
     {
         $sut = CVQualifierConstraint::createVolatile();
         $pattern = \sprintf(
@@ -319,82 +319,6 @@ class CVQualifierConstraintTest extends TestCase
             \str_replace('\\', '\\\\', CVQualifier::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createConst() and the constant/volatile 
-     * qualifier is defined as volatile.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateConstAndQualifierIsVolatile(): void
-    {
-        $cv = $this->createCVQualifierDoubleFactory()->createVolatile();
-        
-        $sut = CVQualifierConstraint::createConst();
-        self::assertSame(
-            "\n".
-            "Constant CV qualifier\n".
-            "\n".
-            "Constant CV qualifier: It should be constant.", 
-            $sut->additionalFailureDescription($cv)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createVolatile() and the 
-     * constant/volatile qualifier is defined as constant.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateVolatileAndQualifierIsConstant(): void
-    {
-        $cv = $this->createCVQualifierDoubleFactory()->createConstant();
-        
-        $sut = CVQualifierConstraint::createVolatile();
-        self::assertSame(
-            "\n".
-            "Volatile CV qualifier\n".
-            "\n".
-            "Volatile CV qualifier: It should be volatile.", 
-            $sut->additionalFailureDescription($cv)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createConst() and the constant/volatile 
-     * qualifier is defined as constant.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateConstAndQualifierIsConstant(): void
-    {
-        $cv = $this->createCVQualifierDoubleFactory()->createConstant();
-        
-        $sut = CVQualifierConstraint::createConst();
-        self::assertSame(
-            "\n".
-            "Constant CV qualifier\n".
-            "\n".
-            "Constant CV qualifier: Unknown reason.", 
-            $sut->additionalFailureDescription($cv)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance has been created by createVolatile() and the 
-     * constant/volatile qualifier is defined as volatile.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateVolatileAndQualifierIsVolatile(): void
-    {
-        $cv = $this->createCVQualifierDoubleFactory()->createVolatile();
-        
-        $sut = CVQualifierConstraint::createVolatile();
-        self::assertSame(
-            "\n".
-            "Volatile CV qualifier\n".
-            "\n".
-            "Volatile CV qualifier: Unknown reason.", 
-            $sut->additionalFailureDescription($cv)
-        );
     }
     
     /**

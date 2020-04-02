@@ -146,10 +146,10 @@ class IdentifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when not 
-     * instance of Identifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNotInstanceIdentifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReason(): void
     {
         $sut = new IdentifierConstraint('foo');
         
@@ -158,36 +158,6 @@ class IdentifierConstraintTest extends TestCase
             \str_replace('\\', '\\\\', Identifier::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when not 
-     * same identifier.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNotSameIdentifier(): void
-    {
-        $id = $this->idFactory->createGetIdentifier('bar');
-        
-        $sut = new IdentifierConstraint('foo');
-        self::assertSame(
-            "\nIdentifier \"foo\"\n\nIdentifier: \"bar\" does not match identifier \"foo\".", 
-            $sut->additionalFailureDescription($id)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when same 
-     * identifier.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenSameIdentifier(): void
-    {
-        $id = $this->idFactory->createGetIdentifier('foo');
-        
-        $sut = new IdentifierConstraint('foo');
-        self::assertSame(
-            "\nIdentifier \"foo\"\n\nIdentifier: Unknown reason.", 
-            $sut->additionalFailureDescription($id)
-        );
     }
     
     /**

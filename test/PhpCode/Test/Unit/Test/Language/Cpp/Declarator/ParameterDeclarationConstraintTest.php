@@ -203,10 +203,11 @@ class ParameterDeclarationConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and not instance of ParameterDeclaration.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * instantiated.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndNotInstanceParameterDeclaration(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenInstantiated(): void
     {
         $declSpecSeqConst = $this->declSpecSeqConstFactory->createConstraintDescription(
             "foo DeclarationSpecifierSequence\n".
@@ -224,64 +225,6 @@ class ParameterDeclarationConstraintTest extends TestCase
             \str_replace('\\', '\\\\', ParameterDeclaration::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the declaration specifier sequence is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndDeclarationSpecifierSequenceIsInvalid(): void
-    {
-        $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
-        $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatchesFailureReasonConstraintDescription(
-            $declSpecSeq, 
-            FALSE,
-            "foo\n".
-            "  bar reason", 
-            "foo description\n".
-            "  bar description"
-        );
-        
-        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
-        self::assertSame(
-            "\n".
-            "Parameter declaration\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Parameter declaration\n".
-            "  foo\n". 
-            "    bar reason", 
-            $sut->additionalFailureDescription($prmDecl)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when 
-     * instantiated and the parameter declaration is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenInstantiatedAndParameterDeclarationIsValid(): void
-    {
-        $declSpecSeq = $this->declSpecSeqFactory->createDummy();
-        $prmDecl = $this->prmDeclFactory->createGetDeclarationSpecifierSequence($declSpecSeq);
-        $declSpecSeqConst = $this->declSpecSeqConstFactory->createMatchesConstraintDescription(
-            $declSpecSeq, 
-            TRUE, 
-            "foo description\n".
-            "  bar description"
-        );
-        
-        $sut = new ParameterDeclarationConstraint($declSpecSeqConst);
-        self::assertSame(
-            "\n".
-            "Parameter declaration\n".
-            "  foo description\n".
-            "    bar description\n".
-            "\n".
-            "Parameter declaration: Unknown reason.", 
-            $sut->additionalFailureDescription($prmDecl)
-        );
     }
     
     /**

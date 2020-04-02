@@ -288,10 +288,10 @@ class QualifiedIdConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when not 
-     * instance of QualifiedId.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure.
      */
-    public function testAdditionalFailureDescriptionReturnsStringNotInstanceQualifiedId(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReason(): void
     {
         $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
             ->buildConstraintDescription(
@@ -319,128 +319,6 @@ class QualifiedIdConstraintTest extends TestCase
             \str_replace('\\', '\\\\', QualifiedId::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * nested name specifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNestedNameSpecifierIsInvalid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $qid = $this->createQualifiedIdDoubleFactory()
-            ->createGetNestedNameSpecifier($nnSpec);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, FALSE)
-            ->buildConstraintDescription(
-                "foo\n".
-                "  bar"
-            )
-            ->buildFailureReason($nnSpec, 'foobar reason')
-            ->getDouble();
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildConstraintDescription(
-                "baz\n".
-                "  qux"
-            )
-            ->getDouble();
-        
-        $sut = new QualifiedIdConstraint($nnSpecConst, $uidConst);
-        self::assertSame(
-            "\n".
-            "Qualified identifier\n". 
-            "  foo\n". 
-            "    bar\n". 
-            "  baz\n". 
-            "    qux\n". 
-            "\n". 
-            "Qualified identifier\n". 
-            "  foobar reason", 
-            $sut->additionalFailureDescription($qid)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * unqualified identifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenUnqualifiedIdIsInvalid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $uid = $this->createUnqualifiedIdDoubleFactory()->createDummy();
-        $qid = $this->createQualifiedIdDoubleFactory()
-            ->createGetNestedNameSpecifierGetUnqualifiedId($nnSpec, $uid);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, TRUE)
-            ->buildConstraintDescription(
-                "foo\n".
-                "  bar"
-            )
-            ->getDouble();
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildMatches($uid, FALSE)
-            ->buildConstraintDescription(
-                "baz\n".
-                "  qux"
-            )
-            ->buildFailureReason($uid, 'foobaz reason')
-            ->getDouble();
-        
-        $sut = new QualifiedIdConstraint($nnSpecConst, $uidConst);
-        self::assertSame(
-            "\n".
-            "Qualified identifier\n". 
-            "  foo\n". 
-            "    bar\n". 
-            "  baz\n". 
-            "    qux\n". 
-            "\n". 
-            "Qualified identifier\n". 
-            "  foobaz reason", 
-            $sut->additionalFailureDescription($qid)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * qualified identifier is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenQualifiedIdIsValid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $uid = $this->createUnqualifiedIdDoubleFactory()->createDummy();
-        $qid = $this->createQualifiedIdDoubleFactory()
-            ->createGetNestedNameSpecifierGetUnqualifiedId($nnSpec, $uid);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, TRUE)
-            ->buildConstraintDescription(
-                "foo\n".
-                "  bar"
-            )
-            ->getDouble();
-        $uidConst = ConceptConstraintDoubleBuilder::createUnqualifiedIdConstraint($this)
-            ->buildMatches($uid, TRUE)
-            ->buildConstraintDescription(
-                "baz\n".
-                "  qux"
-            )
-            ->getDouble();
-        
-        $sut = new QualifiedIdConstraint($nnSpecConst, $uidConst);
-        self::assertSame(
-            "\n".
-            "Qualified identifier\n". 
-            "  foo\n". 
-            "    bar\n". 
-            "  baz\n". 
-            "    qux\n". 
-            "\n". 
-            "Qualified identifier: Unknown reason.", 
-            $sut->additionalFailureDescription($qid)
-        );
     }
     
     /**

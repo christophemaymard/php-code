@@ -308,10 +308,10 @@ class ParameterDeclarationListConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when not 
-     * instance of ParameterDeclarationList.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure.
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenNotInstanceParameterDeclarationList(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReason(): void
     {
         $consts = [];
         $consts[] = $this->prmDeclConstFactory->createConstraintDescription("foo\n  foo sub");
@@ -334,89 +334,6 @@ class ParameterDeclarationListConstraintTest extends TestCase
                 \str_replace('\\', '\\\\', ParameterDeclarationList::class)
             ), 
             $sut->additionalFailureDescription(NULL)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * constraint count is not equal to the parameter declaration count of 
-     * the list.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenConstraintCountNotEqualParameterDeclarationCount(): void
-    {
-        $prmDeclList = $this->prmDeclListFactory->createCount(0);
-        
-        $consts = [];
-        $consts[] = $this->prmDeclConstFactory->createConstraintDescription("foo\n  foo sub");
-        
-        $sut = new ParameterDeclarationListConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Parameter declaration list (1)\n".
-            "  foo\n". 
-            "    foo sub\n".
-            "\n".
-            "Parameter declaration list: ".
-            "parameter declaration list should have 1 parameter declaration(s), got 0.", 
-            $sut->additionalFailureDescription($prmDeclList)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when a 
-     * parameter declaration is not valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenParameterDeclarationIsNotValid(): void
-    {
-        $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(1, $prmDecls);
-        
-        $consts = [];
-        $consts[] = $this->prmDeclConstFactory->createMatchesFailureReasonConstraintDescription(
-            $prmDecls[0], 
-            FALSE, 
-            "foo reason", 
-            'foo description'
-        );
-        
-        $sut = new ParameterDeclarationListConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Parameter declaration list (1)\n".
-            "  foo description\n".
-            "\n".
-            "Parameter declaration list\n".
-            "  foo reason", 
-            $sut->additionalFailureDescription($prmDeclList)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * parameter declaration list is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenParameterDeclarationListIsValid(): void
-    {
-        $prmDecls = [];
-        $prmDecls[] = $this->prmDeclFactory->createDummy();
-        $prmDeclList = $this->prmDeclListFactory->createCountGetParameterDeclarations(1, $prmDecls);
-        
-        $consts = [];
-        $consts[] = $this->prmDeclConstFactory->createMatchesConstraintDescription(
-            $prmDecls[0], 
-            TRUE, 
-            'foo description'
-        );
-        
-        $sut = new ParameterDeclarationListConstraint($consts);
-        self::assertSame(
-            "\n".
-            "Parameter declaration list (1)\n".
-            "  foo description\n".
-            "\n".
-            "Parameter declaration list: Unknown reason.",
-            $sut->additionalFailureDescription($prmDeclList)
         );
     }
     

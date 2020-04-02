@@ -1282,11 +1282,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createInt() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createInt().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateInt(): void
     {
         $sut = DeclarationSpecifierConstraint::createInt();
         
@@ -1302,11 +1302,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createFloat() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createFloat().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateFloat(): void
     {
         $sut = DeclarationSpecifierConstraint::createFloat();
         
@@ -1322,11 +1322,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createBool() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createBool().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateBoolAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateBool(): void
     {
         $sut = DeclarationSpecifierConstraint::createBool();
         
@@ -1342,11 +1342,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createChar() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createChar().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateCharAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateChar(): void
     {
         $sut = DeclarationSpecifierConstraint::createChar();
         
@@ -1362,11 +1362,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createWCharT() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createWCharT().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateWCharTAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateWCharT(): void
     {
         $sut = DeclarationSpecifierConstraint::createWCharT();
         
@@ -1382,11 +1382,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createShort() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createShort().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateShortAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateShort(): void
     {
         $sut = DeclarationSpecifierConstraint::createShort();
         
@@ -1402,11 +1402,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createLong() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createLong().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateLong(): void
     {
         $sut = DeclarationSpecifierConstraint::createLong();
         
@@ -1422,11 +1422,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createSigned() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createSigned().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateSignedAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateSigned(): void
     {
         $sut = DeclarationSpecifierConstraint::createSigned();
         
@@ -1442,11 +1442,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnsigned() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createUnsigned().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateUnsigned(): void
     {
         $sut = DeclarationSpecifierConstraint::createUnsigned();
         
@@ -1462,11 +1462,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDouble() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createDouble().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateDoubleAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateDouble(): void
     {
         $sut = DeclarationSpecifierConstraint::createDouble();
         
@@ -1482,11 +1482,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createIdentifier().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateIdentifier(): void
     {
         $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
             ->buildConstraintDescription('foo description')
@@ -1507,11 +1507,11 @@ class DeclarationSpecifierConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and not instance of 
-     * DeclarationSpecifier.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createIdentifier().
      */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNotInstanceDeclarationSpecifier(): void
+    public function testAdditionalFailureDescriptionReturnsConstraintDescriptionAndFailureReasonWhenCreateQualifiedIdentifier(): void
     {
         $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
             ->buildConstraintDescription('foo description')
@@ -1536,692 +1536,6 @@ class DeclarationSpecifierConstraintTest extends TestCase
             \str_replace('\\', '\\\\', DeclarationSpecifier::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createInt() and is not a simple type specifier 
-     * "int".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierIntProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndNotSimpleTypeSpecifierInt(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createInt();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"int\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"int\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createFloat() and is not a simple type specifier 
-     * "float".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierFloatProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndNotSimpleTypeSpecifierFloat(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createFloat();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"float\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"float\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createBool() and is not a simple type specifier 
-     * "bool".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierBoolProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateBoolAndNotSimpleTypeSpecifierBool(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createBool();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"bool\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"bool\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createChar() and is not a simple type specifier 
-     * "char".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierCharProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateCharAndNotSimpleTypeSpecifierChar(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createChar();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"char\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"char\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createWCharT() and is not a simple type 
-     * specifier "wchar_t".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierWCharTProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateWCharTAndNotSimpleTypeSpecifierWCharT(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createWCharT();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"wchar_t\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"wchar_t\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createShort() and is not a simple type 
-     * specifier "short".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierShortProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateShortAndNotSimpleTypeSpecifierShort(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createShort();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"short\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"short\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createLong() and is not a simple type 
-     * specifier "long".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierLongProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndNotSimpleTypeSpecifierLong(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createLong();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"long\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"long\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createSigned() and is not a simple type 
-     * specifier "signed".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierSignedProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateSignedAndNotSimpleTypeSpecifierSigned(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createSigned();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"signed\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"signed\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnsigned() and is not a simple type 
-     * specifier "unsigned".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierUnsignedProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndNotSimpleTypeSpecifierUnsigned(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createUnsigned();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"unsigned\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"unsigned\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDouble() and is not a simple type 
-     * specifier "double".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierDoubleProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateDoubleAndNotSimpleTypeSpecifierDouble(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $sut = DeclarationSpecifierConstraint::createDouble();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"double\"\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"double\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and is not a simple type 
-     * specifier "identifier".
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierIdentifierProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndNotSimpleTypeSpecifierIdentifier(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"identifier\"\n".
-            "    foo description\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier \"identifier\".", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and identifier does not 
-     * match.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIdentifierAndIdentifierDoesNotMatch(): void
-    {
-        $id = $this->createIdentifierDoubleFactory()->createDummy();
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createIdentifierSimpleTypeSpecifier($id);
-        
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, FALSE)
-            ->buildConstraintDescription('foo description')
-            ->buildFailureReason($id, 'bar reason')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"identifier\"\n".
-            "    foo description\n".
-            "\n".
-            "Declaration specifier\n".
-            "  bar reason", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedIdentifier() and is not a simple 
-     * type specifier qualified identifier.
-     * 
-     * @param   DeclarationSpecifier    $declSpec   The declaration specifier to test.
-     * 
-     * @dataProvider    getNotSimpleTypeSpecifierQualifiedIdentifierProvider
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNotSimpleTypeSpecifierQualifiedIdentifier(
-        DeclarationSpecifier $declSpec
-    ): void
-    {
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildConstraintDescription('bar description')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
-            $nnSpecConst, 
-            $idConst
-        );
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier qualified identifier\n".
-            "    foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declaration specifier: It should be simple type specifier qualified identifier.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedIdentifier() and the nested name 
-     * specifier is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndNestedNameSpecifierIsInvalid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $id = $this->createIdentifierDoubleFactory()->createDummy();
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, FALSE)
-            ->buildConstraintDescription('foo description')
-            ->buildFailureReason($nnSpec, 'foo reason')
-            ->getDouble();
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildConstraintDescription('bar description')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
-            $nnSpecConst, 
-            $idConst
-        );
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier qualified identifier\n".
-            "    foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declaration specifier\n".
-            "  foo reason", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedIdentifier() and the identifier 
-     * is invalid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsInvalid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $id = $this->createIdentifierDoubleFactory()->createDummy();
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, TRUE)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, FALSE)
-            ->buildConstraintDescription('bar description')
-            ->buildFailureReason($id, 'bar reason')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
-            $nnSpecConst, 
-            $idConst
-        );
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier qualified identifier\n".
-            "    foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declaration specifier\n".
-            "  bar reason", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createInt() and is a simple type specifier 
-     * "int".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateIntAndSimpleTypeSpecifierInt(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createIntSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createInt();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"int\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createFloat() and is a simple type specifier 
-     * "float".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateFloatAndSimpleTypeSpecifierFloat(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createFloatSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createFloat();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"float\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createBool() and is a simple type specifier 
-     * "bool".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateBoolAndSimpleTypeSpecifierBool(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createBoolSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createBool();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"bool\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createChar() and is a simple type specifier 
-     * "char".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateCharAndSimpleTypeSpecifierChar(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createCharSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createChar();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"char\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createWCharT() and is a simple type specifier 
-     * "wchar_t".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateWCharTAndSimpleTypeSpecifierWCharT(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createWCharTSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createWCharT();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"wchar_t\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createShort() and is a simple type specifier 
-     * "short".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateShortAndSimpleTypeSpecifierShort(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createShortSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createShort();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"short\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createLong() and is a simple type specifier 
-     * "long".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateLongAndSimpleTypeSpecifierLong(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createLongSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createLong();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"long\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createSigned() and is a simple type specifier 
-     * "signed".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateSignedAndSimpleTypeSpecifierSigned(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createSignedSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createSigned();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"signed\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createUnsigned() and is a simple type specifier 
-     * "unsigned".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateUnsignedAndSimpleTypeSpecifierUnsigned(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createUnsignedSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createUnsigned();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"unsigned\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDouble() and is a simple type specifier 
-     * "double".
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateDoubleAndSimpleTypeSpecifierDouble(): void
-    {
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createDoubleSimpleTypeSpecifier();
-        
-        $sut = DeclarationSpecifierConstraint::createDouble();
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"double\"\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createIdentifier() and identifier matches.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateDoubleAndIdentifierMatches(): void
-    {
-        $id = $this->createIdentifierDoubleFactory()->createDummy();
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createIdentifierSimpleTypeSpecifier($id);
-        
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, TRUE)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createIdentifier($idConst);
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier \"identifier\"\n".
-            "    foo description\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createQualifiedIdentifier() and the identifier 
-     * is valid.
-     */
-    public function testAdditionalFailureDescriptionReturnsStringWhenCreateQualifiedIdentifierAndIdentifierIsValid(): void
-    {
-        $nnSpec = $this->createNestedNameSpecifierDoubleFactory()->createDummy();
-        $id = $this->createIdentifierDoubleFactory()->createDummy();
-        $declSpec = $this->createDeclarationSpecifierDoubleFactory()
-            ->createQualifiedIdentifierSimpleTypeSpecifier($nnSpec, $id);
-        
-        $nnSpecConst = ConceptConstraintDoubleBuilder::createNestedNameSpecifierConstraint($this)
-            ->buildMatches($nnSpec, TRUE)
-            ->buildConstraintDescription('foo description')
-            ->getDouble();
-        $idConst = ConceptConstraintDoubleBuilder::createIdentifierConstraint($this)
-            ->buildMatches($id, TRUE)
-            ->buildConstraintDescription('bar description')
-            ->getDouble();
-        
-        $sut = DeclarationSpecifierConstraint::createQualifiedIdentifier(
-            $nnSpecConst, 
-            $idConst
-        );
-        self::assertSame(
-            "\n".
-            "Declaration specifier\n".
-            "  Simple type specifier qualified identifier\n".
-            "    foo description\n".
-            "    bar description\n".
-            "\n".
-            "Declaration specifier: Unknown reason.", 
-            $sut->additionalFailureDescription($declSpec)
-        );
     }
     
     /**

@@ -624,11 +624,11 @@ class NoptrDeclaratorConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorId() and not instance of 
-     * NoptrDeclarator.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createDeclaratorId().
      */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdAndNotInstanceNoptrDeclarator(): void
+    public function testAdditionalFailureReasonReturnsConstraintDescriptionAndFailureReasonWhenCreateDId(): void
     {
         $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
             ->buildToString('foo declarator identifier')
@@ -649,11 +649,11 @@ class NoptrDeclaratorConstraintTest extends TestCase
     }
     
     /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorIdParametersAndQualifiers() and 
-     * not instance of NoptrDeclarator.
+     * Tests that additionalFailureDescription() returns a string that is 
+     * the constraint description followed by the reason of the failure when 
+     * the instance is created by createDeclaratorIdParametersAndQualifiers().
      */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdPQualAndNotInstanceNoptrDeclarator(): void
+    public function testAdditionalFailureReasonReturnsConstraintDescriptionAndFailureReasonWhenCreateDIdPQual(): void
     {
         $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
             ->buildToString('foo declarator identifier')
@@ -679,229 +679,6 @@ class NoptrDeclaratorConstraintTest extends TestCase
             \str_replace('\\', '\\\\', NoptrDeclarator::class)
         );
         self::assertRegExp($pattern, $sut->additionalFailureDescription(NULL));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorId() and the declarator 
-     * identifier is invalid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdAndDeclaratorIdIsInvalid(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, FALSE)
-            ->buildToString('foo declarator identifier')
-            ->buildFailureReason($did, 'foo reason')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorId($didConst);
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier\n".
-            "  foo declarator identifier description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier\n".
-            "  foo reason", 
-            $sut->additionalFailureDescription($noptrDecl
-        ));
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorIdParametersAndQualifiers() and 
-     * the declarator identifier is invalid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdPQualAndDeclaratorIdIsInvalid(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, FALSE)
-            ->buildToString('foo declarator identifier')
-            ->buildFailureReason($did, 'foo reason')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        $prmQualConst = ConceptConstraintDoubleBuilder::createParametersAndQualifiersConstraint($this)
-            ->buildToString('bar parameters and qualifiers')
-            ->buildConstraintDescription('bar parameters and qualifiers description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorIdParametersAndQualifiers(
-            $didConst, 
-            $prmQualConst
-        );
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers\n".
-            "  foo declarator identifier description\n".
-            "  bar parameters and qualifiers description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers\n".
-            "  foo reason", 
-            $sut->additionalFailureDescription($noptrDecl)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorId() and the no-pointer 
-     * declarator contains parameters and qualifiers.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdAndNoptrDeclaratorContainsParametersAndQualifiers(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->buildGetParametersAndQualifiers($prmQual)
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, TRUE)
-            ->buildToString('foo declarator identifier')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorId($didConst);
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier\n".
-            "  foo declarator identifier description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier: ".
-            "Unexpected parameters and qualifiers.", 
-            $sut->additionalFailureDescription($noptrDecl)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorIdParametersAndQualifiers() and 
-     * parameters and qualifiers are invalid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdPQualAndParametersAndQualifiersAreInvalid(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->buildGetParametersAndQualifiers($prmQual)
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, TRUE)
-            ->buildToString('foo declarator identifier')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        $prmQualConst = ConceptConstraintDoubleBuilder::createParametersAndQualifiersConstraint($this)
-            ->buildMatches($prmQual, FALSE)
-            ->buildToString('bar parameters and qualifiers')
-            ->buildFailureReason($prmQual, 'bar reason')
-            ->buildConstraintDescription('bar parameters and qualifiers description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorIdParametersAndQualifiers(
-            $didConst, 
-            $prmQualConst
-        );
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers\n".
-            "  foo declarator identifier description\n".
-            "  bar parameters and qualifiers description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers\n".
-            "  bar reason", 
-            $sut->additionalFailureDescription($noptrDecl)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorId() and the no-pointer 
-     * declarator is valid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdAndNoptrDeclaratorIsValid(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->buildGetParametersAndQualifiers()
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, TRUE)
-            ->buildToString('foo declarator identifier')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorId($didConst);
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier\n".
-            "  foo declarator identifier description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier: Unknown reason.", 
-            $sut->additionalFailureDescription($noptrDecl)
-        );
-    }
-    
-    /**
-     * Tests that additionalFailureDescription() returns a string when the 
-     * instance is created by createDeclaratorIdParametersAndQualifiers() and 
-     * the no-pointer declarator is valid.
-     */
-    public function testAdditionalFailureReasonReturnsStringWhenCreateDIdPQualAndNoptrDeclaratorIsValid(): void
-    {
-        $did = ConceptDoubleBuilder::createDeclaratorId($this)->getDouble();
-        $prmQual = ConceptDoubleBuilder::createParametersAndQualifiers($this)
-            ->getDouble();
-        $noptrDecl = ConceptDoubleBuilder::createNoptrDeclarator($this)
-            ->buildGetDeclaratorId($did)
-            ->buildGetParametersAndQualifiers($prmQual)
-            ->getDouble();
-        
-        $didConst = ConceptConstraintDoubleBuilder::createDeclaratorIdConstraint($this)
-            ->buildMatches($did, TRUE)
-            ->buildToString('foo declarator identifier')
-            ->buildConstraintDescription('foo declarator identifier description')
-            ->getDouble();
-        $prmQualConst = ConceptConstraintDoubleBuilder::createParametersAndQualifiersConstraint($this)
-            ->buildMatches($prmQual, TRUE)
-            ->buildToString('bar parameters and qualifiers')
-            ->buildConstraintDescription('bar parameters and qualifiers description')
-            ->getDouble();
-        
-        $sut = NoptrDeclaratorConstraint::createDeclaratorIdParametersAndQualifiers(
-            $didConst, 
-            $prmQualConst
-        );
-        self::assertSame(
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers\n".
-            "  foo declarator identifier description\n".
-            "  bar parameters and qualifiers description\n".
-            "\n".
-            "No-pointer declarator with foo declarator identifier and ".
-            "bar parameters and qualifiers: Unknown reason.", 
-            $sut->additionalFailureDescription($noptrDecl)
-        );
     }
     
     /**
