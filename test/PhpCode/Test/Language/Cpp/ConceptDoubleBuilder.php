@@ -10,6 +10,7 @@ namespace PhpCode\Test\Language\Cpp;
 use PhpCode\Test\Language\Cpp\Declaration\DefiningTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\SimpleTypeSpecifierDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declaration\TypeSpecifierDoubleBuilder;
+use PhpCode\Test\Language\Cpp\Declarator\AbstractDeclaratorDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\CVQualifierSequenceDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorIdDoubleBuilder;
 use PhpCode\Test\Language\Cpp\Declarator\DeclaratorDoubleBuilder;
@@ -122,6 +123,18 @@ class ConceptDoubleBuilder
     public static function createCVQualifierSequence(TestCase $testCase): CVQualifierSequenceDoubleBuilder
     {
         return new CVQualifierSequenceDoubleBuilder($testCase);
+    }
+    
+    /**
+     * Creates a double builder of the {@see PhpCode\Language\Cpp\Declarator\AbstractDeclarator} 
+     * class.
+     * 
+     * @param   TestCase    $testCase   The test case used to prophesize a class or an interface.
+     * @return  AbstractDeclaratorDoubleBuilder The created instance of AbstractDeclaratorDoubleBuilder.
+     */
+    public static function createAbstractDeclarator(TestCase $testCase): AbstractDeclaratorDoubleBuilder
+    {
+        return new AbstractDeclaratorDoubleBuilder($testCase);
     }
     
     /**
