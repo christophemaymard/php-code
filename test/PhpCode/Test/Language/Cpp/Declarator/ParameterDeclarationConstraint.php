@@ -25,6 +25,12 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
     private $declSpecSeqConst;
     
     /**
+     * The abstract declarator constraint.
+     * @var AbstractDeclaratorConstraint|NULL
+     */
+    private $abstDcltorConst;
+    
+    /**
      * Constructor.
      * 
      * @param   DeclarationSpecifierSequenceConstraint  $declSpecSeqConst   The declaration specifier sequence constraint.
@@ -32,6 +38,18 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
     public function __construct(DeclarationSpecifierSequenceConstraint $declSpecSeqConst)
     {
         $this->declSpecSeqConst = $declSpecSeqConst;
+    }
+    
+    /**
+     * Sets the abstract declarator constraint.
+     * 
+     * @param   AbstractDeclaratorConstraint    $abstDcltorConst    The abstract declarator constraint to set.
+     */
+    public function setAbstractDeclaratorConstraint(
+        AbstractDeclaratorConstraint $abstDcltorConst
+    ): void
+    {
+        $this->abstDcltorConst = $abstDcltorConst;
     }
     
     /**
@@ -51,6 +69,10 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
         $lines[] = $this->getConceptName();
         $lines[] = $this->indent($this->declSpecSeqConst->constraintDescription());
         
+        if ($this->abstDcltorConst) {
+            $lines[] = $this->indent($this->abstDcltorConst->constraintDescription());
+        }
+        
         return \implode("\n", $lines);
     }
     
@@ -66,6 +88,16 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
         $declSpecSeq = $other->getDeclarationSpecifierSequence();
         
         if (!$this->declSpecSeqConst->matches($declSpecSeq)) {
+            return FALSE;
+        }
+        
+        $abstDcltor = $other->getAbstractDeclarator();
+        
+        if (!$this->abstDcltorConst && $abstDcltor) {
+            return FALSE;
+        }
+        
+        if ($this->abstDcltorConst && !$this->abstDcltorConst->matches($abstDcltor)) {
             return FALSE;
         }
         
@@ -86,6 +118,18 @@ class ParameterDeclarationConstraint extends AbstractConceptConstraint
         if (!$this->declSpecSeqConst->matches($declSpecSeq)) {
             return $this->conceptIndent(
                 $this->declSpecSeqConst->failureReason($declSpecSeq)
+            );
+        }
+        
+        $abstDcltor = $other->getAbstractDeclarator();
+        
+        if (!$this->abstDcltorConst && $abstDcltor) {
+            return $this->hasReason(FALSE, 'abstract declarator');
+        }
+        
+        if ($this->abstDcltorConst && !$this->abstDcltorConst->matches($abstDcltor)) {
+            return $this->conceptIndent(
+                $this->abstDcltorConst->failureReason($abstDcltor)
             );
         }
         
