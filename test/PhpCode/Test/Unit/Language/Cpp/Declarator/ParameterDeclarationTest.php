@@ -9,6 +9,7 @@ namespace PhpCode\Test\Unit\Language\Cpp\Declarator;
 
 use PhpCode\Language\Cpp\Declarator\ParameterDeclaration;
 use PhpCode\Test\Language\Cpp\Declaration\DeclarationSpecifierSequenceDoubleFactory;
+use PhpCode\Test\Language\Cpp\ConceptDoubleBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,6 +45,56 @@ class ParameterDeclarationTest extends TestCase
         
         $sut = new ParameterDeclaration($declSpecSeq);
         self::assertSame($declSpecSeq, $sut->getDeclarationSpecifierSequence());
+    }
+    
+    /**
+     * Tests that getAbstractDeclarator() returns:
+     * - NULL when instantiated, 
+     * - the instance of an abstract declarator that has been set.
+     */
+    public function testGetAbstractDeclarator(): void
+    {
+        $declSpecSeq = $this->declSpecSeqFactory->createDummy();
+        
+        $sut = new ParameterDeclaration($declSpecSeq);
+        
+        self::assertNull($sut->getAbstractDeclarator());
+        
+        $abstDcltor1 = ConceptDoubleBuilder::createAbstractDeclarator($this)
+            ->getDouble();
+        
+        $sut->setAbstractDeclarator($abstDcltor1);
+        self::assertSame($abstDcltor1, $sut->getAbstractDeclarator());
+        
+        $abstDcltor2 = ConceptDoubleBuilder::createAbstractDeclarator($this)
+            ->getDouble();
+        
+        $sut->setAbstractDeclarator($abstDcltor2);
+        self::assertSame($abstDcltor2, $sut->getAbstractDeclarator());
+    }
+    
+    /**
+     * Tests that hasAbstractDeclarator() returns a boolean.
+     */
+    public function testHasAbstractDeclaratorReturnsBool(): void
+    {
+        $declSpecSeq = $this->declSpecSeqFactory->createDummy();
+        
+        $sut = new ParameterDeclaration($declSpecSeq);
+        
+        self::assertFalse($sut->hasAbstractDeclarator());
+            
+        $abstDcltor1 = ConceptDoubleBuilder::createAbstractDeclarator($this)
+            ->getDouble();
+        
+        $sut->setAbstractDeclarator($abstDcltor1);
+        self::assertTrue($sut->hasAbstractDeclarator());
+        
+        $abstDcltor2 = ConceptDoubleBuilder::createAbstractDeclarator($this)
+            ->getDouble();
+        
+        $sut->setAbstractDeclarator($abstDcltor2);
+        self::assertTrue($sut->hasAbstractDeclarator());
     }
 }
 
